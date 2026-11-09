@@ -46,10 +46,13 @@
 .d-heart{width:104px;right:max(6px,calc(50% - 480px));bottom:64px;transform:rotate(10deg)}
 .brand .bowi{height:1.25em;width:auto;vertical-align:-.3em;margin-left:.15em;filter:var(--stk)}
 @media (max-width:560px){.d-star{width:54px;left:-12px}.d-heart{width:78px;right:-14px;bottom:78px}}
+body[data-view="play"] .decos{display:none}
+@media (max-width:760px){body:not([data-view="home"]) .decos{display:none}}
 @media print{.decos{display:none}}
+html{font-size:calc(100% * var(--fs,1))}
 *{box-sizing:border-box}
 html,body{height:auto}
-body{background:var(--bg);background-image:linear-gradient(160deg,var(--bg-a),var(--bg-b));background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+body{background:var(--bg);background-image:linear-gradient(160deg,var(--bg-a),var(--bg-b));background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:1rem;line-height:1.5;
   padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 #app{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 button,input,textarea{font:inherit;color:inherit}
@@ -158,6 +161,12 @@ textarea.inp{min-height:110px;resize:vertical}
 .pbadge,.pend{display:grid;place-items:center;min-width:30px;height:30px;padding:0 7px;border-radius:99px;font-size:.8rem;font-weight:700}
 .pbadge{position:absolute;top:50%;transform:translate(-50%,-50%);background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 8px -2px rgba(7,50,42,.4);transition:left .35s}
 .pend{background:var(--line);color:var(--muted)}
+.lbar{display:flex;align-items:center;gap:12px;padding:10px 6px 8px}
+.lb-track{position:relative;flex:1;height:12px;border-radius:99px;background:var(--line);box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.lb-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--accent);transition:width .45s cubic-bezier(.3,.7,.3,1)}
+.lb-tick{position:absolute;top:2px;bottom:2px;width:2px;margin-left:-1px;border-radius:2px;background:var(--surface);opacity:.75}
+.lb-knob{position:absolute;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:700;color:var(--accent-ink);background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 2px var(--pink),0 4px 10px -2px rgba(0,0,0,.35);transition:left .45s cubic-bezier(.3,.7,.3,1)}
+.lb-end{font-size:.8rem;font-weight:700;color:var(--muted);min-width:1.6em;text-align:right;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){.pseg i,.pbadge{transition:none}}
 .gems{display:flex;flex-wrap:wrap;gap:4px;min-height:26px;align-items:center}
 .g{width:22px;height:22px;clip-path:polygon(50% 0,100% 38%,50% 100%,0 38%);display:inline-block}
@@ -239,6 +248,13 @@ textarea.inp{min-height:110px;resize:vertical}
 .skb:not(.auto):hover:not(:disabled){border-color:var(--accent)}
 .skb:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .skb:disabled{opacity:.5;cursor:default}
+.btn.sq{width:44px;min-width:44px;padding:0;display:inline-grid;place-items:center;font-size:1.2rem;line-height:1}
+.banner.wide{grid-column:1/-1}
+.lk-frame{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}
+.lk-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.lkrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.lkrow .lkx,.lkrow .btn{grid-column:1/-1}
+.editrow .exin{grid-column:1/-1}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{padding:6px 12px;border-radius:99px;border:1px solid var(--line);font-size:.85rem;font-weight:700;color:var(--muted)}
 .chip.on{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
@@ -253,6 +269,26 @@ textarea.inp{min-height:110px;resize:vertical}
 .nbwrap{perspective:2400px}
 .nb{position:relative;display:block;max-width:1100px;margin:0 auto;height:auto;min-height:var(--nbmin);overflow:hidden;border-radius:16px;filter:drop-shadow(0 16px 26px rgba(3,22,18,.22))}
 .np{position:relative;height:auto;min-width:0;background-color:var(--paper);background-image:radial-gradient(var(--rule) 1.3px,transparent 1.6px);background-size:22px 22px;background-position:11px 11px;overflow:hidden}
+/* бумага блокнота: светлая «бумажная» в любой теме, чернила тёмные, чтобы читалось всегда */
+.np{--paper:#FFFCF5;--rule:#E4D9C2;--margin:#E58BA0;--fg:#1D2B26;--muted:#4D5B55;--line:#E3D8C4;--surface:#FFFFFF;--accent:#13806E;--accent-ink:#FFFFFF;--accent-soft:#D9EEE6;--pink:#F27C98;--bg-a:#EEF7F3;--ok:#1F7A55;--ok-soft:#DCEFE4;--bad:#B3243E;--bad-soft:#FBDDE3;--warn:#EBB447;color:var(--fg)}
+@keyframes lbgrow{from{width:var(--from)}to{width:var(--to)}}
+@keyframes lbmove{from{left:var(--from)}to{left:var(--to)}}
+@keyframes lbpop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes lbspark{0%{opacity:0;transform:translateY(4px) scale(.6)}30%{opacity:1}100%{opacity:0;transform:translateY(-22px) scale(1.1)}}
+.lb-fill{animation:lbgrow .6s cubic-bezier(.3,.7,.3,1) both}
+.lb-knob{animation:lbmove .6s cubic-bezier(.3,.7,.3,1) both;font-size:.66rem}
+.lb-knob.up{animation:lbmove .6s cubic-bezier(.3,.7,.3,1) both,lbpop .6s ease-out}
+.lb-knob.up::after{content:"✨";position:absolute;top:-6px;left:50%;margin-left:-8px;font-size:.9rem;animation:lbspark .9s ease-out both;pointer-events:none}
+.fsbox{position:fixed;top:68px;right:16px;z-index:60;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:0 12px 30px -12px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:8px;min-width:230px}
+.fsbox input[type=range]{flex:1;min-width:0;accent-color:var(--accent)}
+.q{position:relative}
+.spk{width:38px;min-width:38px;height:38px;font-size:1rem}
+.q .spk{position:absolute;top:10px;right:10px}
+.strip{display:flex;gap:4px;align-items:flex-end;height:54px}
+.strip i{flex:1;height:8%;min-height:4px;border-radius:5px;background:var(--line)}
+.strip i.on{background:var(--accent)}
+:root[data-theme="dark"] .np{--paper:#143A32;--rule:#2C5A4F;--margin:#C86A82;--fg:#F4F6F1;--muted:#B8CBC4;--line:#2C5A4F;--surface:#1B4A40;--accent:#FD7B96;--accent-ink:#31160F;--accent-soft:#2A6254;--pink:#FD7B96;--bg-a:#1B4A40;--ok:#8FE0B5;--ok-soft:#1F5547;--bad:#FF8F9B;--bad-soft:#5A2A31;--warn:#EBB447;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .np{--paper:#143A32;--rule:#2C5A4F;--margin:#C86A82;--fg:#F4F6F1;--muted:#B8CBC4;--line:#2C5A4F;--surface:#1B4A40;--accent:#FD7B96;--accent-ink:#31160F;--accent-soft:#2A6254;--pink:#FD7B96;--bg-a:#1B4A40;--ok:#8FE0B5;--ok-soft:#1F5547;--bad:#FF8F9B;--bad-soft:#5A2A31;--warn:#EBB447;}}
 .np.l{border-radius:16px 0 0 16px}
 .np.r{border-radius:0 16px 16px 0}
 .np.single{border-radius:16px}
@@ -404,7 +440,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').replace(/[.,!?;:"'«»()\-–—]/g,' ').replace(/\s+/g,' ').trim();
 
 /* ---------- данные ---------- */
-const BUILTIN=[{"id":"f1","name":"To be & Vocabulary in Use","cards":[{"t":"DESCRIBE","d":"описывать, характеризовать, излагать словами","x":"","id":"q01-0"},{"t":"BOTH","d":"оба, обе, и тот и другой, одновременно","x":"","id":"q01-1"},{"t":"BELOW","d":"ниже, внизу, далее по тексту, под","x":"","id":"q01-2"},{"t":"WEST","d":"запад, западный","x":"","id":"q01-3"},{"t":"HAVE GOT","d":"иметь, у кого-то есть","x":"","id":"q01-4"},{"t":"STEP-BROTHER","d":"сводный брат","x":"","id":"q01-5"},{"t":"CLOSE TO","d":"близко к, рядом с, близкий","x":"","id":"q01-6"},{"t":"BRANCH","d":"ветка, филиал, отрасль","x":"","id":"q02-0"},{"t":"BRUNCH","d":"поздний завтрак совмещённый с обедом","x":"","id":"q02-1"},{"t":"BUTCHER","d":"мясник, мясная лавка","x":"","id":"q02-2"},{"t":"RAW","d":"сырой, необработанный","x":"","id":"q02-3"},{"t":"LAY THE TABLE","d":"накрывать на стол","x":"","id":"q02-4"},{"t":"FLOUR","d":"мука","x":"","id":"q02-5"},{"t":"FLOOR","d":"этаж, пол","x":"","id":"q02-6"},{"t":"FROZEN","d":"замороженный, застывший","x":"","id":"q02-7"},{"t":"LEAF","d":"лист растения, лист бумаги","x":"","id":"q02-8"},{"t":"GROUND","d":"земля, грунт, поверхность","x":"","id":"q02-9"},{"t":"DIG","d":"копать, рыть","x":"","id":"q02-10"},{"t":"COUNT","d":"считать, подсчитывать, иметь значение","x":"","id":"q02-11"},{"t":"ADD UP","d":"складывать числа, суммировать, сходиться","x":"","id":"q02-12"}]},{"id":"f2","name":"Movies, Princess & Stative Verbs","cards":[{"t":"ROUGH","d":"тяжёлый, суровый, грубый, неровный, приблизительный","x":"","id":"q03-0"},{"t":"TELL","d":"сказать кому-то, рассказать, сообщить","x":"","id":"q03-1"},{"t":"SAY → SAID","d":"сказать, произнести","x":"","id":"q03-2"},{"t":"NOTHING LEFT TO LOSE","d":"нечего терять","x":"","id":"q03-3"},{"t":"LET ME GET THIS STRAIGHT","d":"дай мне уточнить, правильно ли я понимаю","x":"","id":"q03-4"},{"t":"PRETEND","d":"притворяться, делать вид","x":"","id":"q03-5"},{"t":"ISN'T THAT WHAT THEY SAY?","d":"разве не так говорят?","x":"","id":"q03-6"},{"t":"THE SAME WAY","d":"таким же образом, точно так же","x":"","id":"q03-7"},{"t":"APLENTY","d":"в изобилии, в большом количестве","x":"","id":"q05-0"},{"t":"FRIGHTFUL","d":"ужасный, страшный, пугающий","x":"","id":"q05-1"},{"t":"MIDST","d":"середина, центр, среди, в разгаре","x":"","id":"q05-2"},{"t":"YET","d":"ещё, пока, однако, всё же","x":"","id":"q05-3"},{"t":"UNLESS","d":"если не, если только не","x":"","id":"q05-4"},{"t":"ONCE","d":"однажды, когда-то, один раз, как только","x":"","id":"q05-5"},{"t":"LIKE","d":"нравиться, любить","x":"","id":"q06-0"},{"t":"LOVE","d":"любить, обожать","x":"","id":"q06-1"},{"t":"HATE","d":"ненавидеть, очень не любить","x":"","id":"q06-2"},{"t":"PREFER","d":"предпочитать","x":"","id":"q06-3"},{"t":"NEED","d":"нуждаться, быть необходимым","x":"","id":"q06-4"},{"t":"WANT","d":"хотеть","x":"","id":"q06-5"},{"t":"KNOW","d":"знать","x":"","id":"q06-6"},{"t":"BELIEVE","d":"верить, считать","x":"","id":"q06-7"},{"t":"UNDERSTAND","d":"понимать","x":"","id":"q06-8"},{"t":"REMEMBER","d":"помнить, вспоминать","x":"","id":"q06-9"},{"t":"MEAN","d":"значить, означать, иметь в виду","x":"","id":"q06-10"},{"t":"HEAR","d":"слышать","x":"","id":"q06-11"},{"t":"SEE","d":"видеть","x":"","id":"q06-12"},{"t":"SMELL","d":"пахнуть, чувствовать запах","x":"","id":"q06-13"},{"t":"TASTE","d":"иметь вкус, ощущать вкус","x":"","id":"q06-14"},{"t":"BELONG","d":"принадлежать","x":"","id":"q06-15"},{"t":"CONTAIN","d":"содержать","x":"","id":"q06-16"},{"t":"COST","d":"стоить","x":"","id":"q06-17"},{"t":"OWN","d":"владеть, иметь в собственности","x":"","id":"q06-18"}]},{"id":"f3","name":"Confusing Words","cards":[{"t":"THIS","d":"этот, эта, это","x":"","id":"q04-0"},{"t":"THAT","d":"тот, та, то, что","x":"","id":"q04-1"},{"t":"THESE","d":"эти","x":"","id":"q04-2"},{"t":"THOSE","d":"те","x":"","id":"q04-3"},{"t":"THROUGH","d":"через, сквозь, по, посредством","x":"","id":"q04-4"},{"t":"THOUGH","d":"хотя, однако, несмотря на то что","x":"","id":"q04-5"},{"t":"THOUGHT","d":"мысль, думал, думала","x":"","id":"q04-6"},{"t":"TOUGH","d":"трудный, тяжёлый, жёсткий, выносливый","x":"","id":"q04-7"},{"t":"THOROUGH","d":"тщательный, основательный","x":"","id":"q04-8"},{"t":"THROUGHOUT","d":"на протяжении, по всему пространству","x":"","id":"q04-9"},{"t":"THROW","d":"бросать, кидать","x":"","id":"q04-10"},{"t":"THERE","d":"там","x":"","id":"q04-11"},{"t":"THEIR","d":"их","x":"","id":"q04-12"},{"t":"THEY'RE","d":"они есть, они являются","x":"","id":"q04-13"},{"t":"THEN","d":"затем, потом, тогда","x":"","id":"q04-14"},{"t":"THAN","d":"чем","x":"","id":"q04-15"},{"t":"WHERE","d":"где, куда","x":"","id":"q04-16"},{"t":"WERE","d":"были","x":"","id":"q04-17"},{"t":"WE'RE","d":"мы есть, мы являемся","x":"","id":"q04-18"},{"t":"WHETHER","d":"ли","x":"","id":"q04-19"},{"t":"WEATHER","d":"погода","x":"","id":"q04-20"},{"t":"WHO","d":"кто","x":"","id":"q04-21"},{"t":"WHOSE","d":"чей, чья, чьё, чьи","x":"","id":"q04-22"},{"t":"WHO'S","d":"кто есть, кто является","x":"","id":"q04-23"},{"t":"WHAT","d":"что, какой","x":"","id":"q04-24"},{"t":"WHICH","d":"который, какой из","x":"","id":"q04-25"},{"t":"HERE","d":"здесь, сюда","x":"","id":"q04-26"},{"t":"HEAR","d":"слышать","x":"","id":"q04-27"},{"t":"TO","d":"к, в, частица перед инфинитивом","x":"","id":"q04-28"},{"t":"TOO","d":"тоже, слишком","x":"","id":"q04-29"},{"t":"TWO","d":"два","x":"","id":"q04-30"},{"t":"QUITE","d":"довольно, вполне","x":"","id":"q04-31"},{"t":"QUIET","d":"тихий, спокойный","x":"","id":"q04-32"},{"t":"LOSE","d":"терять, проигрывать","x":"","id":"q04-33"},{"t":"LOOSE","d":"свободный, неплотный, не тугой","x":"","id":"q04-34"},{"t":"ALL","d":"все, весь","x":"","id":"q04-35"},{"t":"WHOLE","d":"целый, весь","x":"","id":"q04-36"},{"t":"OTHER","d":"другой, остальные","x":"","id":"q04-37"},{"t":"ANOTHER","d":"ещё один, другой","x":"","id":"q04-38"}]},{"id":"f4","name":"Have, Past Simple & Collocations","cards":[{"t":"HAVE A HEADACHE","d":"иметь головную боль, болит голова","x":"","id":"q07-0"},{"t":"HAVE FUN","d":"веселиться, хорошо проводить время","x":"","id":"q07-1"},{"t":"HAVE A KING OR QUEEN","d":"иметь короля или королеву","x":"","id":"q07-2"},{"t":"HAVE A DRIVING LICENCE","d":"иметь водительские права","x":"","id":"q07-3"},{"t":"HAVE ANY BROTHERS OR SISTERS","d":"иметь братьев или сестёр","x":"","id":"q07-4"},{"t":"HAVE A TEMPERATURE","d":"иметь повышенную температуру","x":"","id":"q07-5"},{"t":"HAVE LUNCH","d":"обедать","x":"","id":"q07-6"},{"t":"HAVE ANY MOUNTAINS","d":"иметь горы, располагать горными районами","x":"","id":"q07-7"},{"t":"HAVE A CUP OF COFFEE","d":"выпить чашку кофе","x":"","id":"q07-8"},{"t":"CARRY → CARRIED","d":"нести, переносить, перевозить","x":"","id":"q08-0"},{"t":"HURRY → HURRIED","d":"спешить, торопиться","x":"","id":"q08-1"},{"t":"ROB → ROBBED","d":"грабить, обкрадывать","x":"","id":"q08-2"},{"t":"INSTEAD OF","d":"вместо","x":"","id":"q09-0"},{"t":"IMPROVE","d":"улучшать","x":"","id":"q09-1"},{"t":"AVOID","d":"избегать","x":"","id":"q09-2"},{"t":"DEAL WITH","d":"разбираться с чем-либо, справляться","x":"","id":"q09-3"},{"t":"IN DETAIL","d":"подробно","x":"","id":"q09-4"},{"t":"PRECISE","d":"точный","x":"","id":"q09-5"},{"t":"ESPECIALLY","d":"особенно","x":"","id":"q09-6"},{"t":"INCLUDE","d":"включать","x":"","id":"q09-7"},{"t":"STRICTLY FORBIDDEN","d":"строго запрещено","x":"","id":"q09-8"},{"t":"BITTERLY COLD","d":"очень холодно, ужасно холодный","x":"","id":"q09-9"},{"t":"PITCH DARK","d":"совершенно темно, кромешная тьма","x":"","id":"q09-10"},{"t":"SUBSTANTIAL MEAL","d":"сытный, плотный приём пищи","x":"","id":"q09-11"},{"t":"BITTERLY DISAPPOINTED","d":"крайне разочарованный, глубоко разочарованный","x":"","id":"q09-12"},{"t":"VALID PASSPORT","d":"действительный паспорт","x":"","id":"q09-13"},{"t":"LIVE MUSIC","d":"живая музыка","x":"","id":"q09-14"},{"t":"HEAVY SNOW","d":"сильный снегопад","x":"","id":"q09-15"},{"t":"MAKE A MISTAKE","d":"совершить ошибку","x":"","id":"q09-16"},{"t":"PULL SOMEBODY'S LEG","d":"разыгрывать кого-либо, подшучивать","x":"","id":"q09-17"},{"t":"A STORM IN A TEACUP","d":"буря в стакане воды, шумиха из-за пустяка","x":"","id":"q09-18"},{"t":"KEY RING","d":"кольцо для ключей, брелок","x":"","id":"q09-19"},{"t":"LEAVE UNIVERSITY","d":"окончить университет, уйти из университета","x":"","id":"q09-20"},{"t":"MAKE A DECISION","d":"принять решение","x":"","id":"q09-21"},{"t":"TAKE UP A PROFESSION","d":"начать заниматься профессией, выбрать профессию","x":"","id":"q09-22"},{"t":"PLAY THE GUITAR","d":"играть на гитаре","x":"","id":"q09-23"},{"t":"WRITE SONGS","d":"писать песни","x":"","id":"q09-24"},{"t":"MAKE RECORDINGS","d":"делать записи, записывать музыку","x":"","id":"q09-25"},{"t":"HAVE A HEAVY COLD","d":"сильно простудиться, иметь сильную простуду","x":"","id":"q09-26"},{"t":"SEND RECORDINGS TO A RECORD COMPANY","d":"отправлять записи в звукозаписывающую компанию","x":"","id":"q09-27"},{"t":"GET A JOB","d":"устроиться на работу","x":"","id":"q09-28"},{"t":"FAST-FOOD RESTAURANT","d":"ресторан быстрого питания","x":"","id":"q09-29"}]}];
+const BUILTIN=[{"id": "f1", "name": "To be & Vocabulary in Use", "cards": [{"t": "DESCRIBE", "d": "описывать, характеризовать, излагать словами", "x": "We use the verb be to describe people and things. — Мы используем глагол be, чтобы описывать людей и предметы.", "id": "q01-0"}, {"t": "BOTH", "d": "оба, обе, и тот и другой, одновременно", "x": "My sisters are both married. — Обе мои сестры замужем.", "id": "q01-1"}, {"t": "BELOW", "d": "ниже, внизу, далее по тексту, под", "x": "Use the words below. — Используй слова ниже.", "id": "q01-2"}, {"t": "WEST", "d": "запад, западный", "x": "Kate has a house in the west of England. — У Кейт есть дом на западе Англии.", "id": "q01-3"}, {"t": "HAVE GOT", "d": "иметь, у кого-то есть", "x": "He's got two children, Mia and Joe. — У него двое детей — Мия и Джо.", "id": "q01-4"}, {"t": "STEP-BROTHER", "d": "сводный брат", "x": "He's got a step-brother called Adam. — У него есть сводный брат по имени Адам.", "id": "q01-5"}, {"t": "CLOSE TO", "d": "близко к, рядом с, близкий", "x": "The bank is close to the station. — Банк находится рядом со станцией.", "id": "q01-6"}, {"t": "BRANCH", "d": "ветка, филиал, отрасль", "x": "A bird is sitting on a branch. — Птица сидит на ветке.", "id": "q02-0"}, {"t": "BRUNCH", "d": "поздний завтрак совмещённый с обедом", "x": "We had brunch at eleven. — Мы поздно позавтракали в одиннадцать.", "id": "q02-1"}, {"t": "BUTCHER", "d": "мясник, мясная лавка", "x": "The butcher sells meat. — Мясник продаёт мясо.", "id": "q02-2"}, {"t": "RAW", "d": "сырой, необработанный", "x": "Raw means not cooked. — Сырой означает не приготовленный.", "id": "q02-3"}, {"t": "LAY THE TABLE", "d": "накрывать на стол", "x": "Please lay the table. — Пожалуйста, накрой на стол.", "id": "q02-4"}, {"t": "FLOUR", "d": "мука", "x": "Add flour to the mixture. — Добавь муку в смесь.", "id": "q02-5"}, {"t": "FLOOR", "d": "этаж, пол", "x": "The classroom is on the second floor. — Класс находится на втором этаже.", "id": "q02-6"}, {"t": "FROZEN", "d": "замороженный, застывший", "x": "I buy frozen vegetables. — Я покупаю замороженные овощи.", "id": "q02-7"}, {"t": "LEAF", "d": "лист растения, лист бумаги", "x": "A leaf fell from the tree. — С дерева упал лист.", "id": "q02-8"}, {"t": "GROUND", "d": "земля, грунт, поверхность", "x": "The seeds are in the ground. — Семена в земле.", "id": "q02-9"}, {"t": "DIG", "d": "копать, рыть", "x": "I dig in the garden. — Я копаю в саду.", "id": "q02-10"}, {"t": "COUNT", "d": "считать, подсчитывать, иметь значение", "x": "Count from one to ten. — Посчитай от одного до десяти.", "id": "q02-11"}, {"t": "ADD UP", "d": "складывать числа, суммировать, сходиться", "x": "Add up these numbers. — Сложи эти числа.", "id": "q02-12"}]}, {"id": "f2", "name": "Movies, Princess & Stative Verbs", "cards": [{"t": "ROUGH", "d": "тяжёлый, суровый, грубый, неровный, приблизительный", "x": "It's been a rough week. — Это была тяжёлая неделя.", "id": "q03-0"}, {"t": "TELL", "d": "сказать кому-то, рассказать, сообщить", "x": "Tell me the truth. — Скажи мне правду.", "id": "q03-1"}, {"t": "SAY → SAID", "d": "сказать, произнести", "x": "She said hello. — Она поздоровалась.", "id": "q03-2"}, {"t": "NOTHING LEFT TO LOSE", "d": "нечего терять", "x": "I've got nothing left to lose. — Мне больше нечего терять.", "id": "q03-3"}, {"t": "LET ME GET THIS STRAIGHT", "d": "дай мне уточнить, правильно ли я понимаю", "x": "Let me get this straight: you're leaving? — Дай уточню: ты уходишь?", "id": "q03-4"}, {"t": "PRETEND", "d": "притворяться, делать вид", "x": "Stop pretending. — Перестань притворяться.", "id": "q03-5"}, {"t": "ISN'T THAT WHAT THEY SAY?", "d": "разве не так говорят?", "x": "Isn't that what they say? — Разве не так говорят?", "id": "q03-6"}, {"t": "THE SAME WAY", "d": "таким же образом, точно так же", "x": "We did it the same way. — Мы сделали это таким же образом.", "id": "q03-7"}, {"t": "APLENTY", "d": "в изобилии, в большом количестве", "x": "There were Princesses aplenty. — Принцесс было множество.", "id": "q05-0"}, {"t": "FRIGHTFUL", "d": "ужасный, страшный, пугающий", "x": "It was really frightful! — Это было действительно ужасно!", "id": "q05-1"}, {"t": "MIDST", "d": "середина, центр, среди, в разгаре", "x": "In the midst of it all came a knocking at the town gate. — В разгар всего этого в ворота города постучали.", "id": "q05-2"}, {"t": "YET", "d": "ещё, пока, однако, всё же", "x": "Yet she claimed to be a real Princess. — И всё же она утверждала, что настоящая принцесса.", "id": "q05-3"}, {"t": "UNLESS", "d": "если не, если только не", "x": "Unless somebody has taken it. — Если только кто-нибудь не забрал это.", "id": "q05-4"}, {"t": "ONCE", "d": "однажды, когда-то, один раз, как только", "x": "Once there was a Prince. — Однажды жил-был принц.", "id": "q05-5"}, {"t": "LIKE", "d": "нравиться, любить", "x": "I like this song. — Мне нравится эта песня.", "id": "q06-0"}, {"t": "LOVE", "d": "любить, обожать", "x": "She loves chocolate. — Она любит шоколад.", "id": "q06-1"}, {"t": "HATE", "d": "ненавидеть, очень не любить", "x": "I hate cold weather. — Я терпеть не могу холодную погоду.", "id": "q06-2"}, {"t": "PREFER", "d": "предпочитать", "x": "I prefer tea to coffee. — Я предпочитаю чай кофе.", "id": "q06-3"}, {"t": "NEED", "d": "нуждаться, быть необходимым", "x": "I need your help. — Мне нужна твоя помощь.", "id": "q06-4"}, {"t": "WANT", "d": "хотеть", "x": "He wants a new phone. — Он хочет новый телефон.", "id": "q06-5"}, {"t": "KNOW", "d": "знать", "x": "I know the answer. — Я знаю ответ.", "id": "q06-6"}, {"t": "BELIEVE", "d": "верить, считать", "x": "I believe you. — Я тебе верю.", "id": "q06-7"}, {"t": "UNDERSTAND", "d": "понимать", "x": "I understand the question. — Я понимаю вопрос.", "id": "q06-8"}, {"t": "REMEMBER", "d": "помнить, вспоминать", "x": "I remember her name. — Я помню её имя.", "id": "q06-9"}, {"t": "MEAN", "d": "значить, означать, иметь в виду", "x": "What does this word mean? — Что означает это слово?", "id": "q06-10"}, {"t": "HEAR", "d": "слышать", "x": "I hear music. — Я слышу музыку.", "id": "q06-11"}, {"t": "SEE", "d": "видеть", "x": "I see a bird. — Я вижу птицу.", "id": "q06-12"}, {"t": "SMELL", "d": "пахнуть, чувствовать запах", "x": "The flowers smell lovely. — Цветы приятно пахнут.", "id": "q06-13"}, {"t": "TASTE", "d": "иметь вкус, ощущать вкус", "x": "This soup tastes delicious. — Этот суп очень вкусный.", "id": "q06-14"}, {"t": "BELONG", "d": "принадлежать", "x": "This bag belongs to me. — Эта сумка принадлежит мне.", "id": "q06-15"}, {"t": "CONTAIN", "d": "содержать", "x": "This bottle contains water. — В этой бутылке вода.", "id": "q06-16"}, {"t": "COST", "d": "стоить", "x": "The tickets cost twenty euros. — Билеты стоят двадцать евро.", "id": "q06-17"}, {"t": "OWN", "d": "владеть, иметь в собственности", "x": "They own a small house. — У них есть небольшой дом.", "id": "q06-18"}]}, {"id": "f3", "name": "Confusing Words", "cards": [{"t": "THIS", "d": "этот, эта, это", "x": "This book is mine. — Эта книга моя.", "id": "q04-0"}, {"t": "THAT", "d": "тот, та, то, что", "x": "That house is beautiful. — Тот дом красивый.", "id": "q04-1"}, {"t": "THESE", "d": "эти", "x": "These flowers are pink. — Эти цветы розовые.", "id": "q04-2"}, {"t": "THOSE", "d": "те", "x": "Those people are my friends. — Те люди — мои друзья.", "id": "q04-3"}, {"t": "THROUGH", "d": "через, сквозь, по, посредством", "x": "I walked through the forest. — Я прошла через лес.", "id": "q04-4"}, {"t": "THOUGH", "d": "хотя, однако, несмотря на то что", "x": "Though I'm tired, I'll study. — Хотя я устала, я буду заниматься.", "id": "q04-5"}, {"t": "THOUGHT", "d": "мысль, думал, думала", "x": "I thought about you. — Я думала о тебе.", "id": "q04-6"}, {"t": "TOUGH", "d": "трудный, тяжёлый, жёсткий, выносливый", "x": "It was a tough day. — Это был тяжёлый день.", "id": "q04-7"}, {"t": "THOROUGH", "d": "тщательный, основательный", "x": "She did a thorough check. — Она провела тщательную проверку.", "id": "q04-8"}, {"t": "THROUGHOUT", "d": "на протяжении, по всему пространству", "x": "It rained throughout the day. — Дождь шёл весь день.", "id": "q04-9"}, {"t": "THROW", "d": "бросать, кидать", "x": "Don't throw the ball inside. — Не бросай мяч в помещении.", "id": "q04-10"}, {"t": "THERE", "d": "там", "x": "There is a café near here. — Рядом есть кафе.", "id": "q04-11"}, {"t": "THEIR", "d": "их", "x": "Their house is big. — Их дом большой.", "id": "q04-12"}, {"t": "THEY'RE", "d": "они есть, они являются", "x": "They're at home. — Они дома.", "id": "q04-13"}, {"t": "THEN", "d": "затем, потом, тогда", "x": "We ate and then left. — Мы поели, а потом ушли.", "id": "q04-14"}, {"t": "THAN", "d": "чем", "x": "She is taller than me. — Она выше меня.", "id": "q04-15"}, {"t": "WHERE", "d": "где, куда", "x": "Where are you? — Где ты?", "id": "q04-16"}, {"t": "WERE", "d": "были", "x": "We were tired. — Мы устали.", "id": "q04-17"}, {"t": "WE'RE", "d": "мы есть, мы являемся", "x": "We're ready. — Мы готовы.", "id": "q04-18"}, {"t": "WHETHER", "d": "ли", "x": "I don't know whether she'll come. — Не знаю, придёт ли она.", "id": "q04-19"}, {"t": "WEATHER", "d": "погода", "x": "The weather is lovely. — Погода прекрасная.", "id": "q04-20"}, {"t": "WHO", "d": "кто", "x": "Who is she? — Кто она?", "id": "q04-21"}, {"t": "WHOSE", "d": "чей, чья, чьё, чьи", "x": "Whose bag is this? — Чья это сумка?", "id": "q04-22"}, {"t": "WHO'S", "d": "кто есть, кто является", "x": "Who's your teacher? — Кто твой преподаватель?", "id": "q04-23"}, {"t": "WHAT", "d": "что, какой", "x": "What is your name? — Как тебя зовут?", "id": "q04-24"}, {"t": "WHICH", "d": "который, какой из", "x": "Which dress do you prefer? — Какое платье ты предпочитаешь?", "id": "q04-25"}, {"t": "HERE", "d": "здесь, сюда", "x": "Come here, please. — Подойди сюда, пожалуйста.", "id": "q04-26"}, {"t": "HEAR", "d": "слышать", "x": "Can you hear me? — Ты меня слышишь?", "id": "q04-27"}, {"t": "TO", "d": "к, в, частица перед инфинитивом", "x": "I want to learn English. — Я хочу учить английский.", "id": "q04-28"}, {"t": "TOO", "d": "тоже, слишком", "x": "I'm tired too. — Я тоже устала.", "id": "q04-29"}, {"t": "TWO", "d": "два", "x": "I have two cats. — У меня две кошки.", "id": "q04-30"}, {"t": "QUITE", "d": "довольно, вполне", "x": "It's quite easy. — Это довольно легко.", "id": "q04-31"}, {"t": "QUIET", "d": "тихий, спокойный", "x": "This room is quiet. — В этой комнате тихо.", "id": "q04-32"}, {"t": "LOSE", "d": "терять, проигрывать", "x": "Don't lose your keys. — Не потеряй ключи.", "id": "q04-33"}, {"t": "LOOSE", "d": "свободный, неплотный, не тугой", "x": "These jeans are too loose. — Эти джинсы слишком свободные.", "id": "q04-34"}, {"t": "ALL", "d": "все, весь", "x": "All my friends are here. — Все мои друзья здесь.", "id": "q04-35"}, {"t": "WHOLE", "d": "целый, весь", "x": "I read the whole book. — Я прочитала всю книгу.", "id": "q04-36"}, {"t": "OTHER", "d": "другой, остальные", "x": "Other students agreed. — Другие студенты согласились.", "id": "q04-37"}, {"t": "ANOTHER", "d": "ещё один, другой", "x": "Can I have another cup? — Можно мне ещё одну чашку?", "id": "q04-38"}]}, {"id": "f4", "name": "Have, Past Simple & Collocations", "cards": [{"t": "HAVE A HEADACHE", "d": "иметь головную боль, болит голова", "x": "I've got a headache. — У меня болит голова.", "id": "q07-0"}, {"t": "HAVE FUN", "d": "веселиться, хорошо проводить время", "x": "Have fun! — Хорошо проведи время!", "id": "q07-1"}, {"t": "HAVE A KING OR QUEEN", "d": "иметь короля или королеву", "x": "Does this country have a king or queen? — В этой стране есть король или королева?", "id": "q07-2"}, {"t": "HAVE A DRIVING LICENCE", "d": "иметь водительские права", "x": "I have a driving licence. — У меня есть водительские права.", "id": "q07-3"}, {"t": "HAVE ANY BROTHERS OR SISTERS", "d": "иметь братьев или сестёр", "x": "Have you got any brothers or sisters? — У тебя есть братья или сёстры?", "id": "q07-4"}, {"t": "HAVE A TEMPERATURE", "d": "иметь повышенную температуру", "x": "She's got a temperature. — У неё температура.", "id": "q07-5"}, {"t": "HAVE LUNCH", "d": "обедать", "x": "I have lunch at one. — Я обедаю в час.", "id": "q07-6"}, {"t": "HAVE ANY MOUNTAINS", "d": "иметь горы, располагать горными районами", "x": "Does Holland have any mountains? — В Голландии есть горы?", "id": "q07-7"}, {"t": "HAVE A CUP OF COFFEE", "d": "выпить чашку кофе", "x": "I have a cup of coffee every morning. — Я выпиваю чашку кофе каждое утро.", "id": "q07-8"}, {"t": "CARRY → CARRIED", "d": "нести, переносить, перевозить", "x": "She carried a heavy bag. — Она несла тяжёлую сумку.", "id": "q08-0"}, {"t": "HURRY → HURRIED", "d": "спешить, торопиться", "x": "She hurried home. — Она поспешила домой.", "id": "q08-1"}, {"t": "ROB → ROBBED", "d": "грабить, обкрадывать", "x": "They robbed a bank. — Они ограбили банк.", "id": "q08-2"}, {"t": "INSTEAD OF", "d": "вместо", "x": "Instead of coffee, I had tea. — Вместо кофе я выпила чай.", "id": "q09-0"}, {"t": "IMPROVE", "d": "улучшать", "x": "I want to improve my English. — Я хочу улучшить свой английский.", "id": "q09-1"}, {"t": "AVOID", "d": "избегать", "x": "Try to avoid mistakes. — Старайся избегать ошибок.", "id": "q09-2"}, {"t": "DEAL WITH", "d": "разбираться с чем-либо, справляться", "x": "I can deal with this problem. — Я могу справиться с этой проблемой.", "id": "q09-3"}, {"t": "IN DETAIL", "d": "подробно", "x": "Please explain it in detail. — Пожалуйста, объясни это подробно.", "id": "q09-4"}, {"t": "PRECISE", "d": "точный", "x": "We need a precise answer. — Нам нужен точный ответ.", "id": "q09-5"}, {"t": "ESPECIALLY", "d": "особенно", "x": "I like English, especially speaking. — Мне нравится английский, особенно разговорная практика.", "id": "q09-6"}, {"t": "INCLUDE", "d": "включать", "x": "The course includes speaking practice. — Курс включает разговорную практику.", "id": "q09-7"}, {"t": "STRICTLY FORBIDDEN", "d": "строго запрещено", "x": "Smoking is strictly forbidden here. — Здесь курить строго запрещено.", "id": "q09-8"}, {"t": "BITTERLY COLD", "d": "очень холодно, ужасно холодный", "x": "It was bitterly cold yesterday. — Вчера было ужасно холодно.", "id": "q09-9"}, {"t": "PITCH DARK", "d": "совершенно темно, кромешная тьма", "x": "It was pitch dark outside. — На улице было совершенно темно.", "id": "q09-10"}, {"t": "SUBSTANTIAL MEAL", "d": "сытный, плотный приём пищи", "x": "We had a substantial meal. — Мы плотно поели.", "id": "q09-11"}, {"t": "BITTERLY DISAPPOINTED", "d": "крайне разочарованный, глубоко разочарованный", "x": "She was bitterly disappointed. — Она была глубоко разочарована.", "id": "q09-12"}, {"t": "VALID PASSPORT", "d": "действительный паспорт", "x": "You need a valid passport. — Тебе нужен действительный паспорт.", "id": "q09-13"}, {"t": "LIVE MUSIC", "d": "живая музыка", "x": "We listened to live music. — Мы слушали живую музыку.", "id": "q09-14"}, {"t": "HEAVY SNOW", "d": "сильный снегопад", "x": "There was heavy snow last night. — Прошлой ночью был сильный снегопад.", "id": "q09-15"}, {"t": "MAKE A MISTAKE", "d": "совершить ошибку", "x": "Everyone can make a mistake. — Каждый может совершить ошибку.", "id": "q09-16"}, {"t": "PULL SOMEBODY'S LEG", "d": "разыгрывать кого-либо, подшучивать", "x": "Are you pulling my leg? — Ты меня разыгрываешь?", "id": "q09-17"}, {"t": "A STORM IN A TEACUP", "d": "буря в стакане воды, шумиха из-за пустяка", "x": "It's a storm in a teacup. — Это буря в стакане воды.", "id": "q09-18"}, {"t": "KEY RING", "d": "кольцо для ключей, брелок", "x": "My keys are on a key ring. — Мои ключи на кольце для ключей.", "id": "q09-19"}, {"t": "LEAVE UNIVERSITY", "d": "окончить университет, уйти из университета", "x": "I left university five years ago. — Я окончила университет пять лет назад.", "id": "q09-20"}, {"t": "MAKE A DECISION", "d": "принять решение", "x": "I made a decision yesterday. — Я вчера приняла решение.", "id": "q09-21"}, {"t": "TAKE UP A PROFESSION", "d": "начать заниматься профессией, выбрать профессию", "x": "He decided to take up a creative profession. — Он решил выбрать творческую профессию.", "id": "q09-22"}, {"t": "PLAY THE GUITAR", "d": "играть на гитаре", "x": "She plays the guitar. — Она играет на гитаре.", "id": "q09-23"}, {"t": "WRITE SONGS", "d": "писать песни", "x": "He writes songs in English. — Он пишет песни на английском.", "id": "q09-24"}, {"t": "MAKE RECORDINGS", "d": "делать записи, записывать музыку", "x": "I made some recordings. — Я сделала несколько записей.", "id": "q09-25"}, {"t": "HAVE A HEAVY COLD", "d": "сильно простудиться, иметь сильную простуду", "x": "I had a heavy cold last week. — На прошлой неделе я сильно простудилась.", "id": "q09-26"}, {"t": "SEND RECORDINGS TO A RECORD COMPANY", "d": "отправлять записи в звукозаписывающую компанию", "x": "He sent recordings to a record company. — Он отправил записи в звукозаписывающую компанию.", "id": "q09-27"}, {"t": "GET A JOB", "d": "устроиться на работу", "x": "She got a job last month. — В прошлом месяце она устроилась на работу.", "id": "q09-28"}, {"t": "FAST-FOOD RESTAURANT", "d": "ресторан быстрого питания", "x": "He works in a fast-food restaurant. — Он работает в ресторане быстрого питания.", "id": "q09-29"}]}];
 let data;
 try{data=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){data=null}
 if(!data||!Array.isArray(data.sets))data={sets:[]};
@@ -482,6 +518,7 @@ function isRight(input,ans,card){
   });
 }
 const ico={
+ review:'<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 01-14 5.3L4 15"/><path d="M4 20v-5h5"/></svg>',
  cards:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 10h8M8 14h5"/></svg>',
  learn:'<svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>',
  test:'<svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 16h6"/></svg>',
@@ -499,18 +536,19 @@ function home(){
       <span class="tag">${cnt(s.cards.length)}</span>
       <b>${esc(s.name)}</b>
       <span class="bar"><span style="width:${mastered(s)}%"></span></span>
-      <span class="small muted">Выучено ${mastered(s)}%</span>
+      <span class="small muted">Выучено ${mastered(s)}%</span>${dueN(s)?`<span class="small" style="color:var(--accent);font-weight:700">${TX.due(dueN(s))}</span>`:''}
     </button>`).join('')}</div>`
   :`<div class="panel empty stack"><h2>Пока нет ни одного набора</h2><p class="muted">Создайте набор и вставьте слова списком: слово — перевод.</p></div>`;
-  return `<div class="top"><div class="brand">Katrin <i>Dictionary</i><img class="bowi" src="data:image/png;base64,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" alt=""></div><div class="row"><button class="btn sm ghost" data-act="mute" aria-pressed="${data.mute?'true':'false'}">Звук: ${data.mute?'выкл':'вкл'}</button><button class="btn primary" data-act="new">+ Новый набор</button></div></div>
+  return `<div class="top"><div class="brand">Katrin <i>Dictionary</i><img class="bowi" src="data:image/png;base64,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" alt=""></div><div class="row">${themeBtn()}${fsBtn()}<button class="btn sm ghost" data-act="mute" aria-pressed="${data.mute?'true':'false'}">Звук: ${data.mute?'выкл':'вкл'}</button><button class="btn primary" data-act="new">+ Новый набор</button></div></div>
   ${bannerHtml()}
-  <h1>Ваши наборы</h1>${syncLine()}${list}`;
+  <h1>Ваши наборы</h1>${syncLine()}${backupNote()}${list}`;
 }
 
 function setView(){
   const s=cur();
+  if(WF.id!==s.id)WF={q:'',hard:false,id:s.id};
   const ln=learnedToday(),tdDone=data.day&&data.day.date===isoToday()&&data.day.marked;
-  const tdLine=`<div class="small muted">Сегодня полностью выучено слов: ${ln} из ${MARK_WORDS}. ${tdDone?'🍇 Отмечено в таблице.':'Отметка в таблице, когда наберётся '+MARK_WORDS+'.'}</div>`;
+  const tdLine=`<div class="small muted">${ln>=MARK_WORDS?`Сегодня выучено слов: ${ln}.`:`Сегодня выучено слов: ${ln} из ${MARK_WORDS}.`} ${tdDone?'🍇 «Слова» отмечены в трекере.':'«Слова» в трекере отметятся сами, когда наберётся '+MARK_WORDS+'.'}</div>`;
   const lv=c=>`<div class="lv">${[1,2,3].map(i=>`<span class="dot ${c.lvl>=i?'on':''}"></span>`).join('')}</div>`;
   return `<div class="top">${back('home','Наборы')}<div class="row"><button class="btn sm" data-act="edit" data-id="${s.id}">Редактировать</button></div></div>
   <div class="stack"><h1>${esc(s.name)}</h1>
@@ -522,6 +560,7 @@ function setView(){
   <div class="modes">
    <button class="mode" data-act="start" data-m="cards">${ico.cards}<b>Карточки</b><span>Переверните и отметьте, знаете ли слово</span></button>
    <button class="mode" data-act="start" data-m="learn">${ico.learn}<b>Учить</b><span>Части по ${PART} слов: тест, ввод, общая сводка</span></button>
+   <button class="mode" data-act="start" data-m="review">${ico.review}<b>${TX.rvTitle}</b><span>${dueN(s)?TX.rvDue(dueN(s)):TX.rvDesc}</span></button>
    <button class="mode" data-act="start" data-m="test">${ico.test}<b>Тест</b><span>Верно/неверно, выбор и ввод. Итог в конце</span></button>
    <button class="mode" data-act="start" data-m="match">${ico.match}<b>Подбор пар</b><span>Соедините слова на время${s.best?` · рекорд ${s.best} с`:''}</span></button>
   </div>
@@ -531,8 +570,10 @@ function setView(){
    <button class="mode" data-act="start" data-m="blast">${ico.blast}<b>Blast</b><span>Сбивайте летящие слова, вписывая ответ${s.blastBest?` · рекорд ${s.blastBest}`:''}</span></button>
    <button class="mode" data-act="start" data-m="gems">${ico.gems}<b>Кристаллы</b><span>60 секунд, серия ответов дороже кристалл${s.gemBest?` · рекорд ${s.gemBest}`:''}</span></button>
   </div>`}
+  ${statsHtml(s)}
   <div class="panel"><div class="row" style="margin-bottom:8px"><h2 class="grow">Слова в наборе</h2><button class="btn sm ghost" data-act="reset">Сбросить прогресс</button></div>
-   <div class="terms">${s.cards.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}${c.x?`<div class="small" style="margin-top:4px;opacity:.85">${esc(c.x)}</div>`:''}</div>${lv(c)}</div>`).join('')||'<p class="muted">Пусто</p>'}</div></div>`;
+   <div class="row" style="gap:8px;margin-bottom:8px"><input class="inp grow" id="wsearch" placeholder="${TX.search}" value="${esc(WF.q)}" autocomplete="off" style="flex:1;min-width:0"><button class="btn sm ${WF.hard?'primary':''}" data-act="whard" aria-pressed="${WF.hard}">${TX.onlyHard}</button></div>
+   <div class="terms" id="termsbox">${s.cards.map(c=>`<div class="term" data-s="${esc((c.t+' '+c.d).toLowerCase())}" data-h="${c.hard?1:0}"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}</div>${lv(c)}</div>`).join('')||'<p class="muted">Пусто</p>'}</div></div>`;
 }
 
 function editView(){
@@ -542,11 +583,11 @@ function editView(){
   <div class="stack"><label class="small muted" for="setname">Название</label>
    <input class="inp" id="setname" value="${esc(E.name)}" placeholder="Например: Испанский, неделя 1" data-f="name"></div>
   <div class="stack"><div class="row"><h2 class="grow">Слова</h2></div>
-   <div class="stack" id="rows">${E.rows.map((r,i)=>`<div class="editrow"><input class="inp" aria-label="Слово ${i+1}" placeholder="Слово" value="${esc(r.t)}" data-f="t" data-i="${i}"><input class="inp" aria-label="Перевод ${i+1}" placeholder="Перевод" value="${esc(r.d)}" data-f="d" data-i="${i}"><button class="x" data-act="delrow" data-i="${i}" aria-label="Удалить строку ${i+1}">×</button></div>`).join('')}</div>
+   <div class="stack" id="rows">${E.rows.map((r,i)=>`<div class="editrow"><input class="inp" aria-label="Слово ${i+1}" placeholder="Слово" value="${esc(r.t)}" data-f="t" data-i="${i}"><input class="inp" aria-label="Перевод ${i+1}" placeholder="Перевод" value="${esc(r.d)}" data-f="d" data-i="${i}"><button class="x" data-act="delrow" data-i="${i}" aria-label="Удалить строку ${i+1}">×</button><input class="inp exin" aria-label="Пример (по желанию) ${i+1}" placeholder="Пример (по желанию)" value="${esc(r.x||'')}" data-f="x" data-i="${i}"></div>`).join('')}</div>
    <div class="row"><button class="btn" data-act="addrow">+ Добавить слово</button></div></div>
   <div class="panel stack"><h2>Вставить списком</h2>
-   <p class="muted small" style="margin:0">Одна пара на строку. Разделитель: тире, «=», «;» или табуляция (так копируется из таблицы).</p>
-   <textarea class="inp" id="bulk" placeholder="apple — яблоко&#10;to run = бежать&#10;house; дом" data-f="bulk">${esc(E.bulk||'')}</textarea>
+   <p class="muted small" style="margin:0">Одна пара на строку. Разделитель: тире, «=», «;» или табуляция (так копируется из таблицы). Пример можно добавить после «|».</p>
+   <textarea class="inp" id="bulk" placeholder="apple — яблоко | I eat an apple.&#10;to run = бежать&#10;house; дом" data-f="bulk">${esc(E.bulk||'')}</textarea>
    <div class="row"><button class="btn" data-act="import">Добавить из списка</button>${E.msg?`<span class="small muted">${esc(E.msg)}</span>`:''}</div></div>
   ${isNew?'':`<div class="row end">${E.confirmDel?`<span class="small muted">Набор удалится навсегда.</span><button class="btn bad" data-act="delset">Да, удалить</button><button class="btn ghost" data-act="canceldel">Нет</button>`:`<button class="btn bad" data-act="askdel">Удалить набор</button>`}</div>`}`;
 }
@@ -555,7 +596,7 @@ function editView(){
 function cardsStart(){const s=cur();S={m:'cards',queue:shuffle(s.cards),i:0,know:0,again:0,flip:false}}
 function cardsView(){
   const s=cur();
-  const head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   if(S.i>=S.queue.length){
     return `${head}<div class="panel result"><h2>Круг пройден</h2><div class="big">${S.know}/${S.know+S.again}</div><p class="muted">Знали сразу: ${S.know}. Вернулись к повтору: ${S.again}.</p>
     <div class="row"><button class="btn primary" data-act="start" data-m="cards">Ещё раз</button><button class="btn" data-act="start" data-m="learn">Перейти к «Учить»</button></div></div>${summary()}`;
@@ -571,24 +612,237 @@ function cardsView(){
 }
 
 /* --- учить --- */
+/* ---------- ошибки, повторение, статистика ---------- */
+const TX={
+  tr:'Перевод',ex:'Пример',next:'Дальше',again:'Ещё раз',toSet:'К набору',
+  pick:'Выберите ответ',typeA:'Впишите ответ',wordL:'слово',translL:'перевод',
+  right:'Верно',rightAns:'Правильный ответ',youTyped:'Вы ввели',
+  rvTitle:'Повторение',rvDesc:'Слова с ошибками чаще, выученные по разу',
+  rvDue:n=>`Пора повторить: ${n} ${plural(n,'слово','слова','слов')}`,
+  due:n=>`Повторить: ${n}`,
+  rvEmptyT:'Пока нечего повторять',rvEmpty:'Сначала выучи несколько слов: в «Учить» или в других режимах.',rvToLearn:'Перейти к «Учить»',
+  rvDone:'Повторение завершено',rvRes:(a,b)=>`Верных ответов: ${a}, ошибок: ${b}.`,
+  rvHard:n=>`Слов с ошибками осталось: ${n}. В следующем повторении они будут чаще.`,rvClean:'Слов с ошибками не осталось. Отлично!',
+  stT:'Статистика',stLearned:'выучено',stHard:'с ошибками',stNew:'не начато',stDays:'дней занятий',stStrip:'Последние 14 дней',
+  wOn:'отмечено',wAuto:g=>`само: выучено ${g} из ${MARK_WORDS}, или отметь сама`,wHint:()=>`само, когда выучишь ${MARK_WORDS} слов, или отметь сама`
+};
+const REVIEW_DAYS=3,DAY_MS=864e5;
+const isLd=(s,c)=>(s.ld||[]).includes(c.id)&&!c.hard;
+const ldCount=s=>s.cards.filter(c=>isLd(s,c)).length;
+const dueN=s=>s.cards.filter(c=>c.hard||((c.lvl||0)>=3&&(!c.at||Date.now()-c.at>REVIEW_DAYS*DAY_MS))).length;
+/* после ответа: отдельно слово с нормальным переводом (при ошибке) и пример употребления */
+const exHtml=(c,ok,act)=>{
+  const tr=String(c.d||'').replace(/​/g,'');
+  let h=S&&S.m==='learn'?`<small>${spkBtn(c.t)}</small>`:'';
+  if(!ok)h+=`<small><b>${TX.tr}:</b> ${esc(c.t)} — ${esc(tr)}</small>`;
+  if(c.x)h+=`<small class="muted"><b>${TX.ex}:</b> ${esc(c.x)}</small>`;
+  if(ok&&c.x)h+=`<small><button class="btn sm" data-act="${act||'next'}" style="margin-top:6px">${TX.next}</button></small>`;
+  return h;
+};
+/* примеры, стёртые при чистке слов, возвращаем из встроенных наборов */
+data.sets.forEach(s=>{const b=BUILTIN.find(x=>x.id===s.id);if(!b)return;s.cards.forEach(c=>{if(!c.x){const bc=b.cards.find(k=>k.id===c.id);if(bc&&bc.x)c.x=bc.x}})});
+/* статистика набора */
+function statsHtml(s){
+  const n=s.cards.length,hardN=s.cards.filter(c=>c.hard).length;
+  const learned=s.cards.filter(c=>(c.lvl||0)>=3&&!c.hard).length;
+  const fresh=s.cards.filter(c=>!(c.lvl>0)&&!c.hard).length;
+  const days=Object.keys(s.days||{}).length;
+  const tile=(v,l)=>`<div class="tile2"><b>${v}</b><span class="small muted">${l}</span></div>`;
+  const vals=[];let max=1;
+  for(let i=13;i>=0;i--){const d=addDays(isoToday(),-i),v=(s.days||{})[d]||0;vals.push([d,v]);if(v>max)max=v}
+  const bars=vals.map(([d,v])=>`<i class="${v?'on':''}" style="height:${v?Math.max(16,Math.round(v/max*100)):8}%" title="${ruDate(d)}: ${v}"></i>`).join('');
+  return `<div class="panel stack"><h2>${TX.stT}</h2><div class="tiles">${tile(learned+' / '+n,TX.stLearned)}${tile(hardN,TX.stHard)}${tile(fresh,TX.stNew)}${tile(days,TX.stDays)}</div><div class="small muted">${TX.stStrip}</div><div class="strip">${bars}</div></div>`;
+}
+/* --- повторение: слова с ошибками спрашиваем чаще, выученные прогоняем по разу --- */
+function reviewStart(){
+  const s=cur();
+  const hard=s.cards.filter(c=>c.hard);
+  const done=s.cards.filter(c=>!c.hard&&((c.lvl||0)>0||isLd(s,c)));
+  const items=[];
+  hard.forEach(c=>{items.push({c,k:'mc'},{c,k:'typed'},{c,k:'mc'})});
+  shuffle(done).slice(0,20).forEach(c=>items.push({c,k:'mc'}));
+  S={m:'review',queue:shuffle(items),i:0,ok:0,bad:0,fb:null,opts:null,typed:'',retry:{},end:false,empty:!items.length};
+  if(items.length)reviewNext(true);
+}
+function reviewNext(first){
+  if(!first)S.i++;
+  S.fb=null;S.typed='';S.hn=0;
+  const it=S.queue[S.i];
+  if(!it){S.end=true;if(!first)render();return}
+  S.card=it.c;S.kind=it.k;
+  if(S.kind==='mc'){
+    const others=[...new Set(shuffle(cur().cards.filter(x=>x.id!==it.c.id).map(aOf).filter(x=>norm(x)!==norm(aOf(it.c)))))].slice(0,3);
+    if(others.length)S.opts=shuffle([aOf(it.c),...others]);else S.kind='typed';
+  }
+  if(!first)render();
+}
+function reviewAnswer(ok,pick,given){
+  const c=S.card;rec(c.id,ok);
+  if(ok){S.ok++;ding()}
+  else{S.bad++;S.retry[c.id]=(S.retry[c.id]||0)+1;if(S.retry[c.id]<=2)S.queue.push({c,k:'typed'})}
+  S.fb={ok,pick,given};save();render();
+  if(ok)later(()=>{if(S&&S.m==='review'&&S.fb&&S.fb.ok)reviewNext()},c.x?3200:1000);
+}
+function reviewSubmit(v){
+  if(!S||S.m!=='review'||S.fb)return;
+  const c=S.card;reviewAnswer(isRight(v,aOf(c),c),null,v);
+}
+function reviewView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
+  if(S.empty)return `${head}<div class="panel result"><div class="big">🌱</div><h2>${TX.rvEmptyT}</h2><p class="muted">${TX.rvEmpty}</p><div class="row" style="justify-content:center"><button class="btn primary" data-act="start" data-m="learn">${TX.rvToLearn}</button><button class="btn" data-act="open">${TX.toSet}</button></div></div>`;
+  if(S.end){
+    const hardN=s.cards.filter(c=>c.hard).length;
+    return `${head}<div class="panel result"><div class="big">✨</div><h2>${TX.rvDone}</h2><p class="muted">${TX.rvRes(S.ok,S.bad)}</p><p class="small muted">${hardN?TX.rvHard(hardN):TX.rvClean}</p>
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="start" data-m="review">${TX.again}</button><button class="btn" data-act="open">${TX.toSet}</button></div></div>${summary()}`;
+  }
+  const c=S.card,q=qOf(c),a=aOf(c),total=S.queue.length;
+  let body='';
+  if(S.kind==='mc'){
+    body=`<div class="opts">${S.opts.map((o,i)=>{
+      let cls='';if(S.fb){if(o===a)cls='right';else if(S.fb.pick===i)cls='wrong'}
+      return `<button class="opt ${cls}" data-act="rmc" data-i="${i}" ${S.fb?'disabled':''}>${esc(o)}</button>`}).join('')}</div>`;
+  }else{
+    body=`<form id="rtyped" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="${TX.typeA}" ${S.fb?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
+      ${S.fb?'':`<div class="row"><button class="btn primary" type="submit">OK</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button></div>`}</div></form>`;
+  }
+  let fb='';
+  if(S.fb){
+    fb=S.fb.ok?`<div class="fb ok">${TX.right}${exHtml(c,true,'rnext')}</div>`
+      :`<div class="fb bad">${TX.rightAns}<small>${esc(a)}</small>${exHtml(c)}${S.fb.given?`<small class="muted">${TX.youTyped}: ${esc(S.fb.given)}</small>`:''}</div>
+      <div class="row"><button class="btn primary" data-act="rnext">${TX.next}</button></div>`;
+  }
+  return `${head}
+  <div class="row"><span class="small muted">${S.i+1} / ${total}</span><div class="bar blue grow"><span style="width:${S.i/total*100}%"></span></div></div>
+  <div class="q"><span class="tag">${S.kind==='mc'?TX.pick:TX.typeA} · ${s.dir==='dt'?TX.wordL:TX.translL}</span><div class="word">${esc(q)}</div></div>
+  ${body}${fb}`;
+}
+Object.assign(TX,{
+  leave:'Выйти из упражнения? Ответы уже сохранены, но текущий круг придётся начать заново.',
+  left:n=>`осталось ${n}`,
+  wr:(a,b)=>a===b?`слово ${a}`:`слова ${a}–${b}`,
+  snd:'Звук',fsT:'Размер текста',fsDone:'Готово',
+  bkText:'Прогресс хранится только на этом устройстве. Сохрани копию, чтобы ничего не потерять.',bkNow:'Сохранить копию',bkLater:'Позже'
+});
+/* выход из упражнения: спрашиваем подтверждение, если оно не закончено */
+const inProgress=()=>{
+  if(!S||V.view!=='play')return false;
+  switch(S.m){
+    case 'cards':return S.i<S.queue.length;
+    case 'learn':return !['partdone','final','alldone'].includes(S.phase);
+    case 'test':return S.i<S.qs.length;
+    case 'match':return !S.done;
+    case 'review':return !S.end&&!S.empty;
+    case 'gems':case 'blast':return !S.end;
+    case 'blocks':return S.phase!=='end';
+  }
+  return false;
+};
+/* кнопки сверху: звук и размер текста */
+const soundBtn=()=>`<button class="btn sq sndbtn" data-act="smute" aria-label="${TX.snd}" title="${TX.snd}">${data.mute?'🔇':'🔊'}</button>`;
+const fsBtn=()=>`<button class="btn sq" data-act="fsopen" aria-label="${TX.fsT}" title="${TX.fsT}" style="font-size:.95rem;font-weight:700">Aa</button>`;
+const toolsHtml=()=>`<span class="row" style="gap:8px;flex-wrap:nowrap">${soundBtn()}${fsBtn()}</span>`;
+function applyFs(){const v=Math.min(1.4,Math.max(.85,(+data.fs||100)/100));document.documentElement.style.setProperty('--fs',v)}
+applyFs();
+function fsOpen(){
+  const old=document.getElementById('fsbox');
+  if(old){old.remove();return}
+  const box=document.createElement('div');box.id='fsbox';box.className='fsbox';
+  box.innerHTML=`<b>${TX.fsT}</b><div class="row" style="gap:10px;flex-wrap:nowrap"><span style="font-size:.8rem">A</span><input type="range" id="fsr" min="85" max="140" step="5" value="${data.fs||100}" aria-label="${TX.fsT}"><span style="font-size:1.3rem">A</span></div><button class="btn sm" data-act="fsopen">${TX.fsDone}</button>`;
+  document.body.appendChild(box);
+  document.getElementById('fsr').addEventListener('input',e=>{data.fs=+e.target.value;applyFs();saveLocal(true)});
+}
+/* диапазон слов в части */
+function partRange(){
+  const a=S.parts.slice(0,S.p).reduce((t,p)=>t+p.length,0)+1;
+  return TX.wr(a,a+S.parts[S.p].length-1);
+}
+/* напоминание о копии раз в неделю, если не вошла в аккаунт */
+if(!data.firstSeen){data.firstSeen=Date.now();saveLocal(true)}
+function backupNote(){
+  if(fbUser||syncState==='wait'||syncState==='cloud')return '';
+  if(!hasContent())return '';
+  const last=Math.max(data.lastBackup||0,data.bkSnooze||0,data.firstSeen||0);
+  if(Date.now()-last<7*DAY_MS)return '';
+  return `<div class="panel stack" style="gap:10px"><div class="small">${TX.bkText}</div><div class="row"><button class="btn sm primary" data-act="bkexp">${TX.bkNow}</button><button class="btn sm ghost" data-act="bklater">${TX.bkLater}</button></div></div>`;
+}
+Object.assign(TX,{lang:'en-US',spk:'Произнести',hint:'Подсказка',hintL:'Подсказка',search:'Поиск по слову',onlyHard:'Только с ошибками'});
+/* произношение: только в режиме «Учить» */
+const canSpeak=()=>typeof speechSynthesis!=='undefined'&&typeof SpeechSynthesisUtterance!=='undefined';
+function speak(t){
+  if(!canSpeak())return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t).replace(/→/g,' ').replace(/\s+/g,' ').trim());u.lang=TX.lang;u.rate=.9;speechSynthesis.speak(u)}catch(e){}
+}
+const spkBtn=t=>canSpeak()?`<button class="btn sq spk" type="button" data-act="speak" data-t="${esc(t)}" aria-label="${TX.spk}" title="${TX.spk}">🔊</button>`:'';
+/* подсказка при вводе: открывает по одной букве */
+function hintLine(){
+  if(!S||!S.hn)return '';
+  const c=S.m==='test'?(S.qs&&S.qs[S.i]&&S.qs[S.i].c):S.card;if(!c)return '';
+  const first=String(aOf(c)).split(/[,;\/→]/)[0].trim();
+  const k=Math.min(S.hn,Math.max(1,first.length-1));
+  return `<div class="small" style="letter-spacing:.12em;font-weight:700">${TX.hintL}: ${esc(first.slice(0,k)+first.slice(k).replace(/\S/g,'·'))}</div>`;
+}
+function giveHint(){
+  if(!S||S.fb)return;
+  const c=S.m==='test'?(S.qs&&S.qs[S.i]&&S.qs[S.i].c):S.card;if(!c)return;
+  const ans=document.getElementById('ans'),v=ans?ans.value:'';
+  S.hn=(S.hn||0)+1;
+  if(S.m==='learn'&&S.failed)S.failed[c.id]=true;
+  render();
+  const a2=document.getElementById('ans');if(a2&&v)a2.value=v;
+}
+/* поиск и фильтр слов на странице набора */
+let WF={q:'',hard:false,id:null};
+function applyWordFilter(){
+  const q=WF.q.trim().toLowerCase();
+  document.querySelectorAll('#termsbox .term').forEach(el=>{
+    const hide=(q&&!(el.dataset.s||'').includes(q))||(WF.hard&&el.dataset.h!=='1');
+    el.style.display=hide?'none':'';
+  });
+}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='wsearch'){WF.q=e.target.value;applyWordFilter()}});
+/* кнопка «Назад» на телефоне ведёт на предыдущий экран сайта */
+function navUp(){
+  if(inProgress()&&!confirm(TX.leave))return;
+  if(V.view==='play'||V.view==='edit'){if(V.id&&getSet(V.id))go('set',{id:V.id});else go('home')}
+  else if(V.view==='nbedit')go('notebook');
+  else go('home');
+}
+try{history.replaceState({g:0},'');history.pushState({g:1},'')}catch(e){}
+window.addEventListener('popstate',()=>{
+  if(document.getElementById('fsbox')){fsOpen();try{history.pushState({g:1},'')}catch(e){}return}
+  if(V.view==='home'){history.back();return}
+  try{history.pushState({g:1},'')}catch(e){}
+  navUp();
+});
 const PART=5,ROUNDS=3;
 const accOf=st=>{const n=st.mc+st.ty;return n?Math.round((1-(st.mcMiss+st.tyMiss)/n)*100):0};
+/* полоска прогресса «Учить»: без цифры, пока не набралось 5 выученных слов; засечки — каждые 5 слов */
+const lbar=(pct,n,all,from)=>{
+  const f=from==null?pct:from,up=pct>f+0.01;
+  const ticks=Array.from({length:Math.max(0,Math.ceil(all/PART)-1)},(_,k)=>`<i class="lb-tick" style="left:${(k+1)*PART/all*100}%"></i>`).join('');
+  return `<div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="${all}" aria-valuenow="${n}"><div class="lb-track"><span class="lb-fill" style="width:${pct}%;--from:${f}%;--to:${pct}%"></span>${ticks}<b class="lb-knob ${up?'up':''}" style="left:${pct}%;--from:${f}%;--to:${pct}%">${n>=PART?Math.round(pct)+'%':''}</b></div><span class="lb-end">${TX.left(all-n)}</span></div>`;
+};
 function learnStart(){
-  const s=cur(),parts=[];
-  for(let i=0;i<s.cards.length;i+=PART)parts.push(s.cards.slice(i,i+PART));
+  const s=cur();
+  /* продолжаем с места остановки: выученные слова пропускаем, слова с ошибками идут первыми */
+  const todo=s.cards.filter(c=>!isLd(s,c));
+  const order=[...todo.filter(c=>c.hard),...todo.filter(c=>!c.hard)];
+  const parts=[];
+  for(let i=0;i<order.length;i+=PART)parts.push(order.slice(i,i+PART));
   S={m:'learn',parts,phase:'menu',p:0,round:1,queue:[],card:null,fb:null,done:new Set(),
-     stats:parts.map(()=>({mc:0,mcMiss:0,ty:0,tyMiss:0})),miss:{},failed:{},undo:null};
+     stats:parts.map(()=>({mc:0,mcMiss:0,ty:0,tyMiss:0})),miss:{},failed:{},undo:null,base:0};
+  if(!parts.length){S.phase='alldone';return}
   startPart(0);
 }
 function startPart(p){
-  S.p=p;S.phase='mc';S.round=1;S.queue=shuffle(S.parts[p]);
+  S.p=p;S.base=ldCount(cur());S.phase='mc';S.round=1;S.queue=shuffle(S.parts[p]);
   S.stats[p]={mc:0,mcMiss:0,ty:0,tyMiss:0};
   S.parts[p].forEach(c=>{delete S.miss[c.id]});
   S.done.delete(p);S.failed={};
   learnNext();
 }
 function learnNext(){
-  S.fb=null;S.typed='';
+  S.fb=null;S.typed='';S.hn=0;
   const part=S.parts[S.p];
   if(S.phase==='mc'&&!S.queue.length){
     if(S.round<ROUNDS){S.round++;S.queue=shuffle(part)}
@@ -596,6 +850,7 @@ function learnNext(){
   }
   if(S.phase==='type'&&!S.queue.length){
     S.done.add(S.p);
+    {const ss=cur();ss.ld=[...new Set([...(ss.ld||[]),...S.parts[S.p].map(c=>c.id)])]}
     save();
     if(S.p+1<S.parts.length){S.phase='partdone';ding();return render()}
     S.phase='final';return render();
@@ -609,56 +864,63 @@ function learnNext(){
   render();
 }
 function learnView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   const nP=S.parts.length;
-  const rng=i=>{const a=i*PART+1,b=Math.min(s.cards.length,(i+1)*PART);return a===b?`слово ${a}`:`слова ${a}–${b}`};
+  const rng=i=>S.parts[i].map(c=>c.t).join(' · ');
+  if(S.phase==='alldone'){
+    return `${head}<div class="panel result"><div class="big">🎉</div><h2>Все слова набора выучены</h2><p class="muted">Можно пройти набор заново или закрепить слова в других режимах.</p>
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div></div>`;
+  }
   if(S.phase==='partdone'){
     const st=S.stats[S.p],clean=!st.mcMiss&&!st.tyMiss,cnt=S.done.size;
-    const words=S.parts.reduce((a,p,i)=>a+(S.done.has(i)?p.length:0),0),all=s.cards.length;
-    const segs=S.parts.map((p,i)=>`<div class="pseg"><i style="width:${S.done.has(i)?100:0}%"></i>${i===S.p?`<b class="pbadge" style="left:100%">${words}</b>`:''}</div>`).join('');
-    return `${head}<div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="${all}" aria-valuenow="${words}">${segs}<b class="pend">${all}</b></div><div class="panel result"><div class="big">🎉</div><h2>${clean?'Всё правильно, молодец!':'Часть пройдена, молодец!'}</h2>
+    const all=s.cards.length,words=ldCount(s);
+    const bad=S.parts[S.p].filter(c=>S.miss[c.id]).map(c=>c.t);
+    const hardNote=bad.length?`<p class="small" style="margin:0">Слова с ошибками: ${bad.join(" · ")}. В следующий раз начнём с них.</p>`:'';
+    return `${head}${lbar(words/all*100,words,all,S.pf)}<div class="panel result"><div class="big">🎉</div><h2>${clean?'Всё правильно, молодец!':'Часть пройдена, молодец!'}</h2>
       <p class="muted">Прогресс сохранён. Выучено слов в этом наборе: ${words} из ${all}.</p>
       ${clean?'':`<p class="small muted">Ошибок в тесте: ${st.mcMiss}, при вводе: ${st.tyMiss}.</p>`}
+      ${hardNote}
       <div class="row" style="justify-content:center"><button class="btn primary" data-act="partnext">Продолжить</button><button class="btn" data-act="partstop">На сегодня закончить</button></div></div>`;
   }
   if(S.phase==='final'){
     const tot=S.stats.reduce((a,t)=>({mc:a.mc+t.mc,mcMiss:a.mcMiss+t.mcMiss,ty:a.ty+t.ty,tyMiss:a.tyMiss+t.tyMiss}),{mc:0,mcMiss:0,ty:0,tyMiss:0});
     const hard=s.cards.filter(c=>S.miss[c.id]).sort((x,y)=>S.miss[y.id]-S.miss[x.id]);
+    const again=hard.length?`<button class="btn primary" data-act="start" data-m="learn">Повторить слова с ошибками</button>`:'';
     return `${head}<div class="panel result"><h2>Общая сводка</h2><div class="big">${accOf(tot)}%</div>
       <p class="muted">Пройдено частей: ${S.done.size} из ${nP}. Ошибок в тесте: ${tot.mcMiss} из ${tot.mc}. Ошибок при вводе: ${tot.tyMiss} из ${tot.ty}.</p></div>${summary()}
     <div class="panel"><h2 style="margin-bottom:8px">По частям</h2><div class="terms">${S.parts.map((p,i)=>{const st=S.stats[i],d=S.done.has(i);
       return `<div class="part"><div class="grow"><b>Часть ${i+1}</b><div class="small muted">${rng(i)}</div></div>
       <div class="small" style="text-align:right">${d?`тест −${st.mcMiss} · ввод −${st.tyMiss}<br><b>${accOf(st)}%</b>`:'<span class="muted">не пройдена</span>'}</div></div>`}).join('')}</div></div>
     ${hard.length?`<div class="panel"><h2 style="margin-bottom:8px">Слова, которые стоит повторить</h2><div class="terms">${hard.map(c=>`<div class="term"><div class="t">${esc(qOf(c))}</div><div class="d">${esc(aOf(c))} · ошибок: ${S.miss[c.id]}</div></div>`).join('')}</div></div>`:'<div class="panel">Ни одной ошибки во всём модуле.</div>'}
-    <div class="row"><button class="btn primary" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div>`;
+    <div class="row">${again}<button class="btn ${again?'':'primary'}" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div>`;
   }
   const c=S.card,q=qOf(c),a=aOf(c),size=S.parts[S.p].length;
   const steps=(ROUNDS+1)*size,doneSteps=(S.phase==='mc'?(S.round-1)*size:ROUNDS*size)+Math.max(0,size-S.queue.length-1);
   const m=Math.min(100,Math.round(doneSteps/steps*100));
   const stage=S.phase==='mc'?`Тест, круг ${S.round} из ${ROUNDS}`:'Впишите слова сами';
   /* на полоске — только выученные слова: целые пройденные части + слова текущей части, уже верно введённые */
-  const learned=S.parts.reduce((a,p,i)=>a+(S.done.has(i)?p.length:i===S.p?p.filter(x=>x.lvl>=3).length:0),0);
-  const segs=S.parts.map((p,i)=>{const pct=S.done.has(i)?100:i===S.p?m:0;
-    return `<div class="pseg"><i style="width:${pct}%"></i>${i===S.p?`<b class="pbadge" style="left:${pct}%">${learned}</b>`:''}</div>`}).join('');
+  const all=s.cards.length,learned=ldCount(s);
+  const pct=Math.min(100,Math.max(S.base+m/100*S.parts[S.p].length,learned)/all*100);
+  const pfrom=S.pf==null?pct:S.pf;S.pf=pct;
   let body='';
   if(S.kind==='mc'){
     body=`<div class="opts">${S.opts.map((o,i)=>{
       let cls='';if(S.fb){if(o===a)cls='right';else if(S.fb.pick===i)cls='wrong'}
       return `<button class="opt ${cls}" data-act="mc" data-i="${i}" ${S.fb?'disabled':''}>${esc(o)}</button>`}).join('')}</div>${S.fb?'':`<div class="row end"><button class="btn ghost sm" data-act="skip">Не уверена?</button></div>`}`;
   }else{
-    body=`<form id="typed" autocomplete="off"><div class="stack"><input class="inp" id="ans" placeholder="Введите ответ" ${S.fb||S.thinking?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
+    body=`<form id="typed" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введите ответ" ${S.fb||S.thinking?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
       ${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':''}
-      ${S.fb||S.thinking?'':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="skip">Не уверена?</button></div>`}</div></form>`;
+      ${S.fb||S.thinking?'':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="skip">Не уверена?</button></div>`}</div></form>`;
   }
   let fb='';
   if(S.fb){
-    fb=S.fb.ok?`<div class="fb ok">${S.fb.fuzzy?'Верно, засчитано по смыслу':'Верно'}${S.fb.fuzzy?`<small>Как в наборе: ${esc(a)}</small>`:''}</div>`:`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${c.x?`<small class="muted">${esc(c.x)}</small>`:''}${S.kind==='typed'&&S.typed?`<small class="muted">Вы ввели: ${esc(S.typed)}</small>`:''}</div>
+    fb=S.fb.ok?`<div class="fb ok">${S.fb.fuzzy?'Верно, засчитано по смыслу':'Верно'}${S.fb.fuzzy?`<small>Как в наборе: ${esc(a)}</small>`:''}${exHtml(c,true)}</div>`:`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${exHtml(c)}${S.kind==='typed'&&S.typed?`<small class="muted">Вы ввели: ${esc(S.typed)}</small>`:''}</div>
       <div class="row">${S.kind==='typed'&&S.typed?`<button class="btn sm" data-act="override">Я был прав</button>`:''}<button class="btn primary" data-act="next">Дальше</button></div>`;
   }
   return `${head}
-  <div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="${s.cards.length}" aria-valuenow="${learned}">${segs}<b class="pend">${s.cards.length}</b></div>
-  <div class="small muted" style="text-align:center">Часть ${S.p+1} из ${nP} · ${stage}</div>
-  <div class="q"><span class="tag">${S.kind==='mc'?'Выберите ответ':'Впишите ответ'} · ${s.dir==='dt'?'слово':'перевод'}</span><div class="word">${esc(q)}</div></div>
+  ${lbar(pct,learned,all,pfrom)}
+  <div class="small muted" style="text-align:center">Часть ${S.p+1} из ${nP} · ${partRange()} · ${stage}</div>
+  <div class="q"><span class="tag">${S.kind==='mc'?'Выберите ответ':'Впишите ответ'} · ${s.dir==='dt'?'слово':'перевод'}</span><div class="word">${esc(q)}</div>${s.dir!=='dt'?spkBtn(c.t):''}</div>
   ${body}${fb}`;
 }
 function learnAnswer(ok,pick,fuzzy){
@@ -672,7 +934,7 @@ function learnAnswer(ok,pick,fuzzy){
   }else if(typedPhase){c.lvl=S.failed[c.id]?2:3;if(c.lvl>=3)noteLearned(c.id)}
   S.fb={ok,pick,fuzzy};S.aiMsg='';save();render();
   if(ok)ding();
-  if(ok)later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok){learnNext()}},fuzzy?1800:650);
+  if(ok)later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok){learnNext()}},fuzzy||c.x?3200:1000);
 }
 
 /* --- тест --- */
@@ -689,21 +951,21 @@ function testStart(){
   S={m:'test',qs:shuffle(qs),i:0,res:[]};
 }
 function testView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   if(S.i>=S.qs.length){
     const ok=S.res.filter(r=>r.ok).length,n=S.qs.length,wrong=S.res.filter(r=>!r.ok);
     return `${head}<div class="panel result"><h2>Результат теста</h2><div class="big">${ok}/${n}</div><p class="muted">${Math.round(ok/n*100)}% верных ответов</p></div>${summary()}
-    ${wrong.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${wrong.map(r=>`<div class="term"><div class="t">${esc(qOf(r.q.c))}</div><div class="d">${esc(r.q.a)}${r.given?`<br><span style="color:var(--bad)">Вы: ${esc(r.given)}</span>`:''}</div></div>`).join('')}</div></div>`:''}
+    ${wrong.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${wrong.map(r=>`<div class="term"><div class="t">${esc(qOf(r.q.c))}</div><div class="d">${esc(r.q.a)}${r.q.c.x?`<div class="small muted">${esc(r.q.c.x)}</div>`:''}${r.given?`<br><span style="color:var(--bad)">Вы: ${esc(r.given)}</span>`:''}</div></div>`).join('')}</div></div>`:''}
     <div class="row"><button class="btn primary" data-act="start" data-m="test">Новый тест</button><button class="btn" data-act="open">К набору</button></div>`;
   }
   const q=S.qs[S.i],w=qOf(q.c);let body='',lab='';
   if(q.k==='mc'){lab='Выберите ответ';body=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" data-act="tmc" data-i="${i}">${esc(o)}</button>`).join('')}</div>`}
   if(q.k==='tf'){lab='Верно ли соответствие?';body=`<div class="q" style="background:var(--accent-soft)"><div class="word">${esc(q.shown)}</div></div><div class="row"><button class="btn ok" data-act="ttf" data-v="1">Верно</button><button class="btn bad" data-act="ttf" data-v="0">Неверно</button></div>`}
-  if(q.k==='typed'){lab='Впишите ответ';body=`<form id="ttyped" autocomplete="off"><div class="stack"><input class="inp" id="ans" placeholder="Введите ответ" ${S.thinking?'disabled':''} autocapitalize="off" autocorrect="off" spellcheck="false">${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="tskip">Не знаю</button></div>`}</div></form>`}
+  if(q.k==='typed'){lab='Впишите ответ';body=`<form id="ttyped" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введите ответ" ${S.thinking?'disabled':''} autocapitalize="off" autocorrect="off" spellcheck="false">${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="tskip">Не знаю</button></div>`}</div></form>`}
   return `${head}<div class="row"><span class="small muted">Вопрос ${S.i+1} из ${S.qs.length}</span><div class="bar blue grow"><span style="width:${S.i/S.qs.length*100}%"></span></div></div>
   <div class="q"><span class="tag">${lab}</span><div class="word">${esc(w)}</div></div>${body}`;
 }
-function testAnswer(ok,given){if(ok)ding();rec(S.qs[S.i].c.id,ok);S.res.push({q:S.qs[S.i],ok,given});S.i++;render()}
+function testAnswer(ok,given){if(ok)ding();rec(S.qs[S.i].c.id,ok);S.res.push({q:S.qs[S.i],ok,given});S.i++;S.hn=0;render()}
 
 /* --- подбор пар --- */
 function matchStart(){
@@ -713,7 +975,7 @@ function matchStart(){
   timers.push(setInterval(()=>{if(!S||S.m!=='match'||S.done)return;S.t=((Date.now()-S.start)/1000);const el=document.getElementById('clock');if(el)el.textContent=S.t.toFixed(1)+' с'},100));
 }
 function matchView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}<span class="brand" id="clock" style="font-size:1.1rem">${S.t.toFixed(1)} с</span></div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}<span class="brand" id="clock" style="font-size:1.1rem">${S.t.toFixed(1)} с</span>${toolsHtml()}</div>`;
   if(S.done){
     const t=S.final;
     return `${head}<div class="panel result"><h2>Готово</h2><div class="big">${t.toFixed(1)} с</div><p class="muted">${s.best&&Math.abs(s.best-t)<.05?'Новый рекорд!':`Рекорд: ${s.best} с`}${S.miss?` · ошибок: ${S.miss}`:''}</p>
@@ -768,7 +1030,7 @@ function gemsStart(){
 function gemsNext(silent){const c=S.deck[S.k%S.deck.length];S.k++;S.card=c;S.opts=optsFor(c);S.fb=null;if(!silent)render()}
 function gemsEnd(){S.end=true;const s=cur();if(!s.gemBest||S.score>s.gemBest){s.gemBest=S.score;S.record=true;save()}render()}
 function gemsView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   if(S.end)return `${head}<div class="panel result"><h2>Время вышло</h2><div class="big">${S.score}</div>
     <p class="muted">Кристаллов: ${S.crystals} · лучшая серия: ${S.maxStreak}${S.record?' · новый рекорд!':s.gemBest?` · рекорд ${s.gemBest}`:''}</p>${endBtns('gems')}</div>${summary()}`;
   const c=S.card,mult=1+Math.min(3,Math.floor(S.streak/3));
@@ -871,7 +1133,7 @@ function blastEnd(){
   render();
 }
 function blastView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   if(S.end)return `${head}<div class="panel result"><h2>${S.lives>0?'Все слова сбиты':'Игра окончена'}</h2><div class="big">${S.score}</div>
     <p class="muted">Сбито: ${S.killed} из ${S.deck.length}${S.record?' · новый рекорд!':s.blastBest?` · рекорд ${s.blastBest}`:''}</p>${endBtns('blast')}</div>${summary()}`;
   return `${head}
@@ -898,7 +1160,7 @@ function blocksNext(){
   S.card=S.qs[S.i];S.opts=optsFor(S.card);S.phase='q';S.fb=null;S.tray=[];
 }
 function blocksView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
   if(S.phase==='end')return `${head}<div class="panel result"><h2>Игра окончена</h2><div class="big">${S.score}</div>
     <p class="muted">Верных ответов: ${S.correct} из ${S.qs.length} · собрано линий: ${S.lines}${S.record?' · новый рекорд!':s.blocksBest?` · рекорд ${s.blocksBest}`:''}</p>${endBtns('blocks')}</div>${summary()}`;
   const placing=S.phase==='place';
@@ -906,7 +1168,7 @@ function blocksView(){
   if(!placing){
     const c=S.card,a=aOf(c);
     top=`<div class="q"><span class="tag">Верный ответ даёт три блока</span><div class="word">${esc(qOf(c))}</div></div>${optHtml('bans',S.opts,S.fb,a)}
-      ${S.phase==='fb'?`<div class="fb bad">Правильный ответ<small>${esc(a)}</small></div><div class="row"><button class="btn primary" data-act="bnext">Дальше</button></div>`:''}`;
+      ${S.phase==='fb'?`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${exHtml(S.card)}</div><div class="row"><button class="btn primary" data-act="bnext">Дальше</button></div>`:''}`;
   }else{
     top=`<div class="panel stack"><div><b>Перетащите блоки на поле</b><div class="small muted">Возьмите блок пальцем или мышкой и отпустите над свободными клетками</div></div>
       <div class="tray">${S.tray.map((sh,i)=>sh?`<div class="piece" data-pi="${i}" style="grid-template-columns:repeat(${shapeDims(sh)[1]},20px)" aria-label="Блок ${i+1}">${shapeCells(sh)}</div>`:`<div class="slot"></div>`).join('')}</div></div>`;
@@ -997,6 +1259,7 @@ function rec(id,ok){
   const r=S.rec[id]||(S.rec[id]={good:0,bad:0,last:true});
   if(ok)r.good++;else r.bad++;
   r.last=ok;
+  {const hs=cur(),hc=hs&&hs.cards.find(k=>k.id===id);if(hc){if(!ok)hc.hard=true;hc.at=Date.now()}if(hs){const dk=isoToday();hs.days=hs.days||{};hs.days[dk]=(hs.days[dk]||0)+1}}
   /* игры и тест тоже двигают прогресс слова: верный ответ плюс шаг, ошибка минус шаг */
   if(S.m!=='learn'&&S.m!=='cards'){
     const set=cur(),c=set&&set.cards.find(k=>k.id===id);
@@ -1022,7 +1285,7 @@ function summary(){
     :ok>=.4?'Уже неплохо. Красные слова вернутся в следующий раз, и ты запомнишь их лучше.'
     :'Сегодня непростой день, и это нормально. Каждый подход закрепляет слова, в следующий раз получится лучше.';
   const row=(color,v,label)=>`<div class="lg"><i style="background:${color}"></i><b>${v}</b><span>${label}</span></div>`;
-  const list=(arr,color,title)=>arr.length?`<div class="small" style="margin-top:10px"><b style="color:${color}">${title}</b><div class="terms">${arr.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}</div></div>`).join('')}</div></div>`:'';
+  const list=(arr,color,title)=>arr.length?`<div class="small" style="margin-top:10px"><b style="color:${color}">${title}</b><div class="terms">${arr.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}${c.x?`<div class="small muted">${esc(c.x)}</div>`:""}</div></div>`).join('')}</div></div>`:'';
   return `<div class="panel stack"><h2>Итоги по словам</h2>
     <div class="sum">
       <div class="donut" role="img" aria-label="Слов пройдено: ${n}. Знаю точно: ${g}. Частично: ${m}. Не запомнила: ${r}.">
@@ -1076,14 +1339,17 @@ function render(){
   else if(V.view==='edit')h=editView();
   else if(V.view==='progress')h=progressView();
   else if(V.view==='account')h=accountView();
+  else if(V.view==='listen')h=listenView();
   else if(V.view==='notebook')h=`<div class="top nbtop">${back('home','Наборы')}<h1>Блокнотик 🩷</h1></div>${notebookView()}`;
   else if(V.view==='play'){
-    h=({cards:cardsView,learn:learnView,test:testView,match:matchView,gems:gemsView,blast:blastView,blocks:blocksView})[S.m]();
+    h=({cards:cardsView,learn:learnView,review:reviewView,test:testView,match:matchView,gems:gemsView,blast:blastView,blocks:blocksView})[S.m]();
   }
   const keep=document.activeElement&&document.activeElement.id==='ans';
   const key=[V.view,V.id,S&&S.m,S&&S.phase,S&&S.card&&S.card.id,S&&S.i,S&&S.p,S&&S.round].join('|');
+  document.body.dataset.view=V.view;
   if(key===lastKey)$app.classList.remove('enter');
   $app.innerHTML=h;
+  if(V.view==='set')applyWordFilter();
   if(key!==lastKey){lastKey=key;$app.classList.remove('enter');void $app.offsetWidth;$app.classList.add('enter')}
   const ans=document.getElementById('ans');
   if(ans&&!ans.disabled)ans.focus();
@@ -1100,7 +1366,7 @@ const A={
   pday:(d)=>{P.sel=d.date;render()},
   tgl:(d)=>{
     const i=+d.i,date=d.date;
-    if(i===WORDS_I||date>isoToday())return;
+    if(date>isoToday())return;
     const r=data.track[date]||(data.track[date]={s:[0,0,0,0,0],note:''});
     r.s[i]=r.s[i]?0:1;
     saveLocal();
@@ -1117,14 +1383,14 @@ const A={
   },
   ptoday:()=>{P.sel=null;render()},
   mute:()=>{data.mute=!data.mute;save();render();ding()},
-  open:(d)=>go('set',{id:d.id||V.id}),
-  new:()=>{E={id:null,name:'',rows:[{t:'',d:''},{t:'',d:''},{t:'',d:''}],bulk:'',msg:''};V={view:'edit'};render()},
-  edit:(d)=>{const s=getSet(d.id);E={id:s.id,name:s.name,rows:s.cards.map(c=>({id:c.id,t:c.t,d:c.d,x:c.x||'',lvl:c.lvl})),bulk:'',msg:''};V={view:'edit',id:s.id};render()},
-  addrow:()=>{E.rows.push({t:'',d:''});render();const ins=document.querySelectorAll('#rows .editrow');const last=ins[ins.length-1];if(last)last.querySelector('input').focus()},
-  delrow:(d)=>{E.rows.splice(+d.i,1);if(!E.rows.length)E.rows.push({t:'',d:''});render()},
+  open:(d)=>{if(inProgress()&&!confirm(TX.leave))return;go('set',{id:d.id||V.id})},
+  new:()=>{E={id:null,name:'',rows:[{t:'',d:'',x:''},{t:'',d:'',x:''},{t:'',d:'',x:''}],bulk:'',msg:''};V={view:'edit'};render()},
+  edit:(d)=>{const s=getSet(d.id);E={id:s.id,name:s.name,rows:s.cards.map(c=>({id:c.id,t:c.t,d:c.d,x:c.x||'',lvl:c.lvl,hard:c.hard,at:c.at})),bulk:'',msg:''};V={view:'edit',id:s.id};render()},
+  addrow:()=>{E.rows.push({t:'',d:'',x:''});render();const ins=document.querySelectorAll('#rows .editrow');const last=ins[ins.length-1];if(last)last.querySelector('input').focus()},
+  delrow:(d)=>{E.rows.splice(+d.i,1);if(!E.rows.length)E.rows.push({t:'',d:'',x:''});render()},
   import:()=>{
     const lines=(E.bulk||'').split('\n');let n=0;
-    lines.forEach(l=>{const m=l.match(/^\s*(.+?)(?:\t|\s[-—–=]\s|\s*[;=]\s*|\s*[—–]\s*)(.+?)\s*$/);if(m){E.rows.push({t:m[1].trim(),d:m[2].trim()});n++}});
+    lines.forEach(l=>{const [main,...exs]=l.split('|');const m=main.match(/^\s*(.+?)(?:\t|\s[-—–=]\s|\s*[;=]\s*|\s*[—–]\s*)(.+?)\s*$/);if(m){E.rows.push({t:m[1].trim(),d:m[2].trim(),x:exs.join('|').trim()});n++}});
     E.rows=E.rows.filter((r,i)=>r.t||r.d||i===E.rows.length-1);
     if(n){E.bulk='';E.msg='Добавлено: '+n}else E.msg='Не нашёл пар. Проверьте разделитель.';
     render();
@@ -1134,10 +1400,10 @@ const A={
     const name=E.name.trim()||'Без названия';
     if(E.id){
       const s=getSet(E.id);s.name=name;
-      s.cards=rows.map(r=>({id:r.id||uid(),t:r.t.trim(),d:r.d.trim(),x:r.x||'',lvl:r.lvl||0}));
+      s.cards=rows.map(r=>({id:r.id||uid(),t:r.t.trim(),d:r.d.trim(),x:(r.x||'').trim(),lvl:r.lvl||0,hard:r.hard,at:r.at}));
       save();go('set',{id:s.id});
     }else{
-      const s={id:uid(),name,dir:'td',best:null,cards:rows.map(r=>({id:uid(),t:r.t.trim(),d:r.d.trim(),lvl:0}))};
+      const s={id:uid(),name,dir:'td',best:null,cards:rows.map(r=>({id:uid(),t:r.t.trim(),d:r.d.trim(),x:(r.x||'').trim(),lvl:0}))};
       data.sets.unshift(s);save();go('set',{id:s.id});
     }
   },
@@ -1145,11 +1411,11 @@ const A={
   canceldel:()=>{E.confirmDel=false;render()},
   delset:()=>{data.sets=data.sets.filter(s=>s.id!==E.id);allowDrop=true;save();go('home')},
   dir:(d)=>{cur().dir=d.v;save();render()},
-  reset:()=>{cur().cards.forEach(c=>c.lvl=0);cur().best=null;markReset(cur());save();render()},
-  reset2:()=>{cur().cards.forEach(c=>c.lvl=0);markReset(cur());save();A.start({m:'learn'})},
+  reset:()=>{if(!confirm('Сбросить прогресс этого набора? Это нельзя отменить.'))return;cur().ld=[];cur().cards.forEach(c=>{c.lvl=0;c.hard=false});cur().best=null;markReset(cur());save();render()},
+  reset2:()=>{cur().ld=[];cur().cards.forEach(c=>{c.lvl=0;c.hard=false});markReset(cur());save();A.start({m:'learn'})},
   start:(d)=>{
     clearTimers();V={view:'play',id:V.id};
-    ({cards:cardsStart,learn:learnStart,test:testStart,match:matchStart,gems:gemsStart,blast:blastStart,blocks:blocksStart})[d.m]();
+    ({cards:cardsStart,learn:learnStart,review:reviewStart,test:testStart,match:matchStart,gems:gemsStart,blast:blastStart,blocks:blocksStart})[d.m]();
     render();window.scrollTo(0,0);
   },
   /* карточки */
@@ -1174,7 +1440,7 @@ const A={
     S.fb={ok:true};save();render();ding();later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok)learnNext()},500)},
   partnext:()=>{if(S&&S.m==='learn'&&S.phase==='partdone')startPart(S.p+1)},
   partstop:()=>{if(S&&S.m==='learn'&&S.phase==='partdone'){S.phase='final';save();render()}},
-  restart:()=>{cur().cards.forEach(c=>c.lvl=0);markReset(cur());save();A.start({m:'learn'})},
+  restart:()=>{if(!confirm('Сбросить прогресс этого набора? Это нельзя отменить.'))return;cur().ld=[];cur().cards.forEach(c=>{c.lvl=0;c.hard=false});markReset(cur());save();A.start({m:'learn'})},
   /* тест */
   tmc:(d)=>{const q=S.qs[S.i],o=q.opts[+d.i];testAnswer(o===q.a,o===q.a?'':o)},
   ttf:(d)=>{const q=S.qs[S.i];const ok=(d.v==='1')===q.truth;testAnswer(ok,ok?'':(q.truth?'Неверно':'Верно'))},
@@ -1199,6 +1465,7 @@ document.addEventListener('submit',e=>{
   const inp=document.getElementById('ans');if(!inp||!S)return;
   const v=inp.value;
   if(e.target.id==='typed'){learnSubmit(v);return}
+  if(e.target.id==='rtyped'){reviewSubmit(v);return}
   if(e.target.id==='blastform'){blastShoot(v);return}
   if(e.target.id==='ttyped'){testSubmit(v)}
 });
@@ -1329,7 +1596,9 @@ function bannerHtml(){
     <div class="bar"><span style="width:${s.day/T_DAYS*100}%"></span></div></button>
     <button class="banner" data-act="notebook"><div class="bt">Блокнотик 🩷</div>
     <div class="small muted">${nbSub}</div>
-    <div class="nbmini" aria-hidden="true"><i></i><i></i><i></i></div></button></div>`;
+    <div class="nbmini" aria-hidden="true"><i></i><i></i><i></i></div></button>
+    <button class="banner wide" data-act="listen"><div class="bt">Listening 🎧</div>
+    <div class="small muted">Вставь видео с YouTube и превращай незнакомые слова в набор</div></button></div>`;
 }
 function progressView(){
   const D=daysFull(),today=isoToday(),s=progStats(D,today);
@@ -1353,11 +1622,8 @@ function progressView(){
   const future=sel.date>today,got=learnedToday();
   const skb=SKILLS.map((k,i)=>{
     const on=!!sel.s[i];
-    if(i===WORDS_I){
-      const sub=sel.date===today&&!on?`<small>само: выучено ${got} из ${MARK_WORDS}</small>`:`<small>${on?'отмечено':'само, когда выучишь '+MARK_WORDS+' слов'}</small>`;
-      return `<div class="skb auto ${on?'on':''}" role="img" aria-label="${k}: ${on?'отмечено':'не отмечено'}"><i>✓</i><span>${k}${sub}</span></div>`;
-    }
-    return `<button class="skb ${on?'on':''}" data-act="tgl" data-date="${sel.date}" data-i="${i}" aria-pressed="${on}" ${future?'disabled':''}><i>✓</i><span>${k}</span></button>`;
+    const sub=i===WORDS_I?`<small>${on?TX.wOn:(sel.date===today?TX.wAuto(got):TX.wHint())}</small>`:'';
+    return `<button class="skb ${on?'on':''}" data-act="tgl" data-date="${sel.date}" data-i="${i}" aria-pressed="${on}" ${future?'disabled':''}><i>✓</i><span>${k}${sub}</span></button>`;
   }).join('');
   const line=(l,t)=>t?`<div class="dl"><span class="muted small">${l}</span><div>${esc(t)}</div></div>`:'';
   const verdict=sel.n>=4?'сверх нормы':sel.n>=NORM?'норма выполнена, бантик за день 🎀':sel.n>0?'до нормы не хватает '+(NORM-sel.n):'пока без отметок';
@@ -1389,6 +1655,122 @@ function progressView(){
     <div class="row"><button class="btn sm" data-act="bkexp">Сохранить копию</button>${SHEET_HOOK&&fbUser?'<button class="btn sm" data-act="sheetall">Отправить отметки в таблицу</button>':''}<label class="btn sm" for="bkfile" style="display:inline-flex;align-items:center">Загрузить копию</label><input id="bkfile" type="file" accept="application/json,.json" hidden></div></div>
   <h2>План по неделям</h2><div class="weeks">${weeks}</div>`;
 }
+
+/* ---------- тема: светлая / тёмная / автоматическая ---------- */
+const THEMES=['auto','light','dark'];
+const THEME_ICON={auto:'◐',light:'☀',dark:'☾'};
+const THEME_NAME={auto:'авто',light:'светлая',dark:'тёмная'};
+function applyTheme(){
+  const t=THEMES.includes(data.theme)?data.theme:'auto';
+  if(t==='auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',t);
+}
+applyTheme();
+function themeBtn(){
+  const t=THEMES.includes(data.theme)?data.theme:'auto';
+  return `<button class="btn sq" data-act="theme" aria-label="Тема: ${THEME_NAME[t]}. Нажми, чтобы сменить" title="Тема: ${THEME_NAME[t]}">${THEME_ICON[t]}</button>`;
+}
+
+/* ---------- Listening: видео YouTube + незнакомые слова, которые становятся набором ---------- */
+if(!Array.isArray(data.listen))data.listen=[];
+let LS={vid:null,msg:'',busy:false};
+function ytId(u){
+  u=String(u||'').trim();if(!u)return null;
+  if(/^[\w-]{11}$/.test(u))return u;
+  let m=u.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/i);
+  return m?m[1]:null;
+}
+const lkSetId=vid=>'v-'+vid;
+function lkSet(v,create){
+  let s=getSet(lkSetId(v.vid));
+  if(!s&&create){s={id:lkSetId(v.vid),name:'Listening · '+v.title,dir:'dt',best:null,cards:[]};data.sets.push(s)}
+  return s;
+}
+function listenView(){
+  const list=data.listen,cur=list.find(x=>x.vid===LS.vid);
+  let player='';
+  if(cur){
+    const s=lkSet(cur,false),cards=s?s.cards:[];
+    player=`<div class="panel stack">
+      <div class="lk-frame"><iframe src="https://www.youtube-nocookie.com/embed/${esc(cur.vid)}?rel=0" title="${esc(cur.title)}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <input class="inp" id="lk-title" value="${esc(cur.title)}" aria-label="Название видео" maxlength="90">
+      <h2>Слова, которых я не знаю</h2>
+      <div class="small muted">Напиши слово, перевод и, если хочешь, пример. Каждое слово сразу попадает в набор «Listening · ${esc(cur.title)}».</div>
+      <div class="lkrow"><input class="inp" id="lk-w" placeholder="Слово" autocomplete="off" autocapitalize="off"><input class="inp" id="lk-d" placeholder="Перевод" autocomplete="off" autocapitalize="off"><input class="inp lkx" id="lk-x" placeholder="Пример (по желанию)" autocomplete="off" autocapitalize="off"><button class="btn primary" data-act="lkadd">Добавить</button></div>
+      ${cards.length?`<div class="terms">${cards.map((c,i)=>`<div class="term" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}${c.x?`<div class="small muted">${esc(c.x)}</div>`:''}</div><button class="x" data-act="lkdel" data-i="${i}" aria-label="Удалить слово">×</button></div>`).join('')}</div>
+      <div class="row"><button class="btn" data-act="open" data-id="${esc(lkSetId(cur.vid))}">Учить эти ${cards.length} ${plural(cards.length,'слово','слова','слов')}</button></div>`:'<div class="small muted">Пока ни одного слова.</div>'}
+    </div>`;
+  }
+  const mine=list.length?`<h2>Мои видео</h2><div class="stack">${list.map(v=>{
+    const n=(getSet(lkSetId(v.vid))||{cards:[]}).cards.length;
+    return `<div class="row"><button class="set grow" data-act="lkopen" data-vid="${esc(v.vid)}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:1;min-width:0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)"><b>${esc(v.title)}</b><br><span class="small muted">${n} ${plural(n,'слово','слова','слов')}</span></button><button class="x" data-act="lkrm" data-vid="${esc(v.vid)}" aria-label="Убрать видео">×</button></div>`}).join('')}</div>`:'';
+  return `<div class="top">${back('home','Назад')}${themeBtn()}</div>
+  <div class="stack"><h1>Listening 🎧</h1><div class="muted small">Вставь ссылку на видео с YouTube, слушай и записывай ниже слова, которых не знаешь: они станут новым набором для заучивания.</div></div>
+  <div class="panel stack">
+    <div class="row"><input class="inp grow" id="lk-url" placeholder="Ссылка на YouTube" inputmode="url" autocomplete="off" style="flex:1;min-width:0"><button class="btn primary" data-act="lkgo">Открыть</button></div>
+    ${LS.msg?`<div class="small" style="color:var(--bad);font-weight:700">${esc(LS.msg)}</div>`:'<div class="small muted">Подходят ссылки YouTube (в том числе youtu.be и Shorts).</div>'}
+  </div>
+  ${player}${mine}`;
+}
+async function lkFetchTitle(v){
+  try{
+    const r=await fetch('https://noembed.com/embed?url='+encodeURIComponent('https://www.youtube.com/watch?v='+v.vid));
+    const j=await r.json();
+    if(j&&j.title&&v.title==='Video'){
+      v.title=String(j.title).slice(0,90);
+      const s=getSet(lkSetId(v.vid));if(s)s.name='Listening · '+v.title;
+      save();
+      const a=document.activeElement,typing=a&&/^lk-/.test(a.id)&&a.value;
+      if(V.view==='listen'&&LS.vid===v.vid&&!typing)render();
+    }
+  }catch(e){}
+}
+function lkFocus(id){setTimeout(()=>{const el=document.getElementById(id);if(el)el.focus()},30)}
+Object.assign(A,{
+  listen:()=>go('listen'),
+  theme:()=>{
+    const i=THEMES.indexOf(THEMES.includes(data.theme)?data.theme:'auto');
+    data.theme=THEMES[(i+1)%3];saveLocal(true);applyTheme();render();toast('Тема: '+THEME_NAME[data.theme]);
+  },
+  lkgo:()=>{
+    const el=document.getElementById('lk-url'),id=ytId(el&&el.value);
+    if(!id){LS.msg='Не узнаю ссылку. Вставь ссылку на YouTube, например https://www.youtube.com/watch?v=…';render();lkFocus('lk-url');return}
+    LS.msg='';LS.vid=id;
+    let v=data.listen.find(x=>x.vid===id);
+    if(!v){v={vid:id,title:'Video'};data.listen.unshift(v);saveLocal();lkFetchTitle(v)}
+    render();lkFocus('lk-w');
+  },
+  lkopen:(d)=>{LS.vid=d.vid;LS.msg='';render();window.scrollTo(0,0)},
+  lkrm:(d)=>{
+    if(!confirm('Убрать видео из списка? Набор слов останется.'))return;
+    data.listen=data.listen.filter(x=>x.vid!==d.vid);if(LS.vid===d.vid)LS.vid=null;saveLocal();render();
+  },
+  lkadd:()=>{
+    const cur=data.listen.find(x=>x.vid===LS.vid);if(!cur)return;
+    const w=(document.getElementById('lk-w').value||'').trim(),d=(document.getElementById('lk-d').value||'').trim();
+    if(!w){lkFocus('lk-w');return}
+    const s=lkSet(cur,true);
+    if(!s.cards.some(c=>norm(c.t)===norm(w)))s.cards.push({id:'l-'+uid(),t:w,d:d||'—',x:((document.getElementById('lk-x')||{}).value||'').trim(),lvl:0});
+    save();render();lkFocus('lk-w');
+  },
+  lkdel:(d)=>{
+    const cur=data.listen.find(x=>x.vid===LS.vid),s=cur&&getSet(lkSetId(cur.vid));
+    if(!s)return;s.cards.splice(+d.i,1);save();render();
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(V.view!=='listen'||e.key!=='Enter')return;
+  const id=e.target&&e.target.id;
+  if(id==='lk-w'||id==='lk-d'||id==='lk-x'){e.preventDefault();A.lkadd()}
+  else if(id==='lk-url'){e.preventDefault();A.lkgo()}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t||t.id!=='lk-title')return;
+  const cur=data.listen.find(x=>x.vid===LS.vid);if(!cur)return;
+  cur.title=t.value.trim()||'Video';
+  const s=getSet(lkSetId(cur.vid));if(s)s.name='Listening · '+cur.title;
+  save();
+});
 
 /* ---------- Блокнотик: тема = разворот, красивый конспект с перелистыванием ---------- */
 const NB={pages:[],idx:0,busy:false,loaded:false};
@@ -1558,6 +1940,7 @@ function toast(msg){
 /* «полностью выучено сегодня»: слово дошло до трёх шагов прогресса или верно введено в конце «Учить» */
 function learnedToday(){const d=data.day;return d&&d.date===isoToday()?(d.learned||[]).length:0}
 function noteLearned(cardId){
+  data.sets.forEach(s=>s.cards.forEach(c=>{if(c.id===cardId)c.hard=false}));
   const today=isoToday();
   if(!data.day||data.day.date!==today)data.day={date:today,learned:[],marked:false};
   if(!data.day.learned)data.day.learned=[];
@@ -1571,7 +1954,7 @@ function noteLearned(cardId){
 }
 /* копия прогресса в файл и обратно */
 function exportBackup(){
-  try{
+  try{data.lastBackup=Date.now();saveLocal(true);
     const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);a.download='katrin-dictionary-'+isoToday()+'.json';
@@ -1619,13 +2002,13 @@ document.addEventListener('pointerup',e=>{
 
 /* ---------- облако: Firebase (вход + сохранение прогресса) ---------- */
 const FB_CONFIG={apiKey:"AIzaSyDt17ngCw9v7CbgpmaD4CLPjdTwWSZYlxQ",authDomain:"marina-dizionario.firebaseapp.com",projectId:"marina-dizionario",storageBucket:"marina-dizionario.firebasestorage.app",messagingSenderId:"640468625696",appId:"1:640468625696:web:1766f7e8d8646890660f45"};
-const SKIP_SYNC=['theme'];
+const SKIP_SYNC=['theme','fs'];
 function markReset(st){st.resetAt=Date.now()}
 function applyPending(){pendingR=null}
 function stateOut(){const o=JSON.parse(JSON.stringify(data));SKIP_SYNC.forEach(k=>delete o[k]);return o}
 function hasContent(){
   const seedSame=Object.keys(data.track||{}).every(d=>{const r=data.track[d];return TRACK_SEED[d]&&!r.note&&JSON.stringify(r.s)===JSON.stringify(TRACK_SEED[d])});
-  return data.sets.some(s=>!builtinIds.has(s.id)||s.cards.some(c=>c.lvl>0))||!seedSame||!!(data.day&&(data.day.learned||[]).length);
+  return data.sets.some(s=>!builtinIds.has(s.id)||s.cards.some(c=>c.lvl>0))||!seedSame||!!(data.day&&(data.day.learned||[]).length)||(data.listen||[]).length>0;
 }
 function syncLine(){
   if(syncState==='out')return `<div class="panel row" style="align-items:center;gap:12px"><span class="small muted" style="flex:1;min-width:0">☁️ Войди, чтобы прогресс сохранялся в облаке и был на всех устройствах</span><button class="btn sm primary" data-act="acc">Войти</button></div>`;
@@ -1762,6 +2145,16 @@ async function initSync(){
 }
 
 
+Object.assign(A,{
+  rmc:(d)=>{if(!S||S.m!=='review'||S.fb)return;const pick=S.opts[+d.i];reviewAnswer(pick===aOf(S.card),+d.i)},
+  rnext:()=>{if(S&&S.m==='review')reviewNext()},
+  smute:()=>{data.mute=!data.mute;saveLocal();document.querySelectorAll('.sndbtn').forEach(b=>{b.textContent=data.mute?'🔇':'🔊'})},
+  fsopen:()=>fsOpen(),
+  bklater:()=>{data.bkSnooze=Date.now();saveLocal(true);render()},
+  speak:(d)=>speak(d.t),
+  hint:()=>giveHint(),
+  whard:()=>{WF.hard=!WF.hard;render()}
+});
 render();
 initSync();
 initNotes();
