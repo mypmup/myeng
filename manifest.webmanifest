@@ -1,0 +1,15 @@
+{
+  "name": "Katrin Dictionary",
+  "short_name": "Dictionary",
+  "description": "Заучивание английских слов: карточки, режим «Учить», тест и подбор пар.",
+  "lang": "ru",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFC6D2",
+  "theme_color": "#13806E",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

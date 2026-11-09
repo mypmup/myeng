@@ -1,0 +1,1747 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Katrin Dictionary 🎀</title>
+<meta name="theme-color" content="#FFC6D2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#072A24" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Katrin Dictionary">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>:root{color-scheme:light dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
+</head>
+<body>
+<div class="decos" aria-hidden="true"><img class="d-star" src="decor/star.png" alt=""><img class="d-heart" src="decor/heart.png" alt=""></div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Unbounded:wght@500;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: одна колонка 720px, крупные карточки-плитки режимов, нижняя полоса прогресса.
+   Палитра: rose pink / elf green. */
+:root{
+  --bg:#FFC6D2; --bg-a:#FFD6DE; --bg-b:#FDB3C3; --surface:#FFF2F5; --fg:#0B3D34; --muted:#2F5F54; --line:#F5A3B6;
+  --accent:#13806E; --accent-ink:#FFF2F5; --accent-soft:#FFDDE5; --pink:#FD7B96; --blue:#13806E;
+  --ok:#1B8A5A; --ok-soft:#D6F0E4; --bad:#C8203F; --bad-soft:#FFD9E0; --warn:#F2B134; --paper:#FFF6F8; --rule:#F7B3C3; --margin:#FD7B96; --stk:hue-rotate(150deg) saturate(1.1) brightness(.85);
+  --display:'Unbounded','Manrope',system-ui,sans-serif;
+  --body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#072A24; --bg-a:#0B3830; --bg-b:#051F1A; --surface:#0F4A3F; --fg:#FFC4D1; --muted:#D79AAB; --line:#1F6657;
+  --accent:#FD7B96; --accent-ink:#07241F; --accent-soft:#14574B; --pink:#FD7B96; --blue:#FFC4D1;
+  --ok:#8FE0B5; --ok-soft:#0E3F33; --bad:#FF8F78; --bad-soft:#4F2A2A; --warn:#F2B134; --paper:#0F4A3F; --rule:#1F6657; --margin:#D45C78; --stk:saturate(1.2) brightness(1.05); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#072A24; --bg-a:#0B3830; --bg-b:#051F1A; --surface:#0F4A3F; --fg:#FFC4D1; --muted:#D79AAB; --line:#1F6657;
+  --accent:#FD7B96; --accent-ink:#07241F; --accent-soft:#14574B; --pink:#FD7B96; --blue:#FFC4D1;
+  --ok:#8FE0B5; --ok-soft:#0E3F33; --bad:#FF8F78; --bad-soft:#4F2A2A; --warn:#F2B134; --paper:#0F4A3F; --rule:#1F6657; --margin:#D45C78; --stk:saturate(1.2) brightness(1.05); color-scheme:dark}
+
+/* декор: три стикера, не мешают кликам */
+#app{position:relative;z-index:1}
+.decos{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.decos img{position:absolute;height:auto;filter:var(--stk) drop-shadow(0 8px 14px rgba(3,22,18,.25))}
+.d-star{width:72px;left:max(6px,calc(50% - 470px));top:132px;transform:rotate(-12deg)}
+.d-heart{width:104px;right:max(6px,calc(50% - 480px));bottom:64px;transform:rotate(10deg)}
+.brand .bowi{height:1.25em;width:auto;vertical-align:-.3em;margin-left:.15em;filter:var(--stk)}
+@media (max-width:560px){.d-star{width:54px;left:-12px}.d-heart{width:78px;right:-14px;bottom:78px}}
+@media print{.decos{display:none}}
+*{box-sizing:border-box}
+html,body{height:auto}
+body{background:var(--bg);background-image:linear-gradient(160deg,var(--bg-a),var(--bg-b));background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#app{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;line-height:1.2}
+h1{font-size:1.5rem} h2{font-size:1.15rem}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.01em}
+.brand i{font-style:normal;color:var(--accent)}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-weight:700;min-height:44px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.btn.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:.875rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end}
+.grow{flex:1;min-width:0}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.sets{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.set{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.set:hover{border-color:var(--accent)}
+.set:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.set b{font-family:var(--display);font-size:1rem;line-height:1.3;overflow-wrap:anywhere}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+.bar.blue>span{background:var(--accent)}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:420px){.modes{grid-template-columns:1fr}}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.mode:hover{border-color:var(--pink);background:var(--accent-soft)}
+.panel,.set,.mode,.q{box-shadow:0 6px 20px -14px rgba(7,50,42,.28)}
+.bar>span{background:linear-gradient(90deg,var(--pink),var(--blue))}
+.bar.blue>span{background:linear-gradient(90deg,var(--pink),var(--blue))}
+.btn.ok{background:var(--ok);color:#fff}
+.mode:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.mode b{font-family:var(--display);font-size:.95rem}
+.mode span{color:var(--muted);font-size:.875rem}
+.mode svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
+
+.terms{display:flex;flex-direction:column}
+.term{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.term:first-child{border-top:0}
+.term .t{font-weight:700;overflow-wrap:anywhere}
+.term .d{color:var(--muted);overflow-wrap:anywhere}
+.term .lv{grid-column:1/-1;display:flex;gap:4px}
+.dot{width:18px;height:5px;border-radius:3px;background:var(--line)}
+.dot.on{background:var(--ok)}
+
+/* flip card */
+.flip{perspective:1200px}
+.flip-in{position:relative;height:min(52vh,320px);min-height:220px;transition:transform .45s;transform-style:preserve-3d;cursor:pointer}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;
+  display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:var(--display);font-weight:500;overflow:auto;overflow-wrap:anywhere}
+.face.back{transform:rotateY(180deg);background:var(--accent-soft);border-color:var(--accent)}
+.face .lab{position:absolute;top:14px;left:18px;font-family:var(--body);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fs-l{font-size:1.9rem}.fs-m{font-size:1.4rem}.fs-s{font-size:1.1rem}
+@media (prefers-reduced-motion:reduce){.flip-in,.bar>span{transition:none}}
+
+.q{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:6px}
+.q .word{font-family:var(--display);font-size:1.5rem;font-weight:500;overflow-wrap:anywhere}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.opts{grid-template-columns:1fr}}
+.opt{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;font-weight:500;overflow-wrap:anywhere;min-height:56px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.inp{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;min-height:48px}
+.inp:focus{border-color:var(--accent);outline:none}
+textarea.inp{min-height:110px;resize:vertical}
+.fb{border-radius:14px;padding:14px 16px;font-weight:700}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}
+.fb.bad{background:var(--bad-soft);color:var(--bad)}
+.fb small{display:block;font-weight:500;color:var(--fg);margin-top:2px}
+
+.match{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:420px){.match{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;min-height:84px;padding:10px;font-weight:500;text-align:center;display:flex;align-items:center;justify-content:center;overflow-wrap:anywhere;font-size:.95rem}
+.tile.sel{border-color:var(--accent);background:var(--accent-soft)}
+.tile.no{border-color:var(--bad);background:var(--bad-soft)}
+.tile.gone{visibility:hidden}
+
+.result{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;padding:28px 20px}
+.big{font-family:var(--display);font-size:2.6rem;font-weight:700;color:var(--accent)}
+.editrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center}
+@media (max-width:480px){.editrow{grid-template-columns:minmax(0,1fr) auto}.editrow .inp:nth-child(2){grid-column:1}.editrow .x{grid-row:1/3;grid-column:2}}
+.x{background:transparent;border:0;color:var(--muted);font-size:1.3rem;min-width:40px;min-height:40px;border-radius:10px}
+.x:hover{color:var(--bad)}
+.stack{display:flex;flex-direction:column;gap:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:8px 14px;font-weight:700;font-size:.875rem;min-height:40px}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.pbar{display:flex;gap:8px;align-items:center;padding-block:6px}
+.pseg{position:relative;flex:1;height:8px;border-radius:99px;background:var(--line)}
+.pseg i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--accent));transition:width .35s}
+.pbadge,.pend{display:grid;place-items:center;min-width:30px;height:30px;padding:0 7px;border-radius:99px;font-size:.8rem;font-weight:700}
+.pbadge{position:absolute;top:50%;transform:translate(-50%,-50%);background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 8px -2px rgba(7,50,42,.4);transition:left .35s}
+.pend{background:var(--line);color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.pseg i,.pbadge{transition:none}}
+.gems{display:flex;flex-wrap:wrap;gap:4px;min-height:26px;align-items:center}
+.g{width:22px;height:22px;clip-path:polygon(50% 0,100% 38%,50% 100%,0 38%);display:inline-block}
+.g.c0{background:var(--pink)}.g.c1{background:var(--accent)}.g.c2{background:var(--ok)}
+.arena{position:relative;height:min(50vh,360px);min-height:260px;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,var(--accent-soft),var(--surface))}
+.foe{position:absolute;top:0;left:0;max-width:46%;padding:8px 12px;border-radius:12px;background:var(--surface);border:1.5px solid var(--accent);font-weight:700;font-size:.9rem;line-height:1.3;overflow-wrap:anywhere;box-shadow:0 6px 16px -10px rgba(7,50,42,.45);will-change:transform}
+.foe.boom{animation:boom .35s forwards}
+@keyframes boom{to{opacity:0;scale:1.5}}
+.ground{position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,var(--pink),var(--accent))}
+.shake{animation:shake .3s}
+@keyframes shake{25%{translate:-6px 0}75%{translate:6px 0}}
+@media (prefers-reduced-motion:reduce){.foe.boom,.shake{animation:none}}
+.bgrid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;max-width:420px;width:100%;margin:0 auto}
+.bc{aspect-ratio:1;border-radius:8px;background:var(--line);border:0;padding:0;min-width:0}
+.bc.on{background:linear-gradient(135deg,var(--pink),var(--accent))}
+.bgrid.live .bc:not(.on):hover{background:var(--accent-soft);outline:2px solid var(--accent)}
+.tray{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-around;min-height:76px}
+.piece{display:grid;gap:3px;padding:10px;border-radius:14px;background:var(--accent-soft);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.piece:hover{outline:2px solid var(--accent)}
+.piece.lifted{opacity:.35}
+.piece i{width:20px;height:20px;border-radius:5px;background:transparent}
+.piece i.on{background:linear-gradient(135deg,var(--pink),var(--accent))}
+.slot{width:56px;height:56px;border-radius:14px;border:2px dashed var(--line)}
+.dragghost{position:fixed;left:0;top:0;z-index:60;display:grid;gap:4px;pointer-events:none;opacity:.92;will-change:transform}
+.dragghost i{border-radius:8px;background:transparent}
+.dragghost i.on{background:linear-gradient(135deg,var(--pink),var(--accent));box-shadow:0 6px 14px -6px rgba(7,50,42,.5)}
+.dragghost.bad i.on{background:var(--bad)}
+.bc.pre{background:var(--accent-soft);outline:2px solid var(--accent)}
+.mini{display:grid;gap:3px}
+.mini i{width:16px;height:16px;border-radius:4px;background:transparent}
+.mini i.on{background:linear-gradient(135deg,var(--pink),var(--accent))}
+/* плавная смена экранов: новый экран мягко выезжает снизу, блоки по очереди */
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#app.enter>*{animation:enter .38s cubic-bezier(.2,.8,.2,1) both}
+#app.enter>*:nth-child(2){animation-delay:.04s}
+#app.enter>*:nth-child(3){animation-delay:.08s}
+#app.enter>*:nth-child(4){animation-delay:.12s}
+#app.enter>*:nth-child(5){animation-delay:.16s}
+#app.enter>*:nth-child(n+6){animation-delay:.2s}
+@media (prefers-reduced-motion:reduce){#app.enter>*{animation:none}}
+.banners{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.banner .bar{margin-top:4px}
+.nbmini{display:flex;gap:4px;margin-top:4px}
+.nbmini i{width:16px;height:10px;border-radius:3px;background:var(--pink);opacity:.6}
+.nbmini i:nth-child(2){background:var(--accent)}
+.nbmini i:nth-child(3){background:var(--warn)}
+.banner{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;padding:14px 16px;border-radius:18px;border:1px solid var(--pink);background:linear-gradient(135deg,var(--accent-soft),var(--surface));box-shadow:0 6px 20px -14px rgba(7,50,42,.35)}
+.banner:hover{border-color:var(--accent)}
+.banner:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.banner .bt{font-family:var(--display);font-weight:700;font-size:1.05rem}
+.banner .arr{font-size:1.8rem;color:var(--accent);line-height:1}
+.livepill{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--muted);padding:6px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+.livepill i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.livepill.on{color:var(--ok)}
+.livepill.on i{background:var(--ok)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.tile2{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.tile2 b{font-family:var(--display);font-size:1.3rem}
+.cal{display:grid;grid-template-columns:42px repeat(7,minmax(0,1fr));gap:6px;align-items:center;max-width:480px;width:100%}
+.cdh{text-align:center;font-size:.75rem;font-weight:700;color:var(--muted)}
+.cwk{font-size:.75rem;font-weight:700;color:var(--muted)}
+.cd{position:relative;display:block;width:100%;border-radius:10px;border:2px solid transparent;padding:0;font-weight:700;font-size:.85rem;line-height:1;font-variant-numeric:tabular-nums;background:var(--line);color:var(--muted);min-width:0}
+.cd::before{content:"";display:block;padding-top:100%}
+.cd>span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cd.full{background:var(--ok);color:#fff}
+.cd.over{background:linear-gradient(135deg,var(--pink),var(--accent));color:#fff}
+.cd.some{background:var(--warn);color:#2b1d00}
+.cd.miss{background:var(--bad-soft);color:var(--bad)}
+.cd.today{border-color:var(--accent);color:var(--fg)}
+.cd.sel{outline:3px solid var(--accent);outline-offset:1px}
+.skbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.skb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;min-height:52px}
+.skb span{min-width:0}
+.skb small{display:block;font-weight:500;font-size:.78rem;color:var(--muted)}
+.skb i{flex:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:.9rem;color:transparent}
+.skb.on{border-color:var(--ok);background:var(--ok-soft)}
+.skb.on i{background:var(--ok);border-color:var(--ok);color:#fff}
+.skb.auto{cursor:default}
+.skb:not(.auto):hover:not(:disabled){border-color:var(--accent)}
+.skb:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.skb:disabled{opacity:.5;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:99px;border:1px solid var(--line);font-size:.85rem;font-weight:700;color:var(--muted)}
+.chip.on{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.dl{display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:10px}
+.wk{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.wk.cur{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+/* блокнотик */
+:root{--nbmin:max(420px,calc(100vh - 262px))}
+@supports (height:100svh){:root{--nbmin:max(420px,calc(100svh - 262px))}}
+.hand{font-family:'Caveat','Comic Sans MS',cursive;font-weight:700}
+.nbwrap{perspective:2400px}
+.nb{position:relative;display:block;max-width:1100px;margin:0 auto;height:auto;min-height:var(--nbmin);overflow:hidden;border-radius:16px;filter:drop-shadow(0 16px 26px rgba(3,22,18,.22))}
+.np{position:relative;height:auto;min-width:0;background-color:var(--paper);background-image:radial-gradient(var(--rule) 1.3px,transparent 1.6px);background-size:22px 22px;background-position:11px 11px;overflow:hidden}
+.np.l{border-radius:16px 0 0 16px}
+.np.r{border-radius:0 16px 16px 0}
+.np.single{border-radius:16px}
+.np::before{content:"";position:absolute;top:0;bottom:0;left:30px;width:2px;background:var(--margin);opacity:.55;z-index:1}
+.np.r:not(.single)::before{left:20px}
+.np-in{position:relative;height:auto;padding:22px 20px 44px 46px;display:flex;flex-direction:column;gap:12px;}
+.np-in>*{flex-shrink:0}
+.nbs{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:var(--nbmin)}
+.nb.single .nbs{grid-template-columns:1fr}
+.np.r:not(.single) .np-in{padding-left:36px}
+.np.blank{background-image:radial-gradient(var(--rule) 1.3px,transparent 1.6px)}
+.pn{position:absolute;bottom:10px;font-size:.8rem;color:var(--muted);font-weight:700;z-index:2}
+.np.l .pn{left:20px}
+.np.r .pn{right:20px}
+.spine{position:absolute;top:0;bottom:0;left:50%;width:36px;transform:translateX(-50%);z-index:7;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(3,22,18,.16) 42%,rgba(3,22,18,.16) 58%,transparent)}
+.spine::after{content:"";position:absolute;inset:14px 0;background:radial-gradient(circle,var(--bg) 0 5px,#2F5F54 5px 7px,transparent 7px) center top/36px 40px repeat-y}
+.flipper{position:absolute;top:0;bottom:0;left:50%;width:50%;z-index:6;transform-origin:left center;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.45,.05,.25,1)}
+.nb.single .flipper{left:0;width:100%}
+.flipper.turn{transform:rotateY(-180deg)}
+.flipper .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flipper .back{transform:rotateY(180deg)}
+.flipper .face .np{height:100%}
+.cover{min-height:min(60vh,460px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.1}
+.cover .big{font-size:3rem}
+.cover .hand{font-size:2rem;color:var(--accent)}
+/* оформление страницы конспекта */
+.hd{position:relative;padding-top:8px}
+.hd::before{content:"";position:absolute;top:-8px;left:-6px;width:84px;height:20px;background:var(--pink);opacity:.55;transform:rotate(-3deg);border-radius:3px}
+.hrow{display:flex;align-items:center;gap:10px;margin-top:10px}
+.nnum{flex:none;display:grid;place-items:center;min-width:40px;height:40px;padding:0 6px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--accent));color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:.8rem}
+.ntag{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ntitle{font-size:1.9rem;line-height:1.1;margin:0;color:var(--fg);overflow-wrap:anywhere;min-width:0}
+.ntitle span{background:linear-gradient(transparent 62%,var(--accent-soft) 62%);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.nsub{margin-top:6px;font-size:.92rem;color:var(--muted)}
+.nuse{padding:8px 12px;border-radius:12px;background:var(--accent-soft);font-size:.9rem;line-height:1.4}
+.nuse b{color:var(--accent)}
+.ntext{margin:0;font-size:.92rem;line-height:1.45}
+.nsec{font-family:'Caveat','Comic Sans MS',cursive;font-weight:700;font-size:1.45rem;line-height:1.1;color:var(--accent);margin-top:2px}
+.nform{padding:8px 14px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-weight:700;line-height:1.35}
+.ntw{overflow-x:auto;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.nt{width:100%;border-collapse:collapse;font-size:.84rem;line-height:1.3}
+.nt th{background:linear-gradient(135deg,var(--accent-soft),var(--bg-a));color:var(--accent);text-align:left;padding:7px 9px;font-size:.74rem;letter-spacing:.04em;text-transform:uppercase}
+.nt td{padding:6px 9px;border-top:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+.nt tbody tr:nth-child(even) td{background:rgba(19,128,110,.06)}
+.nt.dense td{padding:3px 9px}
+.nt.dense{font-size:.8rem}
+.nt.chip td:first-child{width:1%;white-space:nowrap}
+.tchip{display:inline-block;min-width:26px;padding:1px 8px;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-weight:700;text-align:center;font-size:.8rem}
+.nchips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nlab{font-family:'Caveat','Comic Sans MS',cursive;font-weight:700;font-size:1.3rem;color:var(--accent);margin-right:4px}
+.nchip{padding:3px 10px;border-radius:99px;border:1.5px solid var(--pink);background:var(--surface);font-size:.85rem;font-weight:700}
+.nwarn{display:flex;gap:8px;align-items:flex-start;padding:9px 12px;border-radius:12px;background:var(--bad-soft);border:1px dashed var(--bad);font-size:.9rem;line-height:1.4}
+.nwarn i{font-style:normal}
+.npair{display:grid;gap:6px}
+.npair>div{display:flex;gap:8px;align-items:flex-start;padding:7px 12px;border-radius:12px;font-size:.92rem;line-height:1.35;font-weight:700}
+.npair i{font-style:normal}
+.npair .ok{background:var(--ok-soft);color:var(--ok)}
+.npair .no{background:var(--bad-soft);color:var(--bad)}
+.npair .no span{text-decoration:line-through;text-decoration-thickness:1.5px}
+.nex{margin:0;padding-left:20px;font-size:.92rem;line-height:1.5}
+.nex li::marker{color:var(--pink)}
+.nex.bad li::marker{color:var(--bad)}
+.nexb{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.9rem;line-height:1.4}
+.nexb b{font-size:.84rem;color:var(--accent)}
+.nexb i{font-weight:700}
+.nexb span{color:var(--muted)}
+.nsticky{white-space:pre-line;padding:8px 14px 10px;border-radius:6px;background:var(--warn);color:#2b1d00;transform:rotate(-1.2deg);line-height:1.4;font-size:.92rem;box-shadow:0 6px 12px -8px rgba(0,0,0,.5)}
+.nsticky b{display:block;font-family:'Caveat','Comic Sans MS',cursive;font-size:1.35rem;line-height:1.2}
+.toc{display:flex;flex-direction:column}
+.tocsec{font-family:'Caveat','Comic Sans MS',cursive;font-weight:700;font-size:1.3rem;color:var(--accent);margin-top:8px}
+.tocrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;padding:5px 0;font-size:.92rem;border-bottom:1px dotted var(--margin)}
+.tocrow:hover{color:var(--accent)}
+.tocrow:focus-visible{outline:2px solid var(--accent)}
+/* телефон в альбомной ориентации: разворот во всю высоту экрана */
+@media (max-height:560px){
+  :root{--nbmin:max(200px,calc(100vh - 92px))}
+  @supports (height:100svh){:root{--nbmin:max(200px,calc(100svh - 92px))}}
+  .nbnav{position:fixed;top:8px;right:max(16px,env(safe-area-inset-right,0px));margin:0;padding:3px 8px;gap:6px;z-index:30}
+  .nbnav .btn{min-height:34px;padding:2px 12px;font-size:.85rem}
+  .nbh1,.nbhint{display:none}
+  body{padding-block:10px 16px}
+  #app{gap:10px}
+  .np-in{padding-top:14px}
+}
+.nbnav{position:sticky;bottom:10px;z-index:20;flex-wrap:nowrap;justify-content:center;gap:10px;margin:0 auto;padding:8px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -12px rgba(3,22,18,.45)}
+.dnav{display:flex;gap:8px;align-items:center}
+.dtitle{text-align:center;font-size:1.05rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--surface);color:var(--fg);border:1.5px solid var(--ok);padding:10px 16px;border-radius:99px;font-weight:700;font-size:.9rem;box-shadow:0 12px 28px -12px rgba(3,22,18,.5);transition:opacity .25s,transform .25s;z-index:80;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.nbnav .btn{min-height:40px;padding:6px 16px;white-space:nowrap}
+.nbcnt{white-space:nowrap;min-width:3.6em;text-align:center}
+.nbhint{display:none}
+@media (max-height:560px){.nbnav{position:fixed;top:8px;bottom:auto}}
+@media (min-width:760px) and (min-height:561px){.nbhint{display:block}}
+body:has(.nbwrap){padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}
+#app:has(.nbwrap){max-width:1100px}
+.nbtop{justify-content:flex-start;gap:14px;flex-wrap:nowrap}
+.nbtop h1{font-size:1.25rem}
+.nsep{height:0;border-top:2px dashed var(--margin);opacity:.6;margin:6px 0}
+/* плотная страница: тема со множеством блоков помещается на разворот целиком */
+.np-in.cmp{gap:7px;padding-top:16px;padding-bottom:36px}
+.cmp .hd::before{top:-4px;height:14px}
+.cmp .hrow{margin-top:6px}
+.cmp .nnum{min-width:34px;height:34px;font-size:.72rem}
+.cmp .ntitle{font-size:1.6rem}
+.cmp .nsub{font-size:.8rem;margin-top:2px}
+.cmp .nuse,.cmp .ntext,.cmp .nex{font-size:.8rem;line-height:1.35}
+.cmp .nuse{padding:5px 10px}
+.cmp .nsec{font-size:1.2rem}
+.cmp .nt{font-size:.76rem;line-height:1.2}
+.cmp .nt td{padding:3px 8px}
+.cmp .nt th{padding:4px 8px;font-size:.68rem}
+.cmp .tchip{padding:0 7px;font-size:.74rem}
+.cmp .nchips{gap:4px}
+.cmp .nchip{padding:2px 8px;font-size:.76rem}
+.cmp .nwarn{padding:5px 10px;font-size:.8rem;line-height:1.3}
+.cmp .npair{gap:4px}
+.cmp .npair>div{padding:4px 10px;font-size:.8rem}
+.cmp .nsticky{padding:5px 12px 7px;font-size:.82rem;line-height:1.3}
+.cmp .nsticky b{font-size:1.15rem}
+@media (prefers-reduced-motion:reduce){.flipper{transition:none}}
+.sum{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.donut{position:relative;width:170px;height:170px;flex:none;max-width:100%}
+.donut svg{width:100%;height:100%;display:block}
+.donut .ctr{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.donut .num{font-family:var(--display);font-weight:700;font-size:2.2rem;line-height:1}
+.lg{display:flex;align-items:center;gap:10px}
+.lg i{width:14px;height:14px;border-radius:50%;flex:none}
+.lg b{min-width:1.6em;font-family:var(--display)}
+.part{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.part:first-child{border-top:0}
+.ex{font-family:var(--body);font-weight:500;font-size:.95rem;line-height:1.45;color:var(--muted);margin-top:16px}
+.empty{text-align:center;padding:36px 20px}
+</style>
+
+<div id="app"></div>
+
+<script>
+(function(){
+'use strict';
+const KEY='slovarik.v1';
+/* общий прогресс (облако): переменные объявлены заранее, чтобы save() работал с первой секунды */
+let fbAuth=null,fbDb=null,fbUser=null,pushT=0,pushBusy=false,pushDirty=false,pendingR=null,syncState='wait',sampleFn=null,allowDrop=false;
+const $app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').replace(/[.,!?;:"'«»()\-–—]/g,' ').replace(/\s+/g,' ').trim();
+
+/* ---------- данные ---------- */
+const BUILTIN=[{"id":"f1","name":"To be & Vocabulary in Use","cards":[{"t":"DESCRIBE","d":"описывать, характеризовать, излагать словами","x":"","id":"q01-0"},{"t":"BOTH","d":"оба, обе, и тот и другой, одновременно","x":"","id":"q01-1"},{"t":"BELOW","d":"ниже, внизу, далее по тексту, под","x":"","id":"q01-2"},{"t":"WEST","d":"запад, западный","x":"","id":"q01-3"},{"t":"HAVE GOT","d":"иметь, у кого-то есть","x":"","id":"q01-4"},{"t":"STEP-BROTHER","d":"сводный брат","x":"","id":"q01-5"},{"t":"CLOSE TO","d":"близко к, рядом с, близкий","x":"","id":"q01-6"},{"t":"BRANCH","d":"ветка, филиал, отрасль","x":"","id":"q02-0"},{"t":"BRUNCH","d":"поздний завтрак совмещённый с обедом","x":"","id":"q02-1"},{"t":"BUTCHER","d":"мясник, мясная лавка","x":"","id":"q02-2"},{"t":"RAW","d":"сырой, необработанный","x":"","id":"q02-3"},{"t":"LAY THE TABLE","d":"накрывать на стол","x":"","id":"q02-4"},{"t":"FLOUR","d":"мука","x":"","id":"q02-5"},{"t":"FLOOR","d":"этаж, пол","x":"","id":"q02-6"},{"t":"FROZEN","d":"замороженный, застывший","x":"","id":"q02-7"},{"t":"LEAF","d":"лист растения, лист бумаги","x":"","id":"q02-8"},{"t":"GROUND","d":"земля, грунт, поверхность","x":"","id":"q02-9"},{"t":"DIG","d":"копать, рыть","x":"","id":"q02-10"},{"t":"COUNT","d":"считать, подсчитывать, иметь значение","x":"","id":"q02-11"},{"t":"ADD UP","d":"складывать числа, суммировать, сходиться","x":"","id":"q02-12"}]},{"id":"f2","name":"Movies, Princess & Stative Verbs","cards":[{"t":"ROUGH","d":"тяжёлый, суровый, грубый, неровный, приблизительный","x":"","id":"q03-0"},{"t":"TELL","d":"сказать кому-то, рассказать, сообщить","x":"","id":"q03-1"},{"t":"SAY → SAID","d":"сказать, произнести","x":"","id":"q03-2"},{"t":"NOTHING LEFT TO LOSE","d":"нечего терять","x":"","id":"q03-3"},{"t":"LET ME GET THIS STRAIGHT","d":"дай мне уточнить, правильно ли я понимаю","x":"","id":"q03-4"},{"t":"PRETEND","d":"притворяться, делать вид","x":"","id":"q03-5"},{"t":"ISN'T THAT WHAT THEY SAY?","d":"разве не так говорят?","x":"","id":"q03-6"},{"t":"THE SAME WAY","d":"таким же образом, точно так же","x":"","id":"q03-7"},{"t":"APLENTY","d":"в изобилии, в большом количестве","x":"","id":"q05-0"},{"t":"FRIGHTFUL","d":"ужасный, страшный, пугающий","x":"","id":"q05-1"},{"t":"MIDST","d":"середина, центр, среди, в разгаре","x":"","id":"q05-2"},{"t":"YET","d":"ещё, пока, однако, всё же","x":"","id":"q05-3"},{"t":"UNLESS","d":"если не, если только не","x":"","id":"q05-4"},{"t":"ONCE","d":"однажды, когда-то, один раз, как только","x":"","id":"q05-5"},{"t":"LIKE","d":"нравиться, любить","x":"","id":"q06-0"},{"t":"LOVE","d":"любить, обожать","x":"","id":"q06-1"},{"t":"HATE","d":"ненавидеть, очень не любить","x":"","id":"q06-2"},{"t":"PREFER","d":"предпочитать","x":"","id":"q06-3"},{"t":"NEED","d":"нуждаться, быть необходимым","x":"","id":"q06-4"},{"t":"WANT","d":"хотеть","x":"","id":"q06-5"},{"t":"KNOW","d":"знать","x":"","id":"q06-6"},{"t":"BELIEVE","d":"верить, считать","x":"","id":"q06-7"},{"t":"UNDERSTAND","d":"понимать","x":"","id":"q06-8"},{"t":"REMEMBER","d":"помнить, вспоминать","x":"","id":"q06-9"},{"t":"MEAN","d":"значить, означать, иметь в виду","x":"","id":"q06-10"},{"t":"HEAR","d":"слышать","x":"","id":"q06-11"},{"t":"SEE","d":"видеть","x":"","id":"q06-12"},{"t":"SMELL","d":"пахнуть, чувствовать запах","x":"","id":"q06-13"},{"t":"TASTE","d":"иметь вкус, ощущать вкус","x":"","id":"q06-14"},{"t":"BELONG","d":"принадлежать","x":"","id":"q06-15"},{"t":"CONTAIN","d":"содержать","x":"","id":"q06-16"},{"t":"COST","d":"стоить","x":"","id":"q06-17"},{"t":"OWN","d":"владеть, иметь в собственности","x":"","id":"q06-18"}]},{"id":"f3","name":"Confusing Words","cards":[{"t":"THIS","d":"этот, эта, это","x":"","id":"q04-0"},{"t":"THAT","d":"тот, та, то, что","x":"","id":"q04-1"},{"t":"THESE","d":"эти","x":"","id":"q04-2"},{"t":"THOSE","d":"те","x":"","id":"q04-3"},{"t":"THROUGH","d":"через, сквозь, по, посредством","x":"","id":"q04-4"},{"t":"THOUGH","d":"хотя, однако, несмотря на то что","x":"","id":"q04-5"},{"t":"THOUGHT","d":"мысль, думал, думала","x":"","id":"q04-6"},{"t":"TOUGH","d":"трудный, тяжёлый, жёсткий, выносливый","x":"","id":"q04-7"},{"t":"THOROUGH","d":"тщательный, основательный","x":"","id":"q04-8"},{"t":"THROUGHOUT","d":"на протяжении, по всему пространству","x":"","id":"q04-9"},{"t":"THROW","d":"бросать, кидать","x":"","id":"q04-10"},{"t":"THERE","d":"там","x":"","id":"q04-11"},{"t":"THEIR","d":"их","x":"","id":"q04-12"},{"t":"THEY'RE","d":"они есть, они являются","x":"","id":"q04-13"},{"t":"THEN","d":"затем, потом, тогда","x":"","id":"q04-14"},{"t":"THAN","d":"чем","x":"","id":"q04-15"},{"t":"WHERE","d":"где, куда","x":"","id":"q04-16"},{"t":"WERE","d":"были","x":"","id":"q04-17"},{"t":"WE'RE","d":"мы есть, мы являемся","x":"","id":"q04-18"},{"t":"WHETHER","d":"ли","x":"","id":"q04-19"},{"t":"WEATHER","d":"погода","x":"","id":"q04-20"},{"t":"WHO","d":"кто","x":"","id":"q04-21"},{"t":"WHOSE","d":"чей, чья, чьё, чьи","x":"","id":"q04-22"},{"t":"WHO'S","d":"кто есть, кто является","x":"","id":"q04-23"},{"t":"WHAT","d":"что, какой","x":"","id":"q04-24"},{"t":"WHICH","d":"который, какой из","x":"","id":"q04-25"},{"t":"HERE","d":"здесь, сюда","x":"","id":"q04-26"},{"t":"HEAR","d":"слышать","x":"","id":"q04-27"},{"t":"TO","d":"к, в, частица перед инфинитивом","x":"","id":"q04-28"},{"t":"TOO","d":"тоже, слишком","x":"","id":"q04-29"},{"t":"TWO","d":"два","x":"","id":"q04-30"},{"t":"QUITE","d":"довольно, вполне","x":"","id":"q04-31"},{"t":"QUIET","d":"тихий, спокойный","x":"","id":"q04-32"},{"t":"LOSE","d":"терять, проигрывать","x":"","id":"q04-33"},{"t":"LOOSE","d":"свободный, неплотный, не тугой","x":"","id":"q04-34"},{"t":"ALL","d":"все, весь","x":"","id":"q04-35"},{"t":"WHOLE","d":"целый, весь","x":"","id":"q04-36"},{"t":"OTHER","d":"другой, остальные","x":"","id":"q04-37"},{"t":"ANOTHER","d":"ещё один, другой","x":"","id":"q04-38"}]},{"id":"f4","name":"Have, Past Simple & Collocations","cards":[{"t":"HAVE A HEADACHE","d":"иметь головную боль, болит голова","x":"","id":"q07-0"},{"t":"HAVE FUN","d":"веселиться, хорошо проводить время","x":"","id":"q07-1"},{"t":"HAVE A KING OR QUEEN","d":"иметь короля или королеву","x":"","id":"q07-2"},{"t":"HAVE A DRIVING LICENCE","d":"иметь водительские права","x":"","id":"q07-3"},{"t":"HAVE ANY BROTHERS OR SISTERS","d":"иметь братьев или сестёр","x":"","id":"q07-4"},{"t":"HAVE A TEMPERATURE","d":"иметь повышенную температуру","x":"","id":"q07-5"},{"t":"HAVE LUNCH","d":"обедать","x":"","id":"q07-6"},{"t":"HAVE ANY MOUNTAINS","d":"иметь горы, располагать горными районами","x":"","id":"q07-7"},{"t":"HAVE A CUP OF COFFEE","d":"выпить чашку кофе","x":"","id":"q07-8"},{"t":"CARRY → CARRIED","d":"нести, переносить, перевозить","x":"","id":"q08-0"},{"t":"HURRY → HURRIED","d":"спешить, торопиться","x":"","id":"q08-1"},{"t":"ROB → ROBBED","d":"грабить, обкрадывать","x":"","id":"q08-2"},{"t":"INSTEAD OF","d":"вместо","x":"","id":"q09-0"},{"t":"IMPROVE","d":"улучшать","x":"","id":"q09-1"},{"t":"AVOID","d":"избегать","x":"","id":"q09-2"},{"t":"DEAL WITH","d":"разбираться с чем-либо, справляться","x":"","id":"q09-3"},{"t":"IN DETAIL","d":"подробно","x":"","id":"q09-4"},{"t":"PRECISE","d":"точный","x":"","id":"q09-5"},{"t":"ESPECIALLY","d":"особенно","x":"","id":"q09-6"},{"t":"INCLUDE","d":"включать","x":"","id":"q09-7"},{"t":"STRICTLY FORBIDDEN","d":"строго запрещено","x":"","id":"q09-8"},{"t":"BITTERLY COLD","d":"очень холодно, ужасно холодный","x":"","id":"q09-9"},{"t":"PITCH DARK","d":"совершенно темно, кромешная тьма","x":"","id":"q09-10"},{"t":"SUBSTANTIAL MEAL","d":"сытный, плотный приём пищи","x":"","id":"q09-11"},{"t":"BITTERLY DISAPPOINTED","d":"крайне разочарованный, глубоко разочарованный","x":"","id":"q09-12"},{"t":"VALID PASSPORT","d":"действительный паспорт","x":"","id":"q09-13"},{"t":"LIVE MUSIC","d":"живая музыка","x":"","id":"q09-14"},{"t":"HEAVY SNOW","d":"сильный снегопад","x":"","id":"q09-15"},{"t":"MAKE A MISTAKE","d":"совершить ошибку","x":"","id":"q09-16"},{"t":"PULL SOMEBODY'S LEG","d":"разыгрывать кого-либо, подшучивать","x":"","id":"q09-17"},{"t":"A STORM IN A TEACUP","d":"буря в стакане воды, шумиха из-за пустяка","x":"","id":"q09-18"},{"t":"KEY RING","d":"кольцо для ключей, брелок","x":"","id":"q09-19"},{"t":"LEAVE UNIVERSITY","d":"окончить университет, уйти из университета","x":"","id":"q09-20"},{"t":"MAKE A DECISION","d":"принять решение","x":"","id":"q09-21"},{"t":"TAKE UP A PROFESSION","d":"начать заниматься профессией, выбрать профессию","x":"","id":"q09-22"},{"t":"PLAY THE GUITAR","d":"играть на гитаре","x":"","id":"q09-23"},{"t":"WRITE SONGS","d":"писать песни","x":"","id":"q09-24"},{"t":"MAKE RECORDINGS","d":"делать записи, записывать музыку","x":"","id":"q09-25"},{"t":"HAVE A HEAVY COLD","d":"сильно простудиться, иметь сильную простуду","x":"","id":"q09-26"},{"t":"SEND RECORDINGS TO A RECORD COMPANY","d":"отправлять записи в звукозаписывающую компанию","x":"","id":"q09-27"},{"t":"GET A JOB","d":"устроиться на работу","x":"","id":"q09-28"},{"t":"FAST-FOOD RESTAURANT","d":"ресторан быстрого питания","x":"","id":"q09-29"}]}];
+let data;
+try{data=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){data=null}
+if(!data||!Array.isArray(data.sets))data={sets:[]};
+data.sets=data.sets.filter(s=>!/^Пример:/.test(s.name));
+data.seen=data.seen||[];
+const oldLvl={};
+data.sets.forEach(s=>{if(/^q\d\d$/.test(s.id))s.cards.forEach(c=>{oldLvl[c.id]=c.lvl||0})});
+data.sets=data.sets.filter(s=>!/^q\d\d$/.test(s.id));
+BUILTIN.forEach(b=>{
+  if(data.seen.includes(b.id))return;
+  data.seen.push(b.id);
+  data.sets.push({id:b.id,name:b.name,dir:'dt',best:null,cards:b.cards.map(c=>({id:c.id,t:c.t,d:c.d,x:c.x||'',lvl:oldLvl[c.id]||0}))});
+});
+try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}
+const saveLocal=keep=>{if(keep!==true)data.savedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}if(keep!==true)scheduleRemote()};
+const save=()=>saveLocal();
+const getSet=id=>data.sets.find(s=>s.id===id);
+
+/* ---------- звук «дынь» ---------- */
+/* звук вырезан из записи Quizlet (правильный ответ) */
+const DING_SRC='data:audio/mpeg;base64,SUQzBAAAAAAAIlRTU0UAAAAOAAADTGF2ZjYzLjEuMTAyAAAAAAAAAAAAAAD/+3DAAAAAAAAAAAAAAAAAAAAAAABJbmZvAAAADwAAABQAABm2ABgYGBgkJCQkJDAwMDAwPDw8PDxJSUlJSVVVVVVVYWFhYWFtbW1tbXl5eXl5hoaGhoaSkpKSkp6enp6eqqqqqqq2tra2tsPDw8PDz8/Pz8/b29vb2+fn5+fn8/Pz8/P//////wAAAABMYXZjNjMuMS4AAAAAAAAAAAAAAAAkBRAAAAAAAAAZtusm/BsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//twxAADwAABpAAAACAAADSCgAAEAABDCBCBC8fhMfBtgPfhbBOPCcDv/KZDLP8c4wZIGn/koO8eY8xif/jwIxSGAGwl//80LhWPMZZcX//+dJw5BkF9SzhKf//+UDNzYxHmQzxLjzJn////48BsNyUJQzKZuYMaGZuQz3////////+mbnDQsNiUJQzc+ibm6Gs3cdgtlillzurjcQaCIAjDSFM13OyhNL0GXHmbEhcYXxd0IDwOYaYNJG/EhINwhBf2ApSWsk7Ao2dVMwl1aqFG59DUAI4ZsOYvp/w3/noDQJkXIdZZm0Z5yEHV/pq9KoFJHOqFsfa7wukjGV91YrIm/tVEvRi/OjVB36xCc5WH/6//6rhqVWKhbX1c1zKBjbWxsrHctf7xr/3u9fs11q8GC+hs8SB4Nf/7csSSAA/CLuDY1oADw0VktzTwAY2nz2DC3rO///6U18fMTEeNGtF3ArmkP2g/NteBeLim8/53/6U+8a//p/////q83klvufEk+bxJoVd////+maOeM60vSyz0peLJATxZG4C9X58nGQZaEWIWhqlOl+XQyVYquMAIaIDg8InExAPAGRBMNAIgfIZjILFIpKRExWkVkx06zorntck7MxC3IlrHW5Z0pjnct0I5JpKZ0Q/XbV0rI2/Wcy9Pyo623VTTqqsekl6seTIzuk6H6FVyqahB7TNQWhhAa+3dZRKmr3l3K4gJQFAHiQ4rA8PoMxOKY3AQAQEHzNgpoax2FlaOOukUEyI8DiWQqrWKxltErR4y5GR26tmEqImP4LByHp+QZCKGZGi14OTppGrr3R5UG6vriLHo9Wl///twxG0AUKXFJxzygAnyIGSgJgx571a5jTS78ssrZD1LaqUzuk9++wD6pZpH3UGMzuNNLDcDRuxTZ2hwQj2A8GEAEJQFpbhT7ssrbRMkHrdBNd/GSXbQkmTBi5Fo/cIsZtXmLep50zcHb5L7Itu4v/Pvy15ZIgE6FeYENsvxLf/DoXvtLdSzks3zpJfbX+4U7v6Y198nfAsOrTfJ+ej2fjb4t675LTWnoSXWCPi/NfScNw3jqH2kQMAAoTjzsoctpNHHHYX6p5sQ0CVkSkligEhuqF1BkyjabkQkVB3DhEw1U6QQDEHHEsZ/erEP5EjFCJWQ0CSsZzMstfrH1+0l5V14eUPz0M4gfU5l3/Uv5P8s4ZG2cvy72n+pUnP7NTMa9k4fS6n9725FWKlSuZZfZoWfD5LP/KBKu//7csR+AE84jSkh4MNKA0AlMYSNyABCALGcZeBSl1n/bsy57S+7FXDawOiBWajBdZFEYWQ0sDrCZBNNFKBNaaEDePS3zyaP5nVWGkWFz3VZljfF+ppJyOxcrtmVNC11rcpKeUMnsOo5eJyLY7m2ZeVbxsoC3Uk1KeZu2lR6XZP7PJLDOER/tsKldCKk/66p6lemhg5DdAkAAAZkDd6zDaz2sTr1oBzEIuokQg4pGVL/o7QL2Yg+B4d2scIp4qwxosOn4vj3fQaZXL0YIApzjG6+6qe019a4ni25rt6qKoc9J1HdoO/9tKX+eq9a/fuZ9Jn5q++fd7rvnmTYqUpbnm9bviUute/rf9Ime406qoiG/jzrnzfITufPhZjnLSXpIBgdj5RAgYCxuKSRyBjICeCBQmojFSEYFyEr//twxJMAUEX7JwwkbEIeOWUysIABBggY6RFozi1UYHRoEHRl0TMmAMhCsbdhkjnF+ILjb1vxLIqpVPUjC3Ud/CVrwgJ9IELRg4YTkS4xjcigR9PiLN4IlbtgUXMvATzOI/rIR9ZvDuue0+R5b/RvBEJDcN/n2WX61qrL6KWW6svtXMq9S1at1O53+X8d1auqW9N6/et2b93CX38f/7VXeeNTHPLm6bHDO3aq3bd7LVW1/1beWdivV1jrdrCzW7hnj3m6979a+/hrv2dfXr2d457xqU2Nwq6ogEiStHlEoe02sVt+LW10oAAAC3fsAAAATa77e7J7GFgbVzCEMmYmCQBGEQeHADBBg6GOuLAYnTKk7DIcpzDABDSAbDB8FR77SgIhkVMSAiQgFgVDELAbjPOyBvHJY1vUEv/7csSgAB3FkzO5vYADsTAn9zuwAVoF8wU0EaAn+jTUVm2dSCq10w4NNjuDeDG8tkcAjAwcwQi+mRkMUF1lmXCLh2vv+sZLqj+/4CHXXt77zmeM/LpXlvGlr5SiVdwv02Eaq5ySRz2WXPyl05S2ub1u/Qw/jSYX+Z0+tZa7nensvyrZVst/az73lzOrKKtJasd5rePMrf9wywu6xxx3jvCzjU3u9ypX5vK1jykIA3zqQz7K+gaAgYHYC5gaggGC2A0HDnmBoACBQXjFrCKNYaBMw1hUTE0DLMFQD8FAOlAC7Di/LiwqlcKHrW9f3es4aaUkM07CpV72/N1aXXMcWQv6uWBWHhUZIwnmY/LwFAggx1IXWTsa9GrW578cqbPWtf//h/f/n4/zf2Nc5u//7++ulTFPeIIEIOcs//twxEUDFUTRLD3sAALAOmTF7I25y5EbIMtYvnTkaFq2nuhf3sYtZvya5ND0ZlsQhF7BRUmCHblZixgPAWmA4BuYHQJxgXByJKmCqAoYEQDJvKy/GGmAsYQAHZgPgRq2gA8aUdZ6oxG87VSWZT+WrF65Ums71zL9Wcf1l3mq1ecurlXkSNmxSPMmIyii8krgxXNXt0Uy0KKIly6QRRv8iodJKTkW7kU78LKW5/edpLv+9rkpfSvzqaU87PeHW6dR60LNb823zube7U/6ioSWHWIiSObEZQ9zJgh5GQWVRRuB5916ytUMAAAGygORpflNiAAYCAFpmmAqBGYMAM5aEwBwIjAmByM6RNUwRgIQgCcwFAFGkU4WosKu2/NR+4diaoafbHcBaPx7TMOebvWSXXr959asatENWP/7csQpgBahfy2vPQ3CprnkhewNuSXK979e+PcUhz0wlHW0D1EUcWIJNxEqw4MGEEHCp9DhmPUTVkDkZpo8kY0k0rb28yKnRKkxNkTN13Tv3DrTDZh+biPjV9tEm3aV2fnMHhAFAIl80AXLeKKf0S6LF3MSplgaQDWM0ocycUAJCgHhh1hXGBqDeYCIApgkiOmpyxsEEbEwCoKBeM6DBGXKUM6lTvSXlWftfW7ds397y1urcv1LtW9hzDO938qsllTQnukf29/Wzu5kvMkJ0KytLYdPcGZhEH6wXMsjZTEbzahn2JSPO7bmRKjk5kUkMpnFnS2OTZI7MdQ/CBGmCtlMWZZ5NYMk+5HTb5g/M+svhmwhUQSqAkkQnOJ9uhJks9IgAAbBEDHLjwQpS8gCUxEA0KBeFguCFhOU//twxAyAEWjDLTXWgAKKHqu/NYACrZMUxxMTQREQPCwkCwIsXGOOcpCBhOySGAa7oVMZuqmigfTmq69nZZkYiYC0IRfKDNoKZ70XU9JTJI11LL5TcwN07KYzAzyQWa9JUeHYoy+RfUYrFYoOEsrtetq19x2h7l2bEFXspADQ3oMldhe/be1SndyIkRGYIZJZtV9OxsgAAIsBB0BDsJAAcW3GAY8bgMNIHMeFErSMYHEQ6bRWBl4EgAgmhjKDaNe691LmMp5u4wI9jQgZnAzY2tytYjT/zFhtIp7+W4be55dVGsF5HE/OnM5VJvJEnk3boFWsEmaN/5eEEd4SBudTnljJrK0LTPrFukpJTJ8LHXHUML0BD5JRVdYZY7//i8CSvWsM+dUslsbvds4gUAgNJvrdJETGwAABUP/7csQHgBI87Wu5rQAaJ5ooq7lQAmZ3HBIiAUhhi6TwBMyUZCukjQ08hLF00bkz24nPDI1JBsnSzkwCFPaiAWQbO/4CC0sZYDCeaGAUXyzc/L/3sRBEwAsN+ojMx2I/qLKyxResy/Osnptdy3rG7jZ/dzVCi8YcWYsQLAnn5zJBmc3S/+cZvfkzeKvjY1z/90KOhx13/+xXCAAIoIAbcSYdElzNFT2GQ6LERywaABABzUcGMRBwxCGC3y/QSEDGBMAovgMghgew5AMWjvI0g5QKpgkbF4nkltTLqLJMgh/WdJ8nCeTROs6TLSOf+kbMjS2GNFxETC4IOkI8jSGEwViaWeWViaIM5xQTLPN4hT0UsSZ9dZGbBt48yzCpevbZY1GqNAAAACzYAcf5OSwpOWkEQQmEwUgUBlvC//twxAwBERTRO66h80IPGia1wr5ooKmcTzmQgKmDIMF/AoBIXDwwvGw4wF8w2Clx2RtsgcWWWtDk1ipMbQavjqk7j++xFAKDwRNRyyOuV/vif/EEcN2/YYjYzoYfhHBAThP0+0gq2ZvjSsE7+5KefZQjLKPhKo6UahQbRqCFCq1R9E5020CgAOggBpfl66nNQibiYGBwgAZbIFA417BDK4BEgiCiAGCIwEERG+zL87GAIYQAJABFxxd/YqBQGYXxIahimFIwaZ2/3CQDPZms39vWYWDu4T/D5mjn8LhcnNla5biR6O2XtU+RMrehgsC16wuRKmBqDQE1mriKLxK17Y1XbWihVxl3/RU0EAAAu2ABI7+Iu7BboMPcFCp4hIAjPImSsB1MGwoyAEQTFIKThsbgwVliUjiurv/7csQXgA2gwzeuiZNBqBfm6bGeYBfDDCNStRCIxpHZ2nMR0Lax2dGfD//nG74b8XzWoDR6F6gsH6XgfBwShBtrX/dRRz87eu7numa/d6kf+r/okAANyUANr+/BtK1VmStSINYwkMPdrCINl6tjMwCBmAax61UZAGqTlcilncxYML5v3n7ucmjKlkUOMYZIpPLD//sbUdURVBQPIDIpGpEwE2B265Da61uMAnDrmS6yqmDggUgVYRe7jvA37DQADsjACR3+mUvCspQNYqXAhBaIZtKAl8WtFwi2ZgIAGTxcfQUIiAdtncMUVJyV013fBA4wohSAk4IjEcKhxxVUZlzFM7/f9SD+GTUbWgFNbaRYGzA8NOrzyvMvSMU5Yy9ray8LHWOdax9TMgT3q4r/9no/UYAAUkgBRP70//twxD6ADpTBM04I1QG5FqZpsw4Y89ZeCjTkJ+rlDD43vSDCNQJrhepRkgpTz1EKhiaDFwkIAkk5DR23F5mOfp+EcFL1+VBnpRRDdhp/PP/kRIjGYYIKJAIw8oQOGHgcLpGIcZYpuoVWQAAelG1o3ofsrup29DyGjX/QNAAJxshEj9YwFEk5lL2ftGBgcYaIm4VooBmDhKGKNg6DhgKcjHRVAagkcafOQDXAXFD5JLULqmhGXEmFUrsG3jZHEO7l7/kyGEng1c2thNSCuhiDgqxsxYsI6HuIXoddaVis4iz+9LrfFtljV7xgx6+36qUHgAHIiASR/KeDn1XezyJrrHRgzEHNJYgMDIiu3EC4ZI/HcHgKHZWj64q01QkSincV0mevD49qaA7msp5zMzGS1To/f+kUFkW9A//7csRfAA6M0TFN8G5B15kl6bSKGDLIeqwICpdS6h4aD5UVnAkqkWQWWi1mLWItbYurVdF9j5TaZtZ1RT177GijqhQACvgQNfnujfJhMOs6HSBfc/U0eAsJFhRKDW6CVJ1j2gMa6sGHAgAKDcGttaMRMZiVU3RVIXeCNNfihev//7+2tEpUK4kzcpPBmHaXaaFFYPuC2P7b8F977m0BC+ZS6syp9iWro8cXhVaHiG4CDn1KlWraP1qUQCpAApDvtyiTIiwLiAEAxWZOhJgoZvY7yKoJPzoQMeCmON8+VPb7m+UAlJhiU4O4hn+TZjG901mrXL/t19dD781O0lL6DMUdBsSAIHWFS73JTceNhy065xtisXS6/sIhFWnKLc3ZWLsHqCal2CV8OZsWrv6hRNUKAAXCgAAP1vcV//twxHwADtznKy1sbgHZGWUYHYx4jN6Hm6UIWANjEuSZZ4tKssGgiypy2wEAsCabFN86CqU3GECWFYkCxaqC7kyXIiNH2PeuflTs/gY9UcKTkXrOjgUaTB8akUNvQk+wwgWjUNnSw58nSErUoVfNI5TNuH484oRwcVuaXewedFJ1T3jg0NA8WU9LzAUqSappyULwf5CaaOxfKwsCPgPM5I0qHuoYqZQC2bPl43l9jToYgbsYhzq8pkh6Gbtpl8O/lLbBiP4hf9iGZquU3X4F4zQaVa4s6sV+RyMapQeYcMKSHg8tLHMNmdAti7lS6QGxiLQQkFIcUNrSxIqMAJAAAj6qhbIYFDTRHEvGzruvCgWPFn3qdsuCxNns7P1d2hgMSmiwj3B4MAJ44gmroCr5udN7kTl/yHxaWP/7csSXAE/owSdM6G5BxxukmByMeMNAZs9DCjVR5xxwYCosJWFGD7zb7ERZj+ngBJDvTVxOZohtKaEvLN3DGRUiRG7yWKPrU9wg6gABkCZRomMqyE2wug3TV4QCHhN2cJNJW9Vyo4LfmW2dVhhUVKjnhKqqQNUNYzjMdLhWXhSmiln+WZhvlgVQyhDCY1tebxR369DSz+pYV9o+WN6pyfrGIv/87ev/eJTk0UwR/K/smorm6n1pDecWc/OmAxbF/6brfb2VAAAtgAAITjPT7S5L4VciOsZnWdqMA0EJZhKosEotou0W/6L4U5QKEm37BnW29zuBpJDXzmDB3WCk6i3oLPb/ZCar/cbu36+W97/f9LeZbuuxv3x22hiuav1m+iv4v+HY6s63pb/tVhbv5f7WGytLrdDdPNZ5//twxLEADhylJYHgZYHulGPYbAyxFTkJJn+EBX8GVAQ9DwKojDWjnHNfAQUq+qKcJAuRC3rGTk6uYJb7GRw7L3OAyJiygCAkrgVyFVcOFTlEq6WaOUoS3m2kox5lxtzhO4KrQiKho+JkYGUlck6gWeeZW8SgXbqsEpQe9Kr8wkDqomDJwGC7AUhd5rVZ+lbTksecDixh5iYBExiGZi6DYjZmBiGWqQMrBjCqbKC2BDoqqSuwYyoQeGxwCwaODHKqIPIlCkJCqEcSykZJqCu8Rww4bQ/uZghTnDydlKCqRGqFxSOX9iGZ+e5Bdf+tGYvQvDQiKG6sbXegjMlWDsFGCqZhUu8DE9z5tGDCma2C/wbPAAzSiabWGZgtGpvCOhKWKzcoo0AIcZLo5mYVk0CoYVVJgps1KUuHYf/7cMTMgk4QTx0g4MVJrpNjGGeM6JNsTMKZgpfVybUgqqjRmPXjGzUyZozXarqsOtS2sNVVV/on6vqufqhgImmRxv6y+xqFE6lVK4Vj1WHxVXy+nqsPwxeUZvwzywNP8NDnr8rKgqWqTEFNRTQuMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqgBq8xmospSnIDrGy4U2YFDWwhqQzZXEV0X9EQUZE61QuNevxWVVLeF8ideb3ypjZOKtGnjc7/ZZ22S4SIlWpI25+/9ndpa89GlxqJItAKBS1JS15svlPlOiSKTVTwkRFFJqqW3/+3LE8AASZfEKA2BnCey0YSg3jODzLbLWiSNGkSj02sxNaWaUMHmtIxzQ6CYXEUq1GWusXXsTI4WGoPVplhqDyUYmauYc0oa5sDzSpiZS+auf/ppq2lDiUHqVAYl/tUxBTUU0LjBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7cMTEg9Wt+s4sGRXIAAA0gAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=';
+let dingAudio=null;
+function ding(){
+  if(data.mute)return;
+  try{
+    dingAudio=dingAudio||new Audio(DING_SRC);
+    dingAudio.volume=0.6;dingAudio.currentTime=0;
+    const p=dingAudio.play();if(p&&p.catch)p.catch(()=>{});
+  }catch(e){}
+}
+
+/* ---------- состояние ---------- */
+let V={view:'home'},S=null,E=null,timers=[];
+let raf=0;
+const clearTimers=()=>{timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[];if(raf){cancelAnimationFrame(raf);raf=0}};
+const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
+const cur=()=>getSet(V.id);
+const qOf=c=>cur().dir==='dt'?c.d:c.t;
+const aOf=c=>cur().dir==='dt'?c.t:c.d;
+const mastered=s=>s.cards.length?Math.round(s.cards.filter(c=>c.lvl>=3).length/s.cards.length*100):0;
+const plural=(n,a,b,c)=>{const m=n%100,k=n%10;return (m>10&&m<20)?c:k===1?a:(k>=2&&k<=4)?b:c};
+const cnt=n=>n+' '+plural(n,'слово','слова','слов');
+const fsClass=t=>t.length>60?'fs-s':t.length>22?'fs-m':'fs-l';
+function go(view,extra){clearTimers();V=Object.assign({view},extra||{});S=null;if(pendingR&&(view==='home'||view==='set'))applyPending();render();window.scrollTo(0,0)}
+/* Проверка ответа «по смыслу»: опечатки, формы слов, другой порядок, лишние артикли.
+   Если введено точное слово другой карточки набора (lose / loose), ответ не засчитывается. */
+const STOP=new Set(['to','a','an','the','of','и','в','во','на','с','со','к','по','за','о','об','из','у']);
+const lev=(a,b)=>{
+  const m=a.length,n=b.length;let prev=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const cur=[i];for(let j=1;j<=n;j++)cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));prev=cur}
+  return prev[n];
+};
+const stemRu=w=>/[а-я]/.test(w)&&w.length>5?w.replace(/(ами|ями|ого|его|ому|ему|ыми|ими|ать|ять|ить|еть|уть|ться|ся|ть|ый|ий|ой|ая|яя|ое|ее|ые|ие|ом|ем|ах|ях|ов|ев|ей|ам|ям|ою|ею|а|я|о|е|ы|и|у|ю|ь)$/,''):w;
+const tokNear=(a,b)=>{
+  if(a===b)return true;
+  const A=stemRu(a),B=stemRu(b);
+  if(A.length>=4&&A===B)return true;
+  const L=Math.max(a.length,b.length),tol=L>=9?2:L>=5?1:0;
+  return tol>0&&lev(a,b)<=tol;
+};
+const toks=s=>norm(s).split(' ').filter(Boolean);
+const ctoks=s=>{const t=toks(s).filter(w=>!STOP.has(w));return t.length?t:toks(s)};
+const answerParts=ans=>{const full=String(ans).replace(/\u200B/g,'');return [full,...String(ans).split(/[;,\/→\u200B]|\(.*?\)/)].map(norm).filter(Boolean)};
+function isRight(input,ans,card){
+  const n=norm(input);if(!n)return false;
+  const parts=answerParts(ans);
+  if(parts.includes(n))return true;
+  if(card&&cur().cards.some(x=>x.id!==card.id&&answerParts(aOf(x)).includes(n)))return false;
+  const I=ctoks(input);
+  if(!I.length)return false;
+  return parts.some(p=>{
+    const P=ctoks(p);
+    if(!P.length||I.length>P.length+1)return false;
+    return I.every(i=>P.some(q=>tokNear(i,q)))&&I.length>=Math.ceil(P.length/2);
+  });
+}
+const ico={
+ cards:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 10h8M8 14h5"/></svg>',
+ learn:'<svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>',
+ test:'<svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 16h6"/></svg>',
+ match:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="2"/><rect x="13" y="13" width="8" height="7" rx="2"/><path d="M11 8h2a3 3 0 013 3v2"/></svg>',
+ blocks:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>',
+ blast:'<svg viewBox="0 0 24 24"><path d="M12 3l3 7h-6z"/><path d="M12 10v6M8 21l4-5 4 5"/></svg>',
+ gems:'<svg viewBox="0 0 24 24"><path d="M6 4h12l4 6-10 11L2 10z"/><path d="M2 10h20M9 4l3 17M15 4l-3 17"/></svg>'
+};
+const back=(to,label)=>`<button class="btn ghost sm" data-act="${to}">← ${label||'Назад'}</button>`;
+
+/* ---------- экраны ---------- */
+function home(){
+  const list=data.sets.length?`<div class="sets">${data.sets.map(s=>`
+    <button class="set" data-act="open" data-id="${s.id}">
+      <span class="tag">${cnt(s.cards.length)}</span>
+      <b>${esc(s.name)}</b>
+      <span class="bar"><span style="width:${mastered(s)}%"></span></span>
+      <span class="small muted">Выучено ${mastered(s)}%</span>
+    </button>`).join('')}</div>`
+  :`<div class="panel empty stack"><h2>Пока нет ни одного набора</h2><p class="muted">Создайте набор и вставьте слова списком: слово — перевод.</p></div>`;
+  return `<div class="top"><div class="brand">Katrin <i>Dictionary</i><img class="bowi" src="decor/bow.png" alt=""></div><div class="row"><button class="btn sm ghost" data-act="mute" aria-pressed="${data.mute?'true':'false'}">Звук: ${data.mute?'выкл':'вкл'}</button><button class="btn primary" data-act="new">+ Новый набор</button></div></div>
+  ${bannerHtml()}
+  <h1>Ваши наборы</h1>${syncLine()}${list}`;
+}
+
+function setView(){
+  const s=cur();
+  const ln=learnedToday(),tdDone=data.day&&data.day.date===isoToday()&&data.day.marked;
+  const tdLine=`<div class="small muted">Сегодня полностью выучено слов: ${ln} из ${MARK_WORDS}. ${tdDone?'🍇 Отмечено в таблице.':'Отметка в таблице, когда наберётся '+MARK_WORDS+'.'}</div>`;
+  const lv=c=>`<div class="lv">${[1,2,3].map(i=>`<span class="dot ${c.lvl>=i?'on':''}"></span>`).join('')}</div>`;
+  return `<div class="top">${back('home','Наборы')}<div class="row"><button class="btn sm" data-act="edit" data-id="${s.id}">Редактировать</button></div></div>
+  <div class="stack"><h1>${esc(s.name)}</h1>
+    <div class="row"><span class="muted small">${cnt(s.cards.length)} · выучено ${mastered(s)}%</span>
+    <span class="grow"></span>
+    <div class="seg" role="group" aria-label="Что показывать первым"><button class="${s.dir!=='dt'?'on':''}" data-act="dir" data-v="td">Слово → перевод</button><button class="${s.dir==='dt'?'on':''}" data-act="dir" data-v="dt">Перевод → слово</button></div></div>
+    <div class="bar"><span style="width:${mastered(s)}%"></span></div>${tdLine}</div>
+  ${s.cards.length<2?`<div class="panel muted">Добавьте хотя бы два слова, чтобы открыть режимы. <button class="btn sm" data-act="edit" data-id="${s.id}">Добавить слова</button></div>`:`
+  <div class="modes">
+   <button class="mode" data-act="start" data-m="cards">${ico.cards}<b>Карточки</b><span>Переверните и отметьте, знаете ли слово</span></button>
+   <button class="mode" data-act="start" data-m="learn">${ico.learn}<b>Учить</b><span>Части по ${PART} слов: тест, ввод, общая сводка</span></button>
+   <button class="mode" data-act="start" data-m="test">${ico.test}<b>Тест</b><span>Верно/неверно, выбор и ввод. Итог в конце</span></button>
+   <button class="mode" data-act="start" data-m="match">${ico.match}<b>Подбор пар</b><span>Соедините слова на время${s.best?` · рекорд ${s.best} с`:''}</span></button>
+  </div>
+  <h2 style="margin-top:4px">Игры</h2>
+  <div class="modes">
+   <button class="mode" data-act="start" data-m="blocks">${ico.blocks}<b>Блоки</b><span>Отвечайте верно и заполняйте поле блоками${s.blocksBest?` · рекорд ${s.blocksBest}`:''}</span></button>
+   <button class="mode" data-act="start" data-m="blast">${ico.blast}<b>Blast</b><span>Сбивайте летящие слова, вписывая ответ${s.blastBest?` · рекорд ${s.blastBest}`:''}</span></button>
+   <button class="mode" data-act="start" data-m="gems">${ico.gems}<b>Кристаллы</b><span>60 секунд, серия ответов дороже кристалл${s.gemBest?` · рекорд ${s.gemBest}`:''}</span></button>
+  </div>`}
+  <div class="panel"><div class="row" style="margin-bottom:8px"><h2 class="grow">Слова в наборе</h2><button class="btn sm ghost" data-act="reset">Сбросить прогресс</button></div>
+   <div class="terms">${s.cards.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}${c.x?`<div class="small" style="margin-top:4px;opacity:.85">${esc(c.x)}</div>`:''}</div>${lv(c)}</div>`).join('')||'<p class="muted">Пусто</p>'}</div></div>`;
+}
+
+function editView(){
+  const isNew=!E.id;
+  return `<div class="top">${back(isNew?'home':'open','Отмена')}<button class="btn primary" data-act="saveSet">Сохранить</button></div>
+  <h1>${isNew?'Новый набор':'Редактирование'}</h1>
+  <div class="stack"><label class="small muted" for="setname">Название</label>
+   <input class="inp" id="setname" value="${esc(E.name)}" placeholder="Например: Испанский, неделя 1" data-f="name"></div>
+  <div class="stack"><div class="row"><h2 class="grow">Слова</h2></div>
+   <div class="stack" id="rows">${E.rows.map((r,i)=>`<div class="editrow"><input class="inp" aria-label="Слово ${i+1}" placeholder="Слово" value="${esc(r.t)}" data-f="t" data-i="${i}"><input class="inp" aria-label="Перевод ${i+1}" placeholder="Перевод" value="${esc(r.d)}" data-f="d" data-i="${i}"><button class="x" data-act="delrow" data-i="${i}" aria-label="Удалить строку ${i+1}">×</button></div>`).join('')}</div>
+   <div class="row"><button class="btn" data-act="addrow">+ Добавить слово</button></div></div>
+  <div class="panel stack"><h2>Вставить списком</h2>
+   <p class="muted small" style="margin:0">Одна пара на строку. Разделитель: тире, «=», «;» или табуляция (так копируется из таблицы).</p>
+   <textarea class="inp" id="bulk" placeholder="apple — яблоко&#10;to run = бежать&#10;house; дом" data-f="bulk">${esc(E.bulk||'')}</textarea>
+   <div class="row"><button class="btn" data-act="import">Добавить из списка</button>${E.msg?`<span class="small muted">${esc(E.msg)}</span>`:''}</div></div>
+  ${isNew?'':`<div class="row end">${E.confirmDel?`<span class="small muted">Набор удалится навсегда.</span><button class="btn bad" data-act="delset">Да, удалить</button><button class="btn ghost" data-act="canceldel">Нет</button>`:`<button class="btn bad" data-act="askdel">Удалить набор</button>`}</div>`}`;
+}
+
+/* --- карточки --- */
+function cardsStart(){const s=cur();S={m:'cards',queue:shuffle(s.cards),i:0,know:0,again:0,flip:false}}
+function cardsView(){
+  const s=cur();
+  const head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  if(S.i>=S.queue.length){
+    return `${head}<div class="panel result"><h2>Круг пройден</h2><div class="big">${S.know}/${S.know+S.again}</div><p class="muted">Знали сразу: ${S.know}. Вернулись к повтору: ${S.again}.</p>
+    <div class="row"><button class="btn primary" data-act="start" data-m="cards">Ещё раз</button><button class="btn" data-act="start" data-m="learn">Перейти к «Учить»</button></div></div>${summary()}`;
+  }
+  const c=S.queue[S.i],q=qOf(c),a=aOf(c);
+  return `${head}
+  <div class="row"><span class="small muted">${S.i+1} из ${S.queue.length}</span><div class="bar blue grow"><span style="width:${S.i/S.queue.length*100}%"></span></div></div>
+  <div class="flip ${S.flip?'on':''}" id="flip"><div class="flip-in" data-act="flip" tabindex="0" role="button" aria-label="Перевернуть карточку">
+    <div class="face"><span class="lab">${s.dir==='dt'?'Перевод':'Слово'}</span><span class="${fsClass(q)}">${esc(q)}</span></div>
+    <div class="face back"><span class="lab">${s.dir==='dt'?'Слово':'Перевод'}</span><div><span class="${fsClass(a)}">${esc(a)}</span>${c.x?`<div class="ex">${esc(c.x)}</div>`:''}</div></div></div></div>
+  <div class="row" style="justify-content:center"><button class="btn bad" data-act="again">✕ Не знаю</button><button class="btn" data-act="flip">Перевернуть</button><button class="btn ok" data-act="know">✓ Знаю</button></div>
+  <p class="small muted" style="text-align:center;margin:0">Пробел — перевернуть, ← не знаю, → знаю</p>`;
+}
+
+/* --- учить --- */
+const PART=5,ROUNDS=3;
+const accOf=st=>{const n=st.mc+st.ty;return n?Math.round((1-(st.mcMiss+st.tyMiss)/n)*100):0};
+function learnStart(){
+  const s=cur(),parts=[];
+  for(let i=0;i<s.cards.length;i+=PART)parts.push(s.cards.slice(i,i+PART));
+  S={m:'learn',parts,phase:'menu',p:0,round:1,queue:[],card:null,fb:null,done:new Set(),
+     stats:parts.map(()=>({mc:0,mcMiss:0,ty:0,tyMiss:0})),miss:{},failed:{},undo:null};
+  startPart(0);
+}
+function startPart(p){
+  S.p=p;S.phase='mc';S.round=1;S.queue=shuffle(S.parts[p]);
+  S.stats[p]={mc:0,mcMiss:0,ty:0,tyMiss:0};
+  S.parts[p].forEach(c=>{delete S.miss[c.id]});
+  S.done.delete(p);S.failed={};
+  learnNext();
+}
+function learnNext(){
+  S.fb=null;S.typed='';
+  const part=S.parts[S.p];
+  if(S.phase==='mc'&&!S.queue.length){
+    if(S.round<ROUNDS){S.round++;S.queue=shuffle(part)}
+    else{S.phase='type';S.queue=shuffle(part)}
+  }
+  if(S.phase==='type'&&!S.queue.length){
+    S.done.add(S.p);
+    save();
+    if(S.p+1<S.parts.length){S.phase='partdone';ding();return render()}
+    S.phase='final';return render();
+  }
+  const c=S.queue.shift();S.card=c;
+  S.kind=S.phase==='mc'?'mc':'typed';
+  if(S.kind==='mc'){
+    const others=[...new Set(shuffle(cur().cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(aOf(c)))))].slice(0,3);
+    if(!others.length)S.kind='typed';else S.opts=shuffle([aOf(c),...others]);
+  }
+  render();
+}
+function learnView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  const nP=S.parts.length;
+  const rng=i=>{const a=i*PART+1,b=Math.min(s.cards.length,(i+1)*PART);return a===b?`слово ${a}`:`слова ${a}–${b}`};
+  if(S.phase==='partdone'){
+    const st=S.stats[S.p],clean=!st.mcMiss&&!st.tyMiss,cnt=S.done.size;
+    const words=S.parts.reduce((a,p,i)=>a+(S.done.has(i)?p.length:0),0),all=s.cards.length;
+    const segs=S.parts.map((p,i)=>`<div class="pseg"><i style="width:${S.done.has(i)?100:0}%"></i>${i===S.p?`<b class="pbadge" style="left:100%">${words}</b>`:''}</div>`).join('');
+    return `${head}<div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="${all}" aria-valuenow="${words}">${segs}<b class="pend">${all}</b></div><div class="panel result"><div class="big">🎉</div><h2>${clean?'Всё правильно, молодец!':'Часть пройдена, молодец!'}</h2>
+      <p class="muted">Прогресс сохранён. Выучено слов в этом наборе: ${words} из ${all}.</p>
+      ${clean?'':`<p class="small muted">Ошибок в тесте: ${st.mcMiss}, при вводе: ${st.tyMiss}.</p>`}
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="partnext">Продолжить</button><button class="btn" data-act="partstop">На сегодня закончить</button></div></div>`;
+  }
+  if(S.phase==='final'){
+    const tot=S.stats.reduce((a,t)=>({mc:a.mc+t.mc,mcMiss:a.mcMiss+t.mcMiss,ty:a.ty+t.ty,tyMiss:a.tyMiss+t.tyMiss}),{mc:0,mcMiss:0,ty:0,tyMiss:0});
+    const hard=s.cards.filter(c=>S.miss[c.id]).sort((x,y)=>S.miss[y.id]-S.miss[x.id]);
+    return `${head}<div class="panel result"><h2>Общая сводка</h2><div class="big">${accOf(tot)}%</div>
+      <p class="muted">Пройдено частей: ${S.done.size} из ${nP}. Ошибок в тесте: ${tot.mcMiss} из ${tot.mc}. Ошибок при вводе: ${tot.tyMiss} из ${tot.ty}.</p></div>${summary()}
+    <div class="panel"><h2 style="margin-bottom:8px">По частям</h2><div class="terms">${S.parts.map((p,i)=>{const st=S.stats[i],d=S.done.has(i);
+      return `<div class="part"><div class="grow"><b>Часть ${i+1}</b><div class="small muted">${rng(i)}</div></div>
+      <div class="small" style="text-align:right">${d?`тест −${st.mcMiss} · ввод −${st.tyMiss}<br><b>${accOf(st)}%</b>`:'<span class="muted">не пройдена</span>'}</div></div>`}).join('')}</div></div>
+    ${hard.length?`<div class="panel"><h2 style="margin-bottom:8px">Слова, которые стоит повторить</h2><div class="terms">${hard.map(c=>`<div class="term"><div class="t">${esc(qOf(c))}</div><div class="d">${esc(aOf(c))} · ошибок: ${S.miss[c.id]}</div></div>`).join('')}</div></div>`:'<div class="panel">Ни одной ошибки во всём модуле.</div>'}
+    <div class="row"><button class="btn primary" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div>`;
+  }
+  const c=S.card,q=qOf(c),a=aOf(c),size=S.parts[S.p].length;
+  const steps=(ROUNDS+1)*size,doneSteps=(S.phase==='mc'?(S.round-1)*size:ROUNDS*size)+Math.max(0,size-S.queue.length-1);
+  const m=Math.min(100,Math.round(doneSteps/steps*100));
+  const stage=S.phase==='mc'?`Тест, круг ${S.round} из ${ROUNDS}`:'Впишите слова сами';
+  /* на полоске — только выученные слова: целые пройденные части + слова текущей части, уже верно введённые */
+  const learned=S.parts.reduce((a,p,i)=>a+(S.done.has(i)?p.length:i===S.p?p.filter(x=>x.lvl>=3).length:0),0);
+  const segs=S.parts.map((p,i)=>{const pct=S.done.has(i)?100:i===S.p?m:0;
+    return `<div class="pseg"><i style="width:${pct}%"></i>${i===S.p?`<b class="pbadge" style="left:${pct}%">${learned}</b>`:''}</div>`}).join('');
+  let body='';
+  if(S.kind==='mc'){
+    body=`<div class="opts">${S.opts.map((o,i)=>{
+      let cls='';if(S.fb){if(o===a)cls='right';else if(S.fb.pick===i)cls='wrong'}
+      return `<button class="opt ${cls}" data-act="mc" data-i="${i}" ${S.fb?'disabled':''}>${esc(o)}</button>`}).join('')}</div>${S.fb?'':`<div class="row end"><button class="btn ghost sm" data-act="skip">Не уверена?</button></div>`}`;
+  }else{
+    body=`<form id="typed" autocomplete="off"><div class="stack"><input class="inp" id="ans" placeholder="Введите ответ" ${S.fb||S.thinking?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
+      ${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':''}
+      ${S.fb||S.thinking?'':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="skip">Не уверена?</button></div>`}</div></form>`;
+  }
+  let fb='';
+  if(S.fb){
+    fb=S.fb.ok?`<div class="fb ok">${S.fb.fuzzy?'Верно, засчитано по смыслу':'Верно'}${S.fb.fuzzy?`<small>Как в наборе: ${esc(a)}</small>`:''}</div>`:`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${c.x?`<small class="muted">${esc(c.x)}</small>`:''}${S.kind==='typed'&&S.typed?`<small class="muted">Вы ввели: ${esc(S.typed)}</small>`:''}</div>
+      <div class="row">${S.kind==='typed'&&S.typed?`<button class="btn sm" data-act="override">Я был прав</button>`:''}<button class="btn primary" data-act="next">Дальше</button></div>`;
+  }
+  return `${head}
+  <div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="${s.cards.length}" aria-valuenow="${learned}">${segs}<b class="pend">${s.cards.length}</b></div>
+  <div class="small muted" style="text-align:center">Часть ${S.p+1} из ${nP} · ${stage}</div>
+  <div class="q"><span class="tag">${S.kind==='mc'?'Выберите ответ':'Впишите ответ'} · ${s.dir==='dt'?'слово':'перевод'}</span><div class="word">${esc(q)}</div></div>
+  ${body}${fb}`;
+}
+function learnAnswer(ok,pick,fuzzy){
+  const c=S.card,st=S.stats[S.p],typedPhase=S.phase==='type';
+  rec(c.id,ok);
+  S.undo={prevFailed:!!S.failed[c.id]};
+  if(S.kind==='mc'){st.mc++;if(!ok)st.mcMiss++}else{st.ty++;if(!ok)st.tyMiss++}
+  if(!ok){
+    S.miss[c.id]=(S.miss[c.id]||0)+1;
+    if(typedPhase){S.failed[c.id]=true;S.queue.push(c)}else c.lvl=0;
+  }else if(typedPhase){c.lvl=S.failed[c.id]?2:3;if(c.lvl>=3)noteLearned(c.id)}
+  S.fb={ok,pick,fuzzy};S.aiMsg='';save();render();
+  if(ok)ding();
+  if(ok)later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok){learnNext()}},fuzzy?1800:650);
+}
+
+/* --- тест --- */
+function testStart(){
+  const s=cur(),cs=shuffle(s.cards).slice(0,Math.min(15,s.cards.length));
+  const kinds=['mc','tf','typed'];
+  const qs=cs.map((c,i)=>{
+    let k=kinds[i%3];if(s.cards.length<2&&k!=='typed')k='typed';
+    const o={c,k,a:aOf(c)};
+    if(k==='mc'){const others=[...new Set(shuffle(s.cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(o.a))))].slice(0,3);o.opts=shuffle([o.a,...others])}
+    if(k==='tf'){const truth=Math.random()<.5;const wrong=shuffle(s.cards.filter(x=>x.id!==c.id&&norm(aOf(x))!==norm(o.a)));o.shown=(truth||!wrong.length)?o.a:aOf(wrong[0]);o.truth=o.shown===o.a}
+    return o;
+  });
+  S={m:'test',qs:shuffle(qs),i:0,res:[]};
+}
+function testView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  if(S.i>=S.qs.length){
+    const ok=S.res.filter(r=>r.ok).length,n=S.qs.length,wrong=S.res.filter(r=>!r.ok);
+    return `${head}<div class="panel result"><h2>Результат теста</h2><div class="big">${ok}/${n}</div><p class="muted">${Math.round(ok/n*100)}% верных ответов</p></div>${summary()}
+    ${wrong.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${wrong.map(r=>`<div class="term"><div class="t">${esc(qOf(r.q.c))}</div><div class="d">${esc(r.q.a)}${r.given?`<br><span style="color:var(--bad)">Вы: ${esc(r.given)}</span>`:''}</div></div>`).join('')}</div></div>`:''}
+    <div class="row"><button class="btn primary" data-act="start" data-m="test">Новый тест</button><button class="btn" data-act="open">К набору</button></div>`;
+  }
+  const q=S.qs[S.i],w=qOf(q.c);let body='',lab='';
+  if(q.k==='mc'){lab='Выберите ответ';body=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" data-act="tmc" data-i="${i}">${esc(o)}</button>`).join('')}</div>`}
+  if(q.k==='tf'){lab='Верно ли соответствие?';body=`<div class="q" style="background:var(--accent-soft)"><div class="word">${esc(q.shown)}</div></div><div class="row"><button class="btn ok" data-act="ttf" data-v="1">Верно</button><button class="btn bad" data-act="ttf" data-v="0">Неверно</button></div>`}
+  if(q.k==='typed'){lab='Впишите ответ';body=`<form id="ttyped" autocomplete="off"><div class="stack"><input class="inp" id="ans" placeholder="Введите ответ" ${S.thinking?'disabled':''} autocapitalize="off" autocorrect="off" spellcheck="false">${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="tskip">Не знаю</button></div>`}</div></form>`}
+  return `${head}<div class="row"><span class="small muted">Вопрос ${S.i+1} из ${S.qs.length}</span><div class="bar blue grow"><span style="width:${S.i/S.qs.length*100}%"></span></div></div>
+  <div class="q"><span class="tag">${lab}</span><div class="word">${esc(w)}</div></div>${body}`;
+}
+function testAnswer(ok,given){if(ok)ding();rec(S.qs[S.i].c.id,ok);S.res.push({q:S.qs[S.i],ok,given});S.i++;render()}
+
+/* --- подбор пар --- */
+function matchStart(){
+  const s=cur(),cs=shuffle(s.cards).slice(0,Math.min(6,s.cards.length));
+  const tiles=shuffle(cs.flatMap(c=>[{id:uid(),p:c.id,txt:c.t},{id:uid(),p:c.id,txt:c.d}]));
+  S={m:'match',tiles,sel:null,no:[],gone:new Set(),start:Date.now(),t:0,pairs:cs.length,done:false,miss:0};
+  timers.push(setInterval(()=>{if(!S||S.m!=='match'||S.done)return;S.t=((Date.now()-S.start)/1000);const el=document.getElementById('clock');if(el)el.textContent=S.t.toFixed(1)+' с'},100));
+}
+function matchView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}<span class="brand" id="clock" style="font-size:1.1rem">${S.t.toFixed(1)} с</span></div>`;
+  if(S.done){
+    const t=S.final;
+    return `${head}<div class="panel result"><h2>Готово</h2><div class="big">${t.toFixed(1)} с</div><p class="muted">${s.best&&Math.abs(s.best-t)<.05?'Новый рекорд!':`Рекорд: ${s.best} с`}${S.miss?` · ошибок: ${S.miss}`:''}</p>
+    <div class="row"><button class="btn primary" data-act="start" data-m="match">Ещё раз</button><button class="btn" data-act="open">К набору</button></div></div>${summary()}`;
+  }
+  return `${head}<p class="muted small" style="margin:0">Нажмите на слово и на его перевод.</p>
+  <div class="match">${S.tiles.map(t=>`<button class="tile ${S.gone.has(t.id)?'gone':''} ${S.sel===t.id?'sel':''} ${S.no.includes(t.id)?'no':''}" data-act="tile" data-id="${t.id}">${esc(t.txt)}</button>`).join('')}</div>`;
+}
+function tileClick(id){
+  if(S.done||S.no.length||S.gone.has(id))return;
+  if(!S.sel){S.sel=id;return render()}
+  if(S.sel===id){S.sel=null;return render()}
+  const a=S.tiles.find(t=>t.id===S.sel),b=S.tiles.find(t=>t.id===id);
+  if(a.p===b.p&&a.txt!==b.txt||a.p===b.p){
+    S.gone.add(a.id);S.gone.add(b.id);S.sel=null;ding();rec(a.p,true);
+    if(S.gone.size===S.tiles.length){
+      S.done=true;S.final=(Date.now()-S.start)/1000;
+      const s=cur();if(!s.best||S.final<s.best){s.best=Math.round(S.final*10)/10;save()}
+      S.final=Math.round(S.final*10)/10;
+    }
+    render();
+  }else{
+    S.no=[a.id,b.id];S.sel=null;S.miss++;rec(a.p,false);rec(b.p,false);render();
+    later(()=>{if(S&&S.m==='match'){S.no=[];render()}},500);
+  }
+}
+
+/* ---------- игры: Кристаллы, Blast, Блоки ---------- */
+const optsFor=c=>{
+  const others=[...new Set(shuffle(cur().cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(aOf(c)))))].slice(0,3);
+  return shuffle([aOf(c),...others]);
+};
+const optHtml=(act,opts,fb,correct)=>`<div class="opts">${opts.map((o,i)=>{
+  let cls='';if(fb){if(o===correct)cls='right';else if(fb.pick===i)cls='wrong'}
+  return `<button class="opt ${cls}" data-act="${act}" data-i="${i}" ${fb?'disabled':''}>${esc(o)}</button>`}).join('')}</div>`;
+const endBtns=(m)=>`<div class="row"><button class="btn primary" data-act="start" data-m="${m}">Ещё раз</button><button class="btn" data-act="open">К набору</button></div>`;
+
+/* Кристаллы: 60 секунд, серия правильных ответов повышает цену кристалла */
+const GEM_TIME=60;
+function gemsStart(){
+  S={m:'gems',left:GEM_TIME,score:0,crystals:0,streak:0,maxStreak:0,deck:shuffle(cur().cards),k:0,fb:null,end:false,gems:[]};
+  gemsNext(true);
+  timers.push(setInterval(()=>{
+    if(!S||S.m!=='gems'||S.end)return;
+    S.left=Math.max(0,S.left-0.1);
+    const t=document.getElementById('gtime'),b=document.getElementById('gbar');
+    if(t)t.textContent=Math.ceil(S.left)+' с';
+    if(b)b.style.width=(S.left/GEM_TIME*100)+'%';
+    if(S.left<=0)gemsEnd();
+  },100));
+}
+function gemsNext(silent){const c=S.deck[S.k%S.deck.length];S.k++;S.card=c;S.opts=optsFor(c);S.fb=null;if(!silent)render()}
+function gemsEnd(){S.end=true;const s=cur();if(!s.gemBest||S.score>s.gemBest){s.gemBest=S.score;S.record=true;save()}render()}
+function gemsView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  if(S.end)return `${head}<div class="panel result"><h2>Время вышло</h2><div class="big">${S.score}</div>
+    <p class="muted">Кристаллов: ${S.crystals} · лучшая серия: ${S.maxStreak}${S.record?' · новый рекорд!':s.gemBest?` · рекорд ${s.gemBest}`:''}</p>${endBtns('gems')}</div>${summary()}`;
+  const c=S.card,mult=1+Math.min(3,Math.floor(S.streak/3));
+  return `${head}
+  <div class="row"><b class="brand" id="gtime" style="font-size:1.1rem">${Math.ceil(S.left)} с</b><div class="bar grow"><span id="gbar" style="width:${S.left/GEM_TIME*100}%"></span></div><span class="tag">×${mult}</span><b>${S.score}</b></div>
+  <div class="gems" aria-label="Собрано кристаллов: ${S.crystals}">${S.gems.slice(-28).map(n=>`<i class="g c${n%3}"></i>`).join('')||'<span class="small muted">Отвечайте верно, чтобы собирать кристаллы</span>'}</div>
+  <div class="q"><span class="tag">Выберите ответ</span><div class="word">${esc(qOf(c))}</div></div>
+  ${optHtml('gans',S.opts,S.fb,aOf(c))}`;
+}
+function gemsAnswer(i){
+  if(S.fb||S.end)return;
+  const ok=S.opts[i]===aOf(S.card);
+  rec(S.card.id,ok);
+  if(ok){S.score+=10*(1+Math.min(3,Math.floor(S.streak/3)));S.streak++;S.maxStreak=Math.max(S.maxStreak,S.streak);S.crystals++;S.gems.push(S.crystals);ding()}
+  else S.streak=0;
+  S.fb={ok,pick:i};render();
+  later(()=>{if(S&&S.m==='gems'&&!S.end)gemsNext()},ok?350:1100);
+}
+
+/* Blast: слова летят вниз медленно, впишите ответ, чтобы сбить. Ответ проверяется по смыслу */
+const LIVES=5;
+function blastStart(){
+  S={m:'blast',deck:shuffle(cur().cards).slice(0,15),spawned:0,foes:[],lives:LIVES,score:0,killed:0,lost:0,end:false,t:0,nextSpawn:0.6,last:0,aiBusy:false};
+  later(blastInit,0);
+}
+function blastInit(){
+  if(!S||S.m!=='blast')return;
+  S.last=performance.now();
+  const step=now=>{
+    if(!S||S.m!=='blast'||S.end)return;
+    const arena=document.getElementById('arena');if(!arena)return;
+    const dt=Math.min(.05,(now-S.last)/1000);S.last=now;S.t+=dt;
+    const H=arena.clientHeight,W=arena.clientWidth;
+    if(S.spawned<S.deck.length&&S.t>=S.nextSpawn&&S.foes.length<3)blastSpawn(arena,W);
+    for(const f of S.foes.slice()){
+      f.y+=f.v*dt;f.el.style.transform=`translate(${f.x}px,${f.y}px)`;
+      if(f.y+f.h>=H-6)blastMiss(f);
+      if(S.end)return;
+    }
+    if(S.spawned>=S.deck.length&&!S.foes.length){blastEnd();return}
+    raf=requestAnimationFrame(step);
+  };
+  raf=requestAnimationFrame(step);
+}
+function blastSpawn(arena,W){
+  const c=S.deck[S.spawned++];
+  const el=document.createElement('div');el.className='foe';el.textContent=qOf(c);arena.appendChild(el);
+  const w=el.offsetWidth,h=el.offsetHeight;
+  const f={c,el,x:4+Math.random()*Math.max(1,W-w-8),y:-h,h,v:11+Math.min(10,S.spawned*.7)};
+  el.style.transform=`translate(${f.x}px,${f.y}px)`;
+  S.foes.push(f);
+  S.nextSpawn=S.t+Math.max(5,7.5-S.spawned*.15);
+}
+function blastMiss(f){
+  S.foes=S.foes.filter(x=>x!==f);f.el.remove();S.lives--;S.lost++;rec(f.c.id,false);
+  const l=document.getElementById('blives');if(l)l.textContent='♥'.repeat(Math.max(0,S.lives))+'♡'.repeat(LIVES-Math.max(0,S.lives));
+  const m=document.getElementById('bmsg');if(m)m.textContent='Пропущено: '+qOf(f.c)+' = '+aOf(f.c);
+  if(S.lives<=0)blastEnd();
+}
+function killFoe(f){
+  if(!S||S.end||!S.foes.includes(f))return;
+  S.foes=S.foes.filter(x=>x!==f);f.el.classList.add('boom');later(()=>f.el.remove(),350);
+  S.killed++;S.score+=10;ding();rec(f.c.id,true);
+  const sc=document.getElementById('bscore');if(sc)sc.textContent=S.score;
+}
+/* если по буквам не нашлось, Claude смотрит, подходит ли ответ по смыслу к одному из летящих слов */
+async function blastAi(v){
+  if(!sampleFn||S.aiBusy||!S.foes.length)return;
+  const foes=S.foes.slice(),m=document.getElementById('bmsg');
+  S.aiBusy=true;if(m)m.textContent='Проверяю по смыслу…';
+  let hit=null;
+  try{
+    const list=foes.map((f,i)=>`${i+1}. показано «${qOf(f.c)}», правильный ответ «${aOf(f.c)}»`).join('\n');
+    const r=await Promise.race([sampleFn(`Ученица заучивает слова. Сейчас на экране:\n${list}\nОна ввела: «${v}». Какой из пунктов она ответила верно по смыслу? Синонимы, другие формы слова и опечатки допустимы. Если не подходит ни один, это ответ НЕТ. Ответь только номером или словом НЕТ.`,{modelTier:'quick'}),new Promise((_,rej)=>setTimeout(()=>rej(new Error('t')),7000))]);
+    const n=parseInt(((r&&r.text)||'').replace(/[^0-9]/g,''),10);
+    if(n>=1&&n<=foes.length&&!/нет/i.test(r.text))hit=foes[n-1];
+  }catch(e){}
+  if(!S||S.m!=='blast')return;
+  S.aiBusy=false;
+  const mm=document.getElementById('bmsg');
+  if(hit&&S.foes.includes(hit)){
+    killFoe(hit);if(mm)mm.textContent='Засчитано по смыслу: '+aOf(hit.c);
+    const inp=document.getElementById('ans');if(inp&&inp.value===v)inp.value='';
+  }else if(mm)mm.textContent='';
+}
+function blastShoot(v){
+  const hits=S.foes.filter(f=>isRight(v,aOf(f.c),f.c));
+  const inp=document.getElementById('ans');
+  if(!hits.length){
+    if(inp){inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake')}
+    blastAi(v);return;
+  }
+  killFoe(hits.reduce((a,b)=>b.y>a.y?b:a));
+  const m=document.getElementById('bmsg');if(m)m.textContent='';
+  if(inp)inp.value='';
+}
+function blastEnd(){
+  S.end=true;if(raf){cancelAnimationFrame(raf);raf=0}
+  const s=cur();if(!s.blastBest||S.score>s.blastBest){s.blastBest=S.score;S.record=true;save()}
+  render();
+}
+function blastView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  if(S.end)return `${head}<div class="panel result"><h2>${S.lives>0?'Все слова сбиты':'Игра окончена'}</h2><div class="big">${S.score}</div>
+    <p class="muted">Сбито: ${S.killed} из ${S.deck.length}${S.record?' · новый рекорд!':s.blastBest?` · рекорд ${s.blastBest}`:''}</p>${endBtns('blast')}</div>${summary()}`;
+  return `${head}
+  <div class="row"><span class="brand" id="blives" style="font-size:1.1rem;color:var(--pink)">${'♥'.repeat(S.lives)+'♡'.repeat(LIVES-S.lives)}</span><span class="grow"></span><span class="tag">Очки</span><b id="bscore">${S.score}</b></div>
+  <div class="arena" id="arena"><div class="ground"></div></div>
+  <div class="small muted" id="bmsg" style="min-height:1.4em"></div>
+  <form id="blastform" autocomplete="off"><div class="row"><input class="inp grow" id="ans" placeholder="Впишите ответ и нажмите Enter" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn primary" type="submit">Выстрел</button></div></form>`;
+}
+
+/* Блоки: за верный ответ три блока, перетащите их на поле и собирайте линии */
+const GN=8;
+const SHAPES=[[[0,0]],[[0,0],[0,1]],[[0,0],[1,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[1,0],[1,1]],[[0,0],[0,1],[1,1]],[[0,1],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,1]]];
+const fits=(g,sh,r,c)=>sh.every(([dr,dc])=>{const a=r+dr,b=c+dc;return a>=0&&a<GN&&b>=0&&b<GN&&!g[a*GN+b]});
+const canPlace=(g,sh)=>{for(let r=0;r<GN;r++)for(let c=0;c<GN;c++)if(fits(g,sh,r,c))return true;return false};
+const shapeDims=sh=>[Math.max(...sh.map(p=>p[0]))+1,Math.max(...sh.map(p=>p[1]))+1];
+const shapeCells=(sh,cls)=>{const [rs,cs]=shapeDims(sh);return Array.from({length:rs*cs},(_,k)=>`<i class="${sh.some(p=>p[0]===Math.floor(k/cs)&&p[1]===k%cs)?'on':''}"></i>`).join('')};
+function blocksStart(){
+  const deck=shuffle(cur().cards);
+  S={m:'blocks',qs:Array.from({length:12},(_,i)=>deck[i%deck.length]),i:0,grid:Array(GN*GN).fill(0),phase:'q',tray:[],score:0,lines:0,correct:0,fb:null,msg:''};
+  blocksNext();
+}
+function blocksNext(){
+  if(S.i>=S.qs.length){S.phase='end';const s=cur();if(!s.blocksBest||S.score>s.blocksBest){s.blocksBest=S.score;S.record=true;save()}return}
+  S.card=S.qs[S.i];S.opts=optsFor(S.card);S.phase='q';S.fb=null;S.tray=[];
+}
+function blocksView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}</div>`;
+  if(S.phase==='end')return `${head}<div class="panel result"><h2>Игра окончена</h2><div class="big">${S.score}</div>
+    <p class="muted">Верных ответов: ${S.correct} из ${S.qs.length} · собрано линий: ${S.lines}${S.record?' · новый рекорд!':s.blocksBest?` · рекорд ${s.blocksBest}`:''}</p>${endBtns('blocks')}</div>${summary()}`;
+  const placing=S.phase==='place';
+  let top='';
+  if(!placing){
+    const c=S.card,a=aOf(c);
+    top=`<div class="q"><span class="tag">Верный ответ даёт три блока</span><div class="word">${esc(qOf(c))}</div></div>${optHtml('bans',S.opts,S.fb,a)}
+      ${S.phase==='fb'?`<div class="fb bad">Правильный ответ<small>${esc(a)}</small></div><div class="row"><button class="btn primary" data-act="bnext">Дальше</button></div>`:''}`;
+  }else{
+    top=`<div class="panel stack"><div><b>Перетащите блоки на поле</b><div class="small muted">Возьмите блок пальцем или мышкой и отпустите над свободными клетками</div></div>
+      <div class="tray">${S.tray.map((sh,i)=>sh?`<div class="piece" data-pi="${i}" style="grid-template-columns:repeat(${shapeDims(sh)[1]},20px)" aria-label="Блок ${i+1}">${shapeCells(sh)}</div>`:`<div class="slot"></div>`).join('')}</div></div>`;
+  }
+  return `${head}
+  <div class="row"><span class="small muted">Вопрос ${Math.min(S.i+1,S.qs.length)} из ${S.qs.length}</span><span class="grow"></span><span class="tag">Очки</span><b>${S.score}</b></div>
+  ${top}
+  <div class="bgrid" id="bgrid">${S.grid.map(v=>`<div class="bc ${v?'on':''}"></div>`).join('')}</div>
+  ${S.msg?`<div class="small muted" style="text-align:center">${esc(S.msg)}</div>`:''}`;
+}
+function blocksAnswer(i){
+  if(S.phase!=='q')return;
+  S.msg='';
+  const ok=S.opts[i]===aOf(S.card);
+  rec(S.card.id,ok);
+  if(!ok){S.fb={ok,pick:i};S.phase='fb';render();return}
+  S.correct++;ding();
+  const tray=[pick(SHAPES),pick(SHAPES),pick(SHAPES)];
+  if(!tray.some(sh=>canPlace(S.grid,sh))){S.msg='На поле не осталось места для этих блоков';S.i++;blocksNext();render();return}
+  S.tray=tray;S.phase='place';render();
+}
+function blocksDrop(i,r,c){
+  const sh=S.tray[i];
+  if(S.phase!=='place'||!sh||!fits(S.grid,sh,r,c))return;
+  sh.forEach(([dr,dc])=>{S.grid[(r+dr)*GN+c+dc]=1});
+  S.score+=sh.length;
+  const rows=[],cols=[];
+  for(let k=0;k<GN;k++){
+    if(Array.from({length:GN},(_,j)=>S.grid[k*GN+j]).every(Boolean))rows.push(k);
+    if(Array.from({length:GN},(_,j)=>S.grid[j*GN+k]).every(Boolean))cols.push(k);
+  }
+  rows.forEach(k=>{for(let j=0;j<GN;j++)S.grid[k*GN+j]=0});
+  cols.forEach(k=>{for(let j=0;j<GN;j++)S.grid[j*GN+k]=0});
+  const n=rows.length+cols.length;
+  if(n){S.lines+=n;S.score+=n*10+(n>1?10*n:0);S.msg=n>1?`Собрано линий: ${n}. Бонус!`:'Линия собрана'}else S.msg='';
+  S.tray[i]=null;
+  if(S.tray.every(x=>!x)){S.i++;blocksNext()}
+  else if(!S.tray.some(x=>x&&canPlace(S.grid,x))){S.msg='Для оставшихся блоков нет места';S.i++;blocksNext()}
+  render();
+}
+/* перетаскивание блока: за пальцем или мышкой идёт «призрак», клетки под ним подсвечиваются */
+let drag=null;
+const clearPre=()=>document.querySelectorAll('.bc.pre').forEach(el=>el.classList.remove('pre'));
+function dragMove(e){
+  if(!drag)return;
+  const grid=document.getElementById('bgrid');if(!grid)return;
+  const gr=grid.getBoundingClientRect();
+  const lift=e.pointerType==='touch'?60:0;
+  const x=e.clientX-drag.w/2,y=e.clientY-drag.h/2-lift;
+  drag.ghost.style.transform=`translate(${x}px,${y}px)`;
+  const col=Math.round((x-gr.left)/drag.cs),row=Math.round((y-gr.top)/drag.cs);
+  const ok=fits(S.grid,drag.sh,row,col);
+  if(row!==drag.row||col!==drag.col||ok!==drag.ok){
+    clearPre();drag.row=row;drag.col=col;drag.ok=ok;
+    drag.ghost.classList.toggle('bad',!ok);
+    if(ok){const cells=grid.children;drag.sh.forEach(([dr,dc])=>{const el=cells[(row+dr)*GN+col+dc];if(el)el.classList.add('pre')})}
+  }
+}
+function dragEnd(cancel){
+  if(!drag)return;
+  const d=drag;drag=null;d.ghost.remove();clearPre();
+  const p=document.querySelector(`.piece[data-pi="${d.i}"]`);if(p)p.classList.remove('lifted');
+  if(!cancel&&d.ok)blocksDrop(d.i,d.row,d.col);
+}
+document.addEventListener('pointerdown',e=>{
+  const p=e.target.closest&&e.target.closest('.piece');
+  if(!p||!S||S.m!=='blocks'||S.phase!=='place'||drag)return;
+  const i=+p.dataset.pi,sh=S.tray[i],grid=document.getElementById('bgrid');
+  if(!sh||!grid)return;
+  e.preventDefault();
+  const cs=grid.getBoundingClientRect().width/GN,[rs,cc]=shapeDims(sh);
+  const ghost=document.createElement('div');ghost.className='dragghost';
+  ghost.style.gridTemplateColumns=`repeat(${cc},${cs-4}px)`;ghost.style.gridAutoRows=`${cs-4}px`;
+  ghost.innerHTML=shapeCells(sh);
+  document.body.appendChild(ghost);
+  drag={i,sh,ghost,cs,w:cc*cs,h:rs*cs,row:-9,col:-9,ok:false};
+  p.classList.add('lifted');
+  dragMove(e);
+});
+document.addEventListener('pointermove',dragMove);
+document.addEventListener('pointerup',()=>dragEnd(false));
+document.addEventListener('pointercancel',()=>dragEnd(true));
+
+/* ---------- итоговая сводка: кружок зелёное / жёлтое / красное ---------- */
+function rec(id,ok){
+  if(!S)return;
+  S.rec=S.rec||{};
+  const r=S.rec[id]||(S.rec[id]={good:0,bad:0,last:true});
+  if(ok)r.good++;else r.bad++;
+  r.last=ok;
+  /* игры и тест тоже двигают прогресс слова: верный ответ плюс шаг, ошибка минус шаг */
+  if(S.m!=='learn'&&S.m!=='cards'){
+    const set=cur(),c=set&&set.cards.find(k=>k.id===id);
+    if(c){const prev=c.lvl||0;c.lvl=ok?Math.min(3,prev+1):Math.max(0,prev-1);save();if(prev<3&&c.lvl>=3)noteLearned(c.id)}
+  }
+}
+function recFlip(id){const r=S.rec&&S.rec[id];if(r&&!r.last){r.bad=Math.max(0,r.bad-1);r.good++;r.last=true}}
+function summary(){
+  const s=cur(),ids=Object.keys((S&&S.rec)||{});
+  let g=0,m=0,r=0;const mid=[],red=[];
+  ids.forEach(id=>{
+    const x=S.rec[id],c=s.cards.find(k=>k.id===id);if(!c)return;
+    if(!x.last){r++;red.push(c)}else if(x.bad>0){m++;mid.push(c)}else g++;
+  });
+  const n=g+m+r;if(!n)return '';
+  const R=54,C=2*Math.PI*R;let off=0;
+  const seg=(v,color)=>{if(!v)return '';const len=C*v/n,o=off;off+=len;
+    return `<circle cx="70" cy="70" r="${R}" fill="none" stroke="${color}" stroke-width="18" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-o).toFixed(2)}" transform="rotate(-90 70 70)"/>`};
+  const good=g/n,ok=(g+m)/n;
+  const msg=good>=.9?'Блестяще! Ты почти всё знаешь, так держать.'
+    :good>=.7?'Ты молодец! Сегодня хорошо поработала, большая часть слов уже в голове.'
+    :ok>=.7?'Хороший результат. Ещё один подход, и жёлтые слова станут зелёными.'
+    :ok>=.4?'Уже неплохо. Красные слова вернутся в следующий раз, и ты запомнишь их лучше.'
+    :'Сегодня непростой день, и это нормально. Каждый подход закрепляет слова, в следующий раз получится лучше.';
+  const row=(color,v,label)=>`<div class="lg"><i style="background:${color}"></i><b>${v}</b><span>${label}</span></div>`;
+  const list=(arr,color,title)=>arr.length?`<div class="small" style="margin-top:10px"><b style="color:${color}">${title}</b><div class="terms">${arr.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}</div></div>`).join('')}</div></div>`:'';
+  return `<div class="panel stack"><h2>Итоги по словам</h2>
+    <div class="sum">
+      <div class="donut" role="img" aria-label="Слов пройдено: ${n}. Знаю точно: ${g}. Частично: ${m}. Не запомнила: ${r}.">
+        <svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="${R}" fill="none" stroke="var(--line)" stroke-width="18"/>${seg(g,'var(--ok)')}${seg(m,'var(--warn)')}${seg(r,'var(--bad)')}</svg>
+        <div class="ctr"><div><div class="num">${n}</div><div class="small muted">${plural(n,'слово','слова','слов')}</div></div></div></div>
+      <div class="grow stack" style="min-width:200px">
+        ${row('var(--ok)',g,'знаю точно, без ошибок')}${row('var(--warn)',m,'знаю частично, были ошибки')}${row('var(--bad)',r,'пока не запомнила')}
+        <p style="margin:6px 0 0;font-weight:700">${msg}</p></div></div>
+    ${list(red,'var(--bad)','Повторить в первую очередь')}${list(mid,'var(--warn)','Закрепить')}</div>`;
+}
+
+/* ---------- проверка ответа по смыслу через Claude ---------- */
+async function aiJudge(asked,want,said){
+  if(!sampleFn)return false;
+  try{
+    const r=await Promise.race([
+      sampleFn(`Ученица заучивает слова. Ей показали: «${asked}». В наборе правильный ответ: «${want}». Она ввела: «${said}». Засчитай ответ, если по смыслу это то же слово, его верный синоним или другая форма, опечатки допустимы. Если смысл другой или это другое слово, не засчитывай. Ответь одним словом: ДА или НЕТ.`,{modelTier:'quick'}),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),7000))]);
+    return /^\s*да/i.test((r&&r.text)||'');
+  }catch(e){return false}
+}
+async function learnSubmit(v){
+  const c=S.card,a=aOf(c);S.typed=v;
+  let ok=isRight(v,a,c),fuzzy=ok&&!answerParts(a).includes(norm(v));
+  if(!ok&&sampleFn&&v.trim()){
+    S.thinking=true;render();
+    ok=await aiJudge(qOf(c),a,v);
+    if(!S||S.m!=='learn'||S.card!==c)return;
+    S.thinking=false;fuzzy=ok;
+  }
+  learnAnswer(ok,-1,fuzzy);
+}
+async function testSubmit(v){
+  const q=S.qs[S.i];
+  let ok=isRight(v,q.a,q.c);
+  if(!ok&&sampleFn&&v.trim()){
+    S.thinking=true;render();
+    ok=await aiJudge(qOf(q.c),q.a,v);
+    if(!S||S.m!=='test'||S.qs[S.i]!==q)return;
+    S.thinking=false;
+  }
+  testAnswer(ok,ok?'':v);
+}
+
+/* ---------- отрисовка ---------- */
+let lastKey='';
+function render(){
+  let h='';
+  if(V.view==='home')h=home();
+  else if(V.view==='set')h=setView();
+  else if(V.view==='edit')h=editView();
+  else if(V.view==='progress')h=progressView();
+  else if(V.view==='account')h=accountView();
+  else if(V.view==='notebook')h=`<div class="top nbtop">${back('home','Наборы')}<h1>Блокнотик 🩷</h1></div>${notebookView()}`;
+  else if(V.view==='play'){
+    h=({cards:cardsView,learn:learnView,test:testView,match:matchView,gems:gemsView,blast:blastView,blocks:blocksView})[S.m]();
+  }
+  const keep=document.activeElement&&document.activeElement.id==='ans';
+  const key=[V.view,V.id,S&&S.m,S&&S.phase,S&&S.card&&S.card.id,S&&S.i,S&&S.p,S&&S.round].join('|');
+  if(key===lastKey)$app.classList.remove('enter');
+  $app.innerHTML=h;
+  if(key!==lastKey){lastKey=key;$app.classList.remove('enter');void $app.offsetWidth;$app.classList.add('enter')}
+  const ans=document.getElementById('ans');
+  if(ans&&!ans.disabled)ans.focus();
+}
+
+/* ---------- действия ---------- */
+const A={
+  home:()=>go('home'),
+  progress:()=>go('progress'),
+  notebook:()=>go('notebook'),
+  nbnext:()=>nbFlip(1),
+  nbprev:()=>nbFlip(-1),
+  nbgo:(d)=>{NB.idx=+d.i;render();window.scrollTo(0,0)},
+  pday:(d)=>{P.sel=d.date;render()},
+  tgl:(d)=>{
+    const i=+d.i,date=d.date;
+    if(i===WORDS_I||date>isoToday())return;
+    const r=data.track[date]||(data.track[date]={s:[0,0,0,0,0],note:''});
+    r.s[i]=r.s[i]?0:1;
+    saveLocal();
+    const y=window.scrollY;render();window.scrollTo(0,y);
+  },
+  bkexp:()=>exportBackup(),
+  pnav:(d)=>{
+    const D=daysFull(),today=isoToday();
+    const cur=D.findIndex(x=>x.date===(P.sel||today));
+    const i=Math.max(0,Math.min(D.length-1,(cur<0?0:cur)+(+d.d)));
+    P.sel=D[i].date;render();
+  },
+  ptoday:()=>{P.sel=null;render()},
+  mute:()=>{data.mute=!data.mute;save();render();ding()},
+  open:(d)=>go('set',{id:d.id||V.id}),
+  new:()=>{E={id:null,name:'',rows:[{t:'',d:''},{t:'',d:''},{t:'',d:''}],bulk:'',msg:''};V={view:'edit'};render()},
+  edit:(d)=>{const s=getSet(d.id);E={id:s.id,name:s.name,rows:s.cards.map(c=>({id:c.id,t:c.t,d:c.d,x:c.x||'',lvl:c.lvl})),bulk:'',msg:''};V={view:'edit',id:s.id};render()},
+  addrow:()=>{E.rows.push({t:'',d:''});render();const ins=document.querySelectorAll('#rows .editrow');const last=ins[ins.length-1];if(last)last.querySelector('input').focus()},
+  delrow:(d)=>{E.rows.splice(+d.i,1);if(!E.rows.length)E.rows.push({t:'',d:''});render()},
+  import:()=>{
+    const lines=(E.bulk||'').split('\n');let n=0;
+    lines.forEach(l=>{const m=l.match(/^\s*(.+?)(?:\t|\s[-—–=]\s|\s*[;=]\s*|\s*[—–]\s*)(.+?)\s*$/);if(m){E.rows.push({t:m[1].trim(),d:m[2].trim()});n++}});
+    E.rows=E.rows.filter((r,i)=>r.t||r.d||i===E.rows.length-1);
+    if(n){E.bulk='';E.msg='Добавлено: '+n}else E.msg='Не нашёл пар. Проверьте разделитель.';
+    render();
+  },
+  saveSet:()=>{
+    const rows=E.rows.filter(r=>r.t.trim()||r.d.trim());
+    const name=E.name.trim()||'Без названия';
+    if(E.id){
+      const s=getSet(E.id);s.name=name;
+      s.cards=rows.map(r=>({id:r.id||uid(),t:r.t.trim(),d:r.d.trim(),x:r.x||'',lvl:r.lvl||0}));
+      save();go('set',{id:s.id});
+    }else{
+      const s={id:uid(),name,dir:'td',best:null,cards:rows.map(r=>({id:uid(),t:r.t.trim(),d:r.d.trim(),lvl:0}))};
+      data.sets.unshift(s);save();go('set',{id:s.id});
+    }
+  },
+  askdel:()=>{E.confirmDel=true;render()},
+  canceldel:()=>{E.confirmDel=false;render()},
+  delset:()=>{data.sets=data.sets.filter(s=>s.id!==E.id);allowDrop=true;save();go('home')},
+  dir:(d)=>{cur().dir=d.v;save();render()},
+  reset:()=>{cur().cards.forEach(c=>c.lvl=0);cur().best=null;markReset(cur());save();render()},
+  reset2:()=>{cur().cards.forEach(c=>c.lvl=0);markReset(cur());save();A.start({m:'learn'})},
+  start:(d)=>{
+    clearTimers();V={view:'play',id:V.id};
+    ({cards:cardsStart,learn:learnStart,test:testStart,match:matchStart,gems:gemsStart,blast:blastStart,blocks:blocksStart})[d.m]();
+    render();window.scrollTo(0,0);
+  },
+  /* карточки */
+  flip:()=>{S.flip=!S.flip;const f=document.getElementById('flip');if(f)f.classList.toggle('on',S.flip)},
+  know:()=>{const c=S.queue[S.i];ding();rec(c.id,true);{const pv=c.lvl||0;c.lvl=Math.min(3,pv+1);if(pv<3&&c.lvl>=3)noteLearned(c.id)}S.know++;S.i++;S.flip=false;save();render()},
+  again:()=>{const c=S.queue[S.i];rec(c.id,false);c.lvl=0;S.again++;S.i++;S.flip=false;save();render()},
+  /* учить */
+  mc:(d)=>{const o=S.opts[+d.i];learnAnswer(o===aOf(S.card),+d.i)},
+  skip:()=>{S.typed='';learnAnswer(false,-1)},
+  next:()=>learnNext(),
+  override:()=>{
+    const c=S.card,st=S.stats[S.p];
+    recFlip(c.id);
+    if(S.kind==='typed'){st.tyMiss--}else st.mcMiss--;
+    S.miss[c.id]=Math.max(0,(S.miss[c.id]||1)-1);if(!S.miss[c.id])delete S.miss[c.id];
+    if(S.phase==='type'){
+      const i=S.queue.lastIndexOf(c);if(i>=0)S.queue.splice(i,1);
+      if(!S.undo||!S.undo.prevFailed)delete S.failed[c.id];
+      c.lvl=S.failed[c.id]?2:3;
+      if(c.lvl>=3)noteLearned(c.id);
+    }
+    S.fb={ok:true};save();render();ding();later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok)learnNext()},500)},
+  partnext:()=>{if(S&&S.m==='learn'&&S.phase==='partdone')startPart(S.p+1)},
+  partstop:()=>{if(S&&S.m==='learn'&&S.phase==='partdone'){S.phase='final';save();render()}},
+  restart:()=>{cur().cards.forEach(c=>c.lvl=0);markReset(cur());save();A.start({m:'learn'})},
+  /* тест */
+  tmc:(d)=>{const q=S.qs[S.i],o=q.opts[+d.i];testAnswer(o===q.a,o===q.a?'':o)},
+  ttf:(d)=>{const q=S.qs[S.i];const ok=(d.v==='1')===q.truth;testAnswer(ok,ok?'':(q.truth?'Неверно':'Верно'))},
+  tskip:()=>testAnswer(false,''),
+  tile:(d)=>tileClick(d.id),
+  /* игры */
+  gans:(d)=>gemsAnswer(+d.i),
+  bans:(d)=>blocksAnswer(+d.i),
+  bnext:()=>{S.i++;S.msg='';blocksNext();render()}
+};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const f=A[b.dataset.act];if(f)f(b.dataset);
+});
+document.addEventListener('input',e=>{
+  const t=e.target,f=t.dataset&&t.dataset.f;if(!f||!E)return;
+  if(f==='name')E.name=t.value;else if(f==='bulk')E.bulk=t.value;
+  else{E.rows[+t.dataset.i][f]=t.value}
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  const inp=document.getElementById('ans');if(!inp||!S)return;
+  const v=inp.value;
+  if(e.target.id==='typed'){learnSubmit(v);return}
+  if(e.target.id==='blastform'){blastShoot(v);return}
+  if(e.target.id==='ttyped'){testSubmit(v)}
+});
+document.addEventListener('keydown',e=>{
+  if(V.view!=='play'||!S)return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(S.m==='cards'&&S.i<S.queue.length&&tag!=='button'){
+    if(e.key===' '){e.preventDefault();A.flip()}
+    else if(e.key==='ArrowRight')A.know();
+    else if(e.key==='ArrowLeft')A.again();
+  }
+  if(e.key==='Enter'&&S.m==='learn'&&S.fb&&!S.fb.ok&&tag!=='button'){e.preventDefault();learnNext()}
+  if(S.m==='cards'&&e.target.classList&&e.target.classList.contains('flip-in')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();A.flip()}
+});
+
+/* ---------- Мой прогресс: свой трекер, отметки хранятся на устройстве и в облаке ---------- */
+const SKILLS=['Грамматика','Слова','Listening','Speaking','Письмо'];
+const WORDS_I=1;           /* «Слова» отмечаются сами, остальное вручную */
+const NORM=3;              /* день в норме: от 3 навыков из 5 */
+const T_DAYS=84;
+const T_START='2026-11-05';
+const MARK_WORDS=5;        /* столько слов надо выучить за день до отметки «Слова» */
+const pad2=n=>String(n).padStart(2,'0');
+const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const isoToday=()=>isoOf(new Date());
+const ruDate=iso=>iso.slice(8,10)+'.'+iso.slice(5,7);
+const addDays=(iso,n)=>{const [y,m,d]=iso.split('-').map(Number);return new Date(Date.UTC(y,m-1,d+n)).toISOString().slice(0,10)};
+const dowOf=iso=>{const [y,m,d]=iso.split('-').map(Number);return new Date(Date.UTC(y,m-1,d)).getUTCDay()};
+const builtinIds=new Set(BUILTIN.map(b=>b.id));
+/* что было отмечено в таблице до переезда на сайт: [Грамматика, Слова, Listening, Speaking, Письмо] */
+const TRACK_SEED={'2026-11-05':[1,0,1,0,0],'2026-11-06':[1,1,1,0,1],'2026-11-07':[0,0,1,2,0],'2026-11-08':[0,1,0,0,0]};
+if(!data.track||typeof data.track!=='object')data.track={};
+if(!data.trackSeeded){
+  Object.keys(TRACK_SEED).forEach(d=>{if(!data.track[d])data.track[d]={s:TRACK_SEED[d].slice(),note:''}});
+  data.trackSeeded=true;
+}
+saveLocal(true);
+/* план по дням: юниты MyGrammarLab идут по порядку, остальное зависит от дня недели */
+const PLAN_SNAP=[["Неделя","Даты","MyGrammarLab","Тема","Collocations","Дополнительное","Speaking","Проверка"],
+["1","05.11–11.11","44–50","Past Simple / Past Continuous / Used to","Collocations 1–2","","","Weekly Review"],
+["2","12.11–18.11","51–57","Present Perfect","Collocations 3–4","","","Weekly Review"],
+["3","19.11–25.11","58–64","Future Forms — только по MyGrammarLab","Collocations 5–6","","","Weekly Review"],
+["4","26.11–02.12","65–71","Modal verbs","Collocations 7–8","","","Weekly Review + CHECKPOINT"],
+["5","03.12–09.12","72–78","Modal verbs / Conditionals","Collocations 9–10","","","Weekly Review"],
+["6","10.12–16.12","79–85","Word order","Collocations 11–12","","","Weekly Review"],
+["7","17.12–23.12","86–92","Questions","Collocations 13–14","","","Weekly Review"],
+["8","24.12–30.12","93–99","-ing / infinitive / Reported Speech","Collocations 15–16","","","Weekly Review + CHECKPOINT"],
+["9","31.12–06.01","100–106","Relative clauses / Linking words","Collocations 17–18","","","Weekly Review"],
+["10","07.01–13.01","107–112","Passive / Words together","Collocations 19–20","","","Weekly Review"],
+["11","14.01–20.01","Повторение 44–50","Phrasal verbs / Word formation","Collocations 21–22","","","Weekly Review"],
+["12","21.01–27.01","Повторение 51–57","Spoken English + review","Collocations 23–24","","","Weekly Review + CHECKPOINT"]];
+const PLAN_UNITS=['Unit 44 · Past tenses','Units 45–46 · Past Simple','Unit 47 · следующий новый юнит','Unit 47 · повторение / Unit 48 по желанию (Weekly Review)'];
+const unitTopic=n=>n<=49?'Past tenses':n<=56?'Present Perfect':n<=60?'Future Forms (по учебнику)':n<=68?'Modal verbs':'MyGrammarLab';
+const EX_MON='Collocations in Use — 1 юнит или часть юнита, ~40 мин; повторение слов 15–20 мин; Listening по желанию';
+const EX_TUE='Приоритет: повторить слова к разговорному клубу 20–30 мин; грамматика в облегчённом режиме 20–40 мин; Listening по желанию';
+const EX_WED='Повторить слова 20–30 мин; конспект/письмо или shadowing по желанию; Listening можно совместить с отдыхом';
+const EX_SUN='Weekly Review: повторить слова 20–30 мин; конспект и ошибки; Listening по желанию';
+const SP_MON='Speaking — 15 мин; практика новой грамматики',SP_TUE='Разговорный клуб 60 мин; дополнительно Speaking 5–10 мин по силам',SP_WED='Speaking — 15 мин; 1–2 вопроса по ошибкам',SP_SUN='Speaking 15 мин: недельное повторение';
+/* индекс = день недели, 0 — воскресенье */
+const PLAN_EXTRA=[EX_SUN,EX_MON,EX_TUE,EX_WED,EX_MON,EX_WED,EX_TUE];
+const PLAN_SPEAK=[SP_SUN,SP_MON,SP_TUE,SP_WED,SP_MON,SP_WED,SP_TUE];
+const PLAN_CHECK={'2026-12-02':'CHECKPOINT 1: Grammar, Vocabulary, Listening, Speaking, Writing','2026-12-30':'CHECKPOINT 2: Grammar, Vocabulary, Listening, Speaking, Writing','2027-01-27':'CHECKPOINT 3: Grammar, Vocabulary, Listening, Speaking, Writing'};
+function dayPlan(i,date){
+  let mgl;
+  if(i<4)mgl=PLAN_UNITS[i];
+  else if(i<69){const n=48+(i-4);mgl='Unit '+n+' · '+unitTopic(n)}
+  else mgl='Unit '+(44+(i-69))+' — повторение и закрепление (минимум 1 юнит)';
+  const w=dowOf(date);
+  return {mgl,extra:PLAN_EXTRA[w],speak:PLAN_SPEAK[w],check:PLAN_CHECK[date]||(w===0?'Weekly Review — короткая проверка 5 навыков':'')};
+}
+let P={sel:null};
+function repaintProgress(){if(V.view==='progress'||V.view==='home')render()}
+/* 84 дня с 5 ноября. Навык в день отмечается галочкой; до переезда на сайт у некоторых навыков было больше одной отметки, они сохранены */
+function daysFull(){
+  const RU=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],out=[];
+  for(let i=0;i<T_DAYS;i++){
+    const date=addDays(T_START,i),r=data.track[date];
+    const s=(r&&Array.isArray(r.s)?r.s:[0,0,0,0,0]).map(v=>+v||0);
+    const n=Math.min(5,s.reduce((a,b)=>a+b,0));
+    out.push(Object.assign({date,i,week:Math.floor(i/7)+1,dow:RU[dowOf(date)],s,n,note:(r&&r.note)||'',bows:n>=NORM?1:0},dayPlan(i,date)));
+  }
+  return out;
+}
+/* норма дня: минимум 3 навыка из 5. 3 = день закрыт, 4–5 = сверх нормы, 1–2 = часть */
+const dayState=(d,today)=>d.date>today?'future':d.n>=4?'over':d.n>=NORM?'full':d.n>0?'some':d.date===today?'today':'miss';
+function progStats(D,today){
+  const el=D.filter(d=>d.date<=today);
+  let streak=0;
+  for(let i=el.length-1;i>=0;i--){
+    if(el[i].n>=NORM)streak++;else if(el[i].date===today&&i===el.length-1)continue;else break;
+  }
+  const cur=D.find(d=>d.date===today)||(el.length?el[el.length-1]:D[0]);
+  return {elapsed:el.length,norm:el.filter(d=>d.n>=NORM).length,bows:D.reduce((a,d)=>a+d.bows,0),
+    skills:el.reduce((a,d)=>a+d.n,0),possible:el.length*5,streak,week:cur.week,day:Math.min(T_DAYS,Math.max(1,el.length)),cur};
+}
+function bannerHtml(){
+  const D=daysFull(),s=progStats(D,isoToday());
+  const topics=NB.pages.length||NOTES_BAKED.length;
+  const nbSub=topics?`${topics} ${plural(topics,'тема','темы','тем')} · тема — разворот`:'конспекты по темам';
+  return `<div class="banners"><button class="banner" data-act="progress"><div class="bt">Мой прогресс 🎀</div>
+    <div class="small muted">День ${s.day} из ${T_DAYS} · бантиков ${s.bows}</div>
+    <div class="bar"><span style="width:${s.day/T_DAYS*100}%"></span></div></button>
+    <button class="banner" data-act="notebook"><div class="bt">Блокнотик 🩷</div>
+    <div class="small muted">${nbSub}</div>
+    <div class="nbmini" aria-hidden="true"><i></i><i></i><i></i></div></button></div>`;
+}
+function progressView(){
+  const D=daysFull(),today=isoToday(),s=progStats(D,today);
+  const pl=PLAN_SNAP.slice(1).map(r=>({n:+r[0],dates:r[1]||'',mgl:r[2]||'',topic:r[3]||'',coll:r[4]||'',check:r[7]||''}));
+  const sel=D.find(d=>d.date===P.sel)||D.find(d=>d.date===today)||D[0];
+  const wk=w=>{const ds=D.filter(d=>d.week===w);return Math.round(ds.filter(d=>d.n>=NORM).length/ds.length*100)};
+  const segs=Array.from({length:12},(_,i)=>{
+    const p=wk(i+1),isCur=s.week===i+1;
+    return `<div class="pseg"><i style="width:${p}%"></i>${isCur?`<b class="pbadge" style="left:${p}%">${s.day}</b>`:''}</div>`}).join('');
+  const dows=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const off=(dowOf(D[0].date)+6)%7;
+  const cells=[...Array(off).fill(null),...D];
+  while(cells.length%7)cells.push(null);
+  const cal=Array.from({length:cells.length/7},(_,r)=>{
+    const mon=addDays(D[0].date,-off+r*7);
+    return `<div class="cwk">${ruDate(mon)}</div>`+cells.slice(r*7,r*7+7).map(d=>{
+      if(!d)return '<span></span>';
+      const st=dayState(d,today);
+      return `<button class="cd ${st} ${d.date===sel.date?'sel':''}" data-act="pday" data-date="${d.date}" aria-label="${esc(ruDate(d.date))}, ${esc(d.dow)}, выполнено навыков ${d.n} из 5"><span>${+d.date.slice(8,10)}</span></button>`}).join('');
+  }).join('');
+  const future=sel.date>today,got=learnedToday();
+  const skb=SKILLS.map((k,i)=>{
+    const on=!!sel.s[i];
+    if(i===WORDS_I){
+      const sub=sel.date===today&&!on?`<small>само: выучено ${got} из ${MARK_WORDS}</small>`:`<small>${on?'отмечено':'само, когда выучишь '+MARK_WORDS+' слов'}</small>`;
+      return `<div class="skb auto ${on?'on':''}" role="img" aria-label="${k}: ${on?'отмечено':'не отмечено'}"><i>✓</i><span>${k}${sub}</span></div>`;
+    }
+    return `<button class="skb ${on?'on':''}" data-act="tgl" data-date="${sel.date}" data-i="${i}" aria-pressed="${on}" ${future?'disabled':''}><i>✓</i><span>${k}</span></button>`;
+  }).join('');
+  const line=(l,t)=>t?`<div class="dl"><span class="muted small">${l}</span><div>${esc(t)}</div></div>`:'';
+  const verdict=sel.n>=4?'сверх нормы':sel.n>=NORM?'норма выполнена, бантик за день 🎀':sel.n>0?'до нормы не хватает '+(NORM-sel.n):'пока без отметок';
+  const detail=`<div class="panel stack" id="dpanel"><div class="dnav"><button class="btn sm" data-act="pnav" data-d="-7" aria-label="Неделя назад">«</button><button class="btn sm" data-act="pnav" data-d="-1" aria-label="День назад">‹</button><h2 class="grow dtitle">${esc(sel.dow)}, ${esc(ruDate(sel.date))}</h2><button class="btn sm" data-act="pnav" data-d="1" aria-label="День вперёд">›</button><button class="btn sm" data-act="pnav" data-d="7" aria-label="Неделя вперёд">»</button></div>
+    <div class="row small muted"><span class="tag">Неделя ${sel.week}</span><span class="grow"></span>${sel.date!==today?'<button class="btn sm ghost" data-act="ptoday">Сегодня</button>':'<span class="tag" style="color:var(--accent)">сегодня</span>'}</div>
+    <div class="small muted">${future?'Этот день ещё впереди.':'Отметь, что делала в этот день.'}</div>
+    <div class="skbs">${skb}</div>
+    <div class="small">Навыков: <b>${sel.n} из 5</b>${future?'':' · '+verdict}</div>
+    ${line('MyGrammarLab',sel.mgl)}${line('Дополнительная практика',sel.extra)}${line('Speaking ежедневно',sel.speak)}${line('Проверка',sel.check)}
+    ${future?'':`<textarea class="inp" id="dnote" data-date="${sel.date}" rows="2" placeholder="Заметка за день (по желанию)">${esc(sel.note)}</textarea>`}</div>`;
+  const weeks=pl.map(w=>{
+    const p=wk(w.n),cur=w.n===s.week,flag=/CHECKPOINT/i.test(w.check)?'Чекпоинт':/Review/i.test(w.check)?'Недельный обзор':'';
+    return `<div class="wk ${cur?'cur':''}"><div class="row"><b class="grow">Неделя ${w.n}</b><span class="small muted">${esc(w.dates)}</span></div>
+      <div class="small">${esc(w.topic)}</div><div class="small muted">MyGrammarLab ${esc(w.mgl)} · ${esc(w.coll)}</div>
+      <div class="bar" style="margin-top:6px"><span style="width:${p}%"></span></div>
+      <div class="row small muted"><span>${p}%</span><span class="grow"></span>${flag?`<span class="tag">${flag}</span>`:''}</div></div>`}).join('');
+  const tile=(n,l)=>`<div class="tile2"><b>${n}</b><span class="small muted">${l}</span></div>`;
+  return `<div class="top">${back('home','Наборы')}</div>
+  <div class="stack"><h1>English Tracker 🎀</h1><div class="muted small">12 недель · 05.11.2026–27.01.2027 · навыки отмечай сама</div></div>
+  ${detail}
+  <div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="${T_DAYS}" aria-valuenow="${s.day}">${segs}<b class="pend">${T_DAYS}</b></div>
+  <div class="small muted" style="text-align:center">День ${s.day} из ${T_DAYS} · неделя ${s.week} из 12</div>
+  <div class="tiles">${tile(s.bows+' 🎀','бантиков')}${tile(s.streak,'дней подряд в норме')}${tile(s.norm+' / '+s.elapsed,'дней в норме, от 3 навыков')}${tile(s.skills,'навыков всего')}</div>
+  <div class="panel stack"><h2>Календарь</h2>
+    <div class="cal"><span></span>${dows.map(x=>`<span class="cdh">${x}</span>`).join('')}${cal}</div>
+    <div class="row small muted"><span class="lg"><i style="background:var(--ok)"></i>норма: 3 навыка</span><span class="lg"><i style="background:linear-gradient(135deg,var(--pink),var(--accent))"></i>сверх нормы: 4–5</span><span class="lg"><i style="background:var(--warn)"></i>1–2 навыка</span><span class="lg"><i style="background:var(--bad)"></i>пропуск</span><span class="lg"><i style="background:var(--line)"></i>впереди</span></div></div>
+  <div class="panel stack"><h2>Сохранность прогресса</h2>
+    <div class="small muted">${fbUser?'Всё сохраняется в облаке, с твоим аккаунтом, и на этом устройстве. «Сохранить копию» остаётся как копия на всякий случай.':'Всё хранится в этом браузере на этом устройстве. Чтобы прогресс был на всех устройствах, войди на главном экране (☁️). Иногда нажимай «Сохранить копию»: файл можно загрузить обратно, если данные пропадут.'}</div>
+    <div class="row"><button class="btn sm" data-act="bkexp">Сохранить копию</button><label class="btn sm" for="bkfile" style="display:inline-flex;align-items:center">Загрузить копию</label><input id="bkfile" type="file" accept="application/json,.json" hidden></div></div>
+  <h2>План по неделям</h2><div class="weeks">${weeks}</div>`;
+}
+
+/* ---------- Блокнотик: тема = разворот, красивый конспект с перелистыванием ---------- */
+const NB={pages:[],idx:0,busy:false,loaded:false};
+const SAMPLE_TOPIC={sample:true,section:'Grammar',title:'Пример оформления',pages:[
+  [{t:'head',n:'00',tag:'Grammar',title:'НАЗВАНИЕ ТЕМЫ',sub:'Короткое пояснение: что это и когда нужно.'},
+   {t:'use',v:'описание, привычки, факты.'},
+   {t:'table',chip:true,head:['Тип','Формула','Пример'],rows:[['+','S + V1','She works.'],['−','S + don\'t + V1','She doesn\'t work.'],['?','Do + S + V1?','Does she work?']]}],
+  [{t:'chips',label:'Маркеры',items:['always','usually','never']},
+   {t:'warn',v:'Важное правило, на которое легко попасться.'},
+   {t:'pair',ok:'Верный пример.',no:'Неверный пример.'},
+   {t:'sticky',title:'Запомнить',v:'Короткая подсказка.'}]]};
+/* два листа: на широком экране и на телефоне в альбомном положении; один лист: телефон стоймя */
+const nbSingle=()=>{const w=window.innerWidth,h=window.innerHeight;return !(w>=760||(w>h&&w>=540))};
+/* запасной вариант: те же конспекты зашиты в страницу, их видно и без входа в claude.ai */
+const NOTES_BAKED=/*NOTES_BAKED*/[{"order":1,"section":"Grammar","title":"01 · Present Simple — to be","pages":[[{"t":"head","n":"01","title":"PRESENT SIMPLE — TO BE","tag":"Grammar","sub":"AM / IS / ARE — быть, являться, находиться."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are","She is happy."],["−","S + am/is/are + not","She isn't happy."],["?","Am/Is/Are + S?","Is she happy?"],["WH?","WH + am/is/are + S?","Where are you?"]],"chip":true}],[{"t":"use","v":"описание, состояние, возраст, профессия, местоположение."},{"t":"sticky","title":"Запомнить","v":"I'm hungry. / I'm cold. / She's 20 years old."}]]},{"order":2,"section":"Grammar","title":"02 · Present Simple — ordinary verbs","pages":[[{"t":"head","n":"02","title":"PRESENT SIMPLE — ORDINARY VERBS","tag":"Grammar"},{"t":"use","v":"привычки, регулярные действия, факты."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V1 (he/she/it + -s)","She works."],["−","S + don't/doesn't + V1","She doesn't work."],["?","Do/Does + S + V1?","Does she work?"],["WH?","WH + do/does + S + V1?","Where does she work?"]],"chip":true}],[{"t":"chips","items":["always","usually","often","sometimes","never","every day"],"label":"Маркеры"},{"t":"warn","v":"После does/doesn't глагол без -s."},{"t":"pair","ok":"Does she like it?","no":"Does she likes it?"}]]},{"order":3,"section":"Grammar","title":"03 · Present Continuous","pages":[[{"t":"head","n":"03","title":"PRESENT CONTINUOUS","tag":"Grammar"},{"t":"use","v":"действие сейчас, временная ситуация, запланированное действие в ближайшем будущем."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are + V-ing","She is reading."],["−","S + am/is/are + not + V-ing","She isn't reading."],["?","Am/Is/Are + S + V-ing?","Is she reading?"],["WH?","WH + am/is/are + S + V-ing?","What is she reading?"]],"chip":true}],[{"t":"chips","items":["now","right now","at the moment","this week"],"label":"Маркеры"},{"t":"list","items":["make → making","swim → swimming","lie → lying"],"title":"Правила -ing"},{"t":"warn","v":"He isn't sleeping, не He aren't sleep."}]]},{"order":4,"section":"Grammar","title":"04 · Present Simple vs Present Continuous","pages":[[{"t":"head","n":"04","title":"PRESENT SIMPLE VS PRESENT CONTINUOUS","tag":"Grammar"},{"t":"table","head":["Present Simple","Present Continuous"],"rows":[["Регулярно, обычно","Сейчас, временно"],["I work every day.","I'm working now."],["She lives in London.","She's staying in London this week."]],"chip":false}],[{"t":"h","v":"Stative verbs"},{"t":"text","v":"глаголы состояния, обычно не используются в Continuous."},{"t":"chips","items":["know","like","love","hate","want","need","understand","believe","remember","prefer","belong","own"]},{"t":"pair","ok":"I know the answer.","no":"I'm knowing the answer."},{"t":"list","items":["I think you're right. — Я считаю, что ты права.","I'm thinking about it. — Я сейчас об этом размышляю."],"title":"THINK"}]]},{"order":5,"section":"Grammar","title":"05 · Have / have got","pages":[[{"t":"head","n":"05","title":"HAVE / HAVE GOT","tag":"Grammar","sub":"Обе конструкции могут означать «иметь», «у кого-то есть»."},{"t":"table","head":["Тип","HAVE GOT","HAVE"],"rows":[["+","I've got a car.","I have a car."],["−","I haven't got a car.","I don't have a car."],["?","Have you got a car?","Do you have a car?"],["He/She +","She's got a car.","She has a car."],["He/She −","She hasn't got a car.","She doesn't have a car."],["He/She ?","Has she got a car?","Does she have a car?"]],"chip":true},{"t":"use","v":"обладание, семья, внешность, некоторые состояния."}],[{"t":"h","v":"HAVE + действия"},{"t":"list","items":["have breakfast — завтракать","have lunch — обедать","have a shower — принимать душ","have a good time — хорошо проводить время"]},{"t":"h","v":"Формы HAVE по временам"},{"t":"table","head":["Время","Пример"],"rows":[["Present Simple","She has breakfast."],["Present Continuous","She's having breakfast."],["Past Simple","She had breakfast."]],"chip":false},{"t":"warn","v":"Have → had → had."}]]},{"order":6,"section":"Grammar","title":"06 · Prepositions of place (1)","pages":[[{"t":"head","n":"06","title":"PREPOSITIONS OF PLACE (1)","tag":"Grammar"},{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["IN","внутри","in the room"],["ON","на поверхности","on the table"],["AT","в точке, месте","at home"],["UNDER","под","under the bed"],["ABOVE","над, выше","above the table"]],"chip":false}],[{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["BELOW","ниже","below the window"],["NEAR","недалеко","near the station"],["NEXT TO","прямо рядом","next to the shop"],["BESIDE","рядом, сбоку","beside me"]],"chip":false},{"t":"sticky","title":"Запомнить целиком","v":"at home, at work, at school, in bed, on the bed."}]]},{"order":7,"section":"Grammar","title":"07 · Prepositions of place (2)","pages":[[{"t":"head","n":"07","title":"PREPOSITIONS OF PLACE (2)","tag":"Grammar"},{"t":"table","head":["Предлог","Перевод"],"rows":[["IN FRONT OF","перед"],["BEHIND","за, позади"],["OPPOSITE","напротив"],["BETWEEN","между"],["OUTSIDE","снаружи"],["INSIDE","внутри"]],"chip":false}],[{"t":"h","v":"Для описания фотографий"},{"t":"list","items":["on the left/right — слева/справа","at the top/bottom — вверху/внизу","in the centre — в центре","at the front/back — впереди/сзади"]}]]},{"order":8,"section":"Grammar","title":"08 · Prepositions of time","pages":[[{"t":"head","n":"08","title":"PREPOSITIONS OF TIME","tag":"Grammar"},{"t":"table","head":["Предлог","Использование","Пример"],"rows":[["AT","точное время","at 8 p.m."],["ON","день, дата","on Monday"],["IN","месяц, год, часть дня","in July, in 2026, in the morning"],["Без предлога","last, next, this, yesterday, tomorrow","last week, tomorrow morning"]],"chip":false}],[{"t":"list","items":["at night","in the morning/afternoon/evening","on Friday evening","last Monday","next year","yesterday evening"],"title":"Запомнить"},{"t":"pair","ok":"last week","no":"in the last week (когда имеем в виду просто «на прошлой неделе»)"}]]},{"order":9,"section":"Grammar","title":"09 · Question words","pages":[[{"t":"head","n":"09","title":"QUESTION WORDS","tag":"Grammar"},{"t":"table","head":["Слово","Перевод"],"rows":[["WHAT","что, какой"],["WHERE","где, куда"],["WHEN","когда"],["WHY","почему"],["WHO","кто"],["WHOSE","чей"],["WHICH","который, какой из"],["HOW","как"],["HOW OLD","сколько лет"],["HOW MANY","сколько (исчисляемые)"],["HOW MUCH","сколько (неисчисляемые, цена)"],["HOW OFTEN","как часто"],["WHAT TIME","во сколько"]],"chip":false}],[{"t":"h","v":"Формула"},{"t":"formula","v":"WH + вспомогательный глагол + S + основной глагол?"},{"t":"list","items":["Where does she live?","Where were you yesterday?"]},{"t":"warn","v":"Если WHO — подлежащее, do/does обычно не нужен."},{"t":"list","items":["Who lives here?"]}]]},{"order":10,"section":"Grammar","title":"10 · Question structure & short answers","pages":[[{"t":"head","n":"10","title":"QUESTION STRUCTURE & SHORT ANSWERS","tag":"Grammar"},{"t":"table","head":["Тип","Пример"],"rows":[["To be","Is she happy?"],["Present Simple","Does she work?"],["Present Continuous","Is she working?"],["Past Simple of be","Was she happy?"]],"chip":false}],[{"t":"list","items":["Are you tired? — Yes, I am.","Does she work? — Yes, she does.","Is he sleeping? — No, he isn't.","Were they ready? — No, they weren't."],"title":"Short answers"},{"t":"warn","v":"В коротком положительном ответе не сокращаем:"},{"t":"pair","ok":"Yes, she is.","no":"Yes, she's."}]]},{"order":11,"section":"Grammar","title":"11 · Past Simple — to be","pages":[[{"t":"head","n":"11","title":"PAST SIMPLE — TO BE","tag":"Grammar","sub":"WAS / WERE — был, была, были."},{"t":"table","head":["Местоимение","Форма"],"rows":[["I / He / She / It","WAS"],["You / We / They","WERE"]],"chip":false},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were","She was happy."],["−","S + wasn't/weren't","She wasn't happy."],["?","Was/Were + S?","Was she happy?"],["WH?","WH + was/were + S?","Where were you?"]],"chip":true}],[{"t":"chips","items":["yesterday","last week","last year","ago","in 2020"],"label":"Маркеры"},{"t":"warn","v":"С was/were не используем did."},{"t":"pair","ok":"Was she tired?","no":"Did she was tired?"}]]},{"order":12,"section":"Grammar","title":"12 · Past Simple — Units 45–46","pages":[[{"t":"head","n":"12","title":"PAST SIMPLE — UNITS 45–46","tag":"Grammar"},{"t":"use","v":"завершённые действия, события, привычки и ситуации в прошлом."},{"t":"h","v":"FORM"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V2 / V-ed","She worked."],["−","S + didn't + V1","She didn't work."],["?","Did + S + V1?","Did she work?"],["WH?","WH + did + S + V1?","Where did she work?"]],"chip":true},{"t":"text","v":"Short answers: Yes, I did. / No, I didn't."},{"t":"h","v":"REGULAR & IRREGULAR VERBS"},{"t":"text","v":"Regular verbs — правильные глаголы, образуются с помощью -ed."},{"t":"table","head":["Правило","Пример"],"rows":[["+ ed","watch → watched"],["После -e → + d","live → lived"],["Удвоение согласной","stop → stopped"],["Согласная + y → ied","carry → carried"],["Гласная + y → ed","play → played"]],"chip":false},{"t":"text","v":"Irregular verbs — неправильные глаголы, форму запоминаем."},{"t":"chips","items":["go → went","buy → bought","do → did","have → had","make → made","see → saw","send → sent"]},{"t":"warn","v":"После did/didn't всегда V1."},{"t":"pair","ok":"Did she go?","no":"Did she went?"}],[{"t":"h","v":"WAS/WERE VS DID"},{"t":"table","head":["TO BE","ORDINARY VERBS"],"rows":[["I was tired.","I worked."],["She wasn't happy.","She didn't work."],["Was she at home?","Did she go home?"],["Where were you?","Where did you go?"]],"chip":false},{"t":"text","v":"Was/were — прошедшие формы глагола to be. Did/didn't — вспомогательные глаголы для вопросов и отрицаний с обычными глаголами."},{"t":"warn","v":"После wasn't/weren't не добавляем be."},{"t":"pair","ok":"They weren't happy.","no":"They weren't be happy."},{"t":"h","v":"USE"},{"t":"list","items":["I watched TV yesterday. — Завершённое действие.","I played tennis every day when I was young. — Привычка в прошлом.","I arrived home, cooked dinner and went to bed. — Последовательность действий.","I lived in London in 2020. — Ситуация в прошлом."]},{"t":"h","v":"TIME EXPRESSIONS"},{"t":"table","head":["Маркер","Перевод"],"rows":[["yesterday","вчера"],["last week/year","на прошлой неделе / в прошлом году"],["two days ago","два дня назад"],["then","затем, потом"],["from ... to","с ... до / с ... по"],["for two weeks","в течение двух недель"]],"chip":false},{"t":"sticky","title":"Главное","v":"утверждение → V2/V-ed; вопрос и отрицание → did/didn't + V1; глагол to be → was/were."}]]},{"order":13,"section":"Grammar","title":"13 · Past Continuous — Unit 47","pages":[[{"t":"head","n":"13","title":"PAST CONTINUOUS — UNIT 47","tag":"Grammar"},{"t":"use","v":"когда действие находилось в процессе в определённый момент в прошлом."},{"t":"h","v":"FORM — ОБРАЗОВАНИЕ"},{"t":"formula","v":"S + was/were + V-ing"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were + V-ing","She was sleeping."],["−","S + wasn't/weren't + V-ing","She wasn't sleeping."],["?","Was/Were + S + V-ing?","Was she sleeping?"],["WH?","WH + was/were + S + V-ing?","What was she doing?"]],"chip":true},{"t":"table","head":["Форма","Местоимения"],"rows":[["Was","I / He / She / It"],["Were","You / We / They"]],"chip":false},{"t":"text","v":"Short answers: Yes, I was. / No, I wasn't."},{"t":"h","v":"USE — УПОТРЕБЛЕНИЕ"},{"t":"ex","en":"I was watching TV at 9 p.m. yesterday.","ru":"Вчера в 9 вечера я смотрела телевизор.","title":"1. Действие в конкретный момент прошлого"},{"t":"ex","en":"She was living in Paris when she had her first baby.","ru":"Она жила в Париже, когда у неё родился первый ребёнок.","title":"2. Временная ситуация в прошлом"},{"t":"ex","en":"The sun was shining when we arrived.","ru":"Когда мы приехали, светило солнце.","title":"3. Описание обстановки в прошлом"},{"t":"ex","en":"I was sleeping when the phone rang.","ru":"Я спала, когда зазвонил телефон.","title":"4. Действие, прерванное другим событием"}],[{"t":"h","v":"PAST SIMPLE VS PAST CONTINUOUS"},{"t":"table","head":["Past Simple","Past Continuous"],"rows":[["Факт или завершённое действие","Процесс в прошлом"],["I cooked dinner.","I was cooking dinner."],["She watched TV.","She was watching TV at 8."],["The phone rang.","I was sleeping when it rang."]],"chip":false},{"t":"h","v":"Past Continuous + when + Past Simple"},{"t":"text","v":"Длительное действие + событие, произошедшее во время него."},{"t":"ex","en":"I was studying when he called.","ru":"Я занималась, когда он позвонил."},{"t":"h","v":"STATIVE VERBS"},{"t":"text","v":"Глаголы состояния обычно не используются в Continuous:"},{"t":"chips","items":["know","like","love","hate","want","need","believe","understand","remember"]},{"t":"pair","ok":"I hated him. — Я его ненавидела.","no":"I was hating him."},{"t":"text","v":"Некоторые глаголы меняют значение:"},{"t":"list","items":["I thought he was right. — Я считала, что он прав.","I was thinking about him. — Я размышляла о нём."]},{"t":"h","v":"TIME MARKERS"},{"t":"list","items":["at 7 o'clock yesterday — вчера в 7 часов","at that moment — в тот момент","when — когда","while — пока, в то время как","all evening — весь вечер"]},{"t":"h","v":"⚠️ COMMON MISTAKES"},{"t":"pair","ok":"She was sleeping.","no":"She were sleeping."},{"t":"pair","ok":"I was watching TV.","no":"I was watch TV."},{"t":"pair","ok":"Were you watching TV?","no":"Did you watching TV?"},{"t":"sticky","title":"Главное запомнить","v":"Past Simple → что произошло?\nPast Continuous → что происходило в тот момент?\nPast Continuous = was/were + V-ing.\nВ Past Continuous не используем did/didn't."}]]},{"order":14,"section":"Vocabulary Notebook 🩷","title":"01 · Collocations, compounds & idioms","pages":[[{"t":"head","n":"01","title":"COLLOCATIONS, COMPOUNDS & IDIOMS","tag":"Vocabulary Notebook","sub":"English Collocations in Use Intermediate • Unit 1"},{"t":"table","head":["Тип","Определение","Пример"],"rows":[["Collocation","Привычное сочетание слов","heavy rain"],["Compound","Составное слово или единое название","teapot"],["Idiom","Устойчивое выражение с переносным смыслом","pull somebody's leg"]],"chip":false},{"t":"sticky","title":"Зачем учить коллокации?","v":"Чтобы говорить естественнее, точнее выражать мысли и улучшать письменный английский."}],[{"t":"h","v":"Collocations"},{"t":"text","v":"слова естественно употребляются вместе, значение обычно понятно."},{"t":"list","items":["make a mistake — совершить ошибку","heavy rain — сильный дождь","bitterly disappointed — глубоко разочарованный","strictly forbidden — строго запрещено"]},{"t":"h","v":"Compounds"},{"t":"text","v":"два или более слова образуют единое название. Могут писаться слитно, через дефис или раздельно."},{"t":"list","items":["teapot — чайник","narrow-minded — ограниченный во взглядах","car park — парковка"]},{"t":"h","v":"Idioms"},{"t":"text","v":"смысл часто невозможно понять дословным переводом."},{"t":"list","items":["pull somebody's leg — разыгрывать кого-то","a storm in a teacup — буря в стакане воды","pass the buck — перекладывать ответственность","be over the moon — быть на седьмом небе от счастья"]}]]},{"order":15,"section":"Описание фотографии","title":"План описания: 6 пунктов","pages":[[{"t":"head","n":"01","tag":"Описание фотографии","title":"ОПИСАНИЕ ФОТОГРАФИИ","sub":"План из 6 пунктов: от общей информации до впечатления."},{"t":"h","v":"1. General information"},{"t":"text","v":"Общая информация о фотографии"},{"t":"list","items":["This is a photo of...","This is a family / a group of friends.","There are three people in the photo.","The photo is indoors / outdoors."]},{"t":"h","v":"2. Foreground"},{"t":"text","v":"Передний план: что находится ближе всего к нам?"},{"t":"list","items":["In the foreground, there is...","There are two people in the foreground.","I can see a table / a dog / a woman"]},{"t":"h","v":"3. Background"},{"t":"text","v":"Задний план: что находится позади людей?"},{"t":"list","items":["In the background, there is...","There are some trees.","There is a big window.","I can see a house / a park / a room."]}],[{"t":"h","v":"4. People: Appearance"},{"t":"text","v":"Внешность людей"},{"t":"list","items":["He is tall / short.","She is young / middle-aged.","He has got short dark hair.","She has got long blonde hair.","He has got blue eyes."]},{"t":"h","v":"5. Clothes"},{"t":"text","v":"Одежда"},{"t":"list","items":["He wears a T-shirt and jeans.","She wears a dress.","He is in a blue shirt.","She has got a black jacket.","They wear casual clothes."]},{"t":"h","v":"6. Final impression"},{"t":"text","v":"Общее впечатление"},{"t":"list","items":["They look happy / friendly / tired.","The family looks happy.","I like this photo because...","I think this is a nice photo."]}]]}];
+function nbTopics(){return NB.pages.length?NB.pages:(NOTES_BAKED.length?NOTES_BAKED:[SAMPLE_TOPIC])}
+function nbBook(){
+  const single=nbSingle(),bk=[{type:'cover'},{type:'toc'}],first=[];
+  nbTopics().forEach((t,ti)=>{
+    first[ti]=bk.length;
+    let pgs=(t.pages||[]).slice();
+    if(single){
+      /* на телефоне вся тема лежит на одном длинном листе */
+      const merged=[];
+      pgs.forEach((p,k)=>{if(k&&p.length)merged.push({t:'sep'});merged.push(...p)});
+      pgs=[merged];
+    }else{
+      if(pgs.length%2)pgs.push([]);
+      if(!pgs.length)pgs.push([],[]);
+    }
+    pgs.forEach(blocks=>bk.push({type:'topic',blocks,topic:t,ti}));
+  });
+  if(!single&&bk.length%2)bk.push({type:'blank'});
+  bk.first=first;
+  return bk;
+}
+function nbBlock(b){
+  const e=esc;
+  const bold=s=>{const m=String(s).split(' — ');return m.length>1?`<b>${e(m[0])}</b> — ${e(m.slice(1).join(' — '))}`:e(s)};
+  switch(b.t){
+    case 'head':return `<div class="hd">${b.tag?`<span class="ntag">${e(b.tag)}</span>`:''}<div class="hrow">${b.n?`<span class="nnum">${e(b.n)}</span>`:''}<h3 class="hand ntitle"><span>${e(b.title)}</span></h3></div>${b.sub?`<div class="nsub">${e(b.sub)}</div>`:''}</div>`;
+    case 'ex':return `<div class="nexb">${b.title?`<b>${e(b.title)}</b>`:''}<i>${e(b.en)}</i><span>${e(b.ru)}</span></div>`;
+    case 'sep':return `<div class="nsep" aria-hidden="true"></div>`;
+    case 'use':return `<div class="nuse"><b>Используем:</b> ${e(b.v)}</div>`;
+    case 'text':return `<p class="ntext">${e(b.v)}</p>`;
+    case 'h':return `<div class="nsec">${e(b.v)}</div>`;
+    case 'formula':return `<div class="nform">${e(b.v)}</div>`;
+    case 'table':return `<div class="ntw"><table class="nt ${b.chip?'chip':''} ${b.rows.length>9?'dense':''}"><thead><tr>${b.head.map(x=>`<th>${e(x)}</th>`).join('')}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${b.chip&&i===0?`<span class="tchip">${e(c)}</span>`:e(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    case 'chips':return `<div class="nchips">${b.label?`<span class="nlab">${e(b.label)}</span>`:''}${(b.items||[]).map(x=>`<span class="nchip">${e(x)}</span>`).join('')}</div>`;
+    case 'warn':return `<div class="nwarn"><i>⚠️</i><span>${e(b.v)}</span></div>`;
+    case 'pair':return `<div class="npair"><div class="ok"><i>✅</i><span>${e(b.ok)}</span></div><div class="no"><i>❌</i><span>${e(b.no)}</span></div></div>`;
+    case 'sticky':return `<div class="nsticky"><b>${e(b.title||'Запомнить')}</b>${e(b.v)}</div>`;
+    case 'list':return `${b.title?`<div class="nsec">${e(b.title)}</div>`:''}<ul class="nex">${(b.items||[]).map(x=>`<li>${bold(x)}</li>`).join('')}</ul>`;
+    default:return '';
+  }
+}
+function nbPage(i){
+  const bk=nbBook(),pg=bk[i];
+  if(!pg)return `<div class="np-in"></div>`;
+  let h='';
+  if(pg.type==='cover')h=`<div class="cover"><div class="hand big">Мой блокнотик</div><div class="hand">English 🎀</div><div class="small muted">тема — разворот</div></div>`;
+  else if(pg.type==='toc'){
+    const ts=nbTopics();let last='';
+    const rows=ts.map((t,ti)=>{
+      const head=t.section&&t.section!==last?`<div class="tocsec">${esc(t.section)}</div>`:'';last=t.section||last;
+      return head+`<button class="tocrow" data-act="nbgo" data-i="${bk.first[ti]}"><span class="grow">${esc(t.title||'')}${t.sample?' <span class="small muted">(пример)</span>':''}</span><span class="muted">${bk.first[ti]+1}</span></button>`;
+    }).join('');
+    h=`<div class="hand ntitle"><span>Оглавление</span></div><div class="toc">${rows}</div>
+      ${!NB.pages.length&&!NOTES_BAKED.length?'<p class="small muted">Страницы твоих тем появятся здесь. Пока показан пример оформления.</p>':''}`;
+  }else if(pg.type==='topic')h=(pg.blocks||[]).map(nbBlock).join('')||'';
+  const dense=!nbSingle()&&pg.type==='topic'&&(pg.blocks||[]).length>=10;
+  return `<div class="np-in ${dense?'cmp':''}">${h}</div><div class="pn">${i+1}</div>`;
+}
+function nbInner(single,idx){
+  return `<div class="nbs" id="nbs">`+(single?`<div class="np r single">${nbPage(idx)}</div>`
+    :`<div class="np l">${nbPage(idx)}</div><div class="np r">${nbPage(idx+1)}</div>`)+`</div>`+(single?'':'<div class="spine"></div>');
+}
+function notebookView(){
+  const bk=nbBook(),single=nbSingle();
+  if(!single)NB.idx-=NB.idx%2;
+  NB.idx=Math.max(0,Math.min(NB.idx,bk.length-1));
+  const L=NB.idx,R=NB.idx+1;
+  const inner=nbInner(single,NB.idx);
+  const label=single?`Страница ${NB.idx+1} из ${bk.length}`:`Страницы ${L+1}–${Math.min(R+1,bk.length)} из ${bk.length}`;
+  const last=NB.idx+(single?1:2)>=bk.length;
+  const short=single?`${NB.idx+1} / ${bk.length}`:`${L+1}–${Math.min(R+1,bk.length)} / ${bk.length}`;
+  return `<div class="nbwrap"><div class="nb ${single?'single':''}" id="nb" aria-label="Блокнот, ${label}">${inner}</div></div>
+    <div class="row nbnav"><button class="btn" data-act="nbprev" style="visibility:${NB.idx<=0?'hidden':'visible'}">‹ Назад</button><span class="small muted nbcnt">${short}</span><button class="btn" data-act="nbnext" style="visibility:${last?'hidden':'visible'}">Вперёд ›</button></div>
+    <p class="small muted nbhint" style="text-align:center;margin:0">Листай кнопками, стрелками на клавиатуре или свайпом</p>`;
+}
+/* листание без прыжков: сначала плавно к началу листа, высота замораживается на время переворота,
+   потом плавно подстраивается под новую страницу */
+function nbFlip(dir){
+  if(NB.busy||V.view!=='notebook')return;
+  const bk=nbBook(),single=nbSingle(),step=single?1:2,ni=NB.idx+dir*step;
+  if(ni<0||ni>=bk.length)return;
+  const nb=document.getElementById('nb');if(!nb)return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){NB.idx=ni;render();window.scrollTo(0,0);return}
+  NB.busy=true;
+  const start=()=>{
+    if(V.view!=='notebook'){NB.busy=false;return}
+    const i=NB.idx;
+    nb.style.height=nb.offsetHeight+'px';
+    if(single){
+      const under=dir>0?nbPage(i+1):nbPage(i),front=dir>0?nbPage(i):nbPage(i-1);
+      nb.innerHTML=`<div class="nbs"><div class="np r single">${under}</div></div><div class="flipper ${dir<0?'turn':''}"><div class="face front"><div class="np r single">${front}</div></div><div class="face back"><div class="np l blank"></div></div></div>`;
+    }else{
+      const left=dir>0?nbPage(i):nbPage(i-2),right=dir>0?nbPage(i+3):nbPage(i+1),
+        front=dir>0?nbPage(i+1):nbPage(i-1),back=dir>0?nbPage(i+2):nbPage(i);
+      nb.innerHTML=`<div class="nbs"><div class="np l">${left}</div><div class="np r">${right}</div></div><div class="spine"></div><div class="flipper ${dir<0?'turn':''}"><div class="face front"><div class="np r">${front}</div></div><div class="face back"><div class="np l">${back}</div></div></div>`;
+    }
+    const fl=nb.querySelector('.flipper');void fl.offsetWidth;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>fl.classList.toggle('turn',dir>0)));
+    setTimeout(()=>{
+      if(V.view!=='notebook'){NB.busy=false;return}
+      NB.idx=ni;
+      nb.innerHTML=nbInner(single,ni);
+      const target=nb.querySelector('.nbs').offsetHeight;
+      nb.style.transition='height .28s ease';
+      requestAnimationFrame(()=>{nb.style.height=target+'px'});
+      setTimeout(()=>{NB.busy=false;render()},330);
+    },900);
+  };
+  if(window.scrollY>6){window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>{if(window.scrollY>6)window.scrollTo(0,0);start()},380)}else start();
+}
+async function initNotes(){
+  let db=null;try{db=await claude.use('db')}catch(e){}
+  if(!db){NB.loaded=true;if(V.view==='notebook')render();return}
+  try{
+    db.collection('notes').orderBy('order').onSnapshot(snap=>{
+      NB.pages=snap.docs.map(d=>Object.assign({id:d.id},JSON.parse(JSON.stringify(d.data()))));
+      NB.loaded=true;
+      if((V.view==='notebook'&&!NB.busy)||V.view==='home')render();
+    },()=>{NB.loaded=true});
+  }catch(e){NB.loaded=true}
+  setTimeout(()=>{if(!NB.loaded){NB.loaded=true;if(V.view==='notebook'&&!NB.busy)render()}},10000);
+}
+document.addEventListener('keydown',e=>{
+  if(V.view!=='notebook')return;
+  if(e.key==='ArrowRight')nbFlip(1);else if(e.key==='ArrowLeft')nbFlip(-1);
+});
+let nbSwipe=null;
+document.addEventListener('pointerdown',e=>{
+  const nb=e.target.closest&&e.target.closest('#nb');
+  if(!nb||e.target.closest('button'))return;
+  nbSwipe={x:e.clientX,y:e.clientY};
+});
+document.addEventListener('pointerup',e=>{
+  if(!nbSwipe)return;
+  const dx=e.clientX-nbSwipe.x,dy=e.clientY-nbSwipe.y;nbSwipe=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)nbFlip(dx<0?1:-1);
+});
+let nbResizeT=0;
+window.addEventListener('orientationchange',()=>setTimeout(()=>{if(V.view==='notebook'&&!NB.busy)render()},250));
+window.addEventListener('resize',()=>{
+  clearTimeout(nbResizeT);
+  nbResizeT=setTimeout(()=>{if(V.view==='notebook'&&!NB.busy)render()},200);
+});
+
+/* ---------- слова за день: «Слова» в трекере отмечается сама ---------- */
+let MK={};
+function toast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.className='toast';t.setAttribute('role','status');document.body.appendChild(t)}
+  t.textContent=msg;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),4200);
+}
+/* «полностью выучено сегодня»: слово дошло до трёх шагов прогресса или верно введено в конце «Учить» */
+function learnedToday(){const d=data.day;return d&&d.date===isoToday()?(d.learned||[]).length:0}
+function noteLearned(cardId){
+  const today=isoToday();
+  if(!data.day||data.day.date!==today)data.day={date:today,learned:[],marked:false};
+  if(!data.day.learned)data.day.learned=[];
+  if(!data.day.learned.includes(cardId))data.day.learned.push(cardId);
+  if(data.day.learned.length>=MARK_WORDS&&!data.day.marked){
+    data.day.marked=true;
+    const r=data.track[today]||(data.track[today]={s:[0,0,0,0,0],note:''});
+    if(!r.s[WORDS_I]){r.s[WORDS_I]=1;toast('🎀 «Слова» за сегодня отмечены в трекере')}
+  }
+  saveLocal();
+}
+/* копия прогресса в файл и обратно */
+function exportBackup(){
+  try{
+    const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download='katrin-dictionary-'+isoToday()+'.json';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    toast('Копия сохранена в файл');
+  }catch(e){toast('Не получилось сохранить копию')}
+}
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t)return;
+  if(t.id==='dnote'){
+    const date=t.getAttribute('data-date');
+    const r=data.track[date]||(data.track[date]={s:[0,0,0,0,0],note:''});
+    r.note=t.value;saveLocal();return;
+  }
+  if(t.id==='bkfile'&&t.files&&t.files[0]){
+    const f=t.files[0],rd=new FileReader();
+    rd.onload=()=>{
+      let o=null;try{o=JSON.parse(String(rd.result))}catch(err){}
+      if(!o||!Array.isArray(o.sets)){toast('Это не файл с копией прогресса');return}
+      if(!confirm('Заменить текущий прогресс на сохранённую копию?'))return;
+      try{localStorage.setItem(KEY,JSON.stringify(o))}catch(err){toast('Не получилось записать копию');return}
+      location.reload();
+    };
+    rd.readAsText(f);
+  }
+});
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+document.addEventListener('keydown',e=>{
+  if(V.view!=='progress')return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea')return;
+  if(e.key==='ArrowLeft')A.pnav({d:-1});else if(e.key==='ArrowRight')A.pnav({d:1});
+});
+let dpSwipe=null;
+document.addEventListener('pointerdown',e=>{
+  const el=e.target.closest&&e.target.closest('#dpanel');
+  if(el&&!e.target.closest('button'))dpSwipe={x:e.clientX,y:e.clientY};
+});
+document.addEventListener('pointerup',e=>{
+  if(!dpSwipe)return;
+  const dx=e.clientX-dpSwipe.x,dy=e.clientY-dpSwipe.y;dpSwipe=null;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)A.pnav({d:dx<0?1:-1});
+});
+
+/* ---------- облако: Firebase (вход + сохранение прогресса) ---------- */
+const FB_CONFIG={apiKey:"AIzaSyDt17ngCw9v7CbgpmaD4CLPjdTwWSZYlxQ",authDomain:"marina-dizionario.firebaseapp.com",projectId:"marina-dizionario",storageBucket:"marina-dizionario.firebasestorage.app",messagingSenderId:"640468625696",appId:"1:640468625696:web:1766f7e8d8646890660f45"};
+const SKIP_SYNC=['theme'];
+function markReset(st){st.resetAt=Date.now()}
+function applyPending(){pendingR=null}
+function stateOut(){const o=JSON.parse(JSON.stringify(data));SKIP_SYNC.forEach(k=>delete o[k]);return o}
+function hasContent(){
+  const seedSame=Object.keys(data.track||{}).every(d=>{const r=data.track[d];return TRACK_SEED[d]&&!r.note&&JSON.stringify(r.s)===JSON.stringify(TRACK_SEED[d])});
+  return data.sets.some(s=>!builtinIds.has(s.id)||s.cards.some(c=>c.lvl>0))||!seedSame||!!(data.day&&(data.day.learned||[]).length);
+}
+function syncLine(){
+  if(syncState==='out')return `<div class="panel row" style="align-items:center;gap:12px"><span class="small muted" style="flex:1;min-width:0">☁️ Войди, чтобы прогресс сохранялся в облаке и был на всех устройствах</span><button class="btn sm primary" data-act="acc">Войти</button></div>`;
+  if(syncState==='cloud'&&fbUser)return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">☁️ Сохранено в облаке · ${esc(fbUser.email||'')}</span><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
+  if(syncState==='error')return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">Не получилось сохранить в облако. Прогресс сохранён на этом устройстве.</span><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
+  return '';
+}
+function setSync(s){if(syncState===s)return;syncState=s;if(V.view==='home')render()}
+function scheduleRemote(){
+  if(!fbUser||!fbDb)return;
+  pushDirty=true;clearTimeout(pushT);pushT=setTimeout(pushRemote,1500);
+}
+async function pushRemote(){
+  pushT=0;
+  if(!fbUser||!fbDb||pushBusy||!pushDirty)return;
+  pushBusy=true;pushDirty=false;
+  try{
+    await fbDb.collection('users').doc(fbUser.uid).set({data:JSON.stringify(stateOut()),savedAt:data.savedAt||Date.now(),email:fbUser.email||''});
+    setSync('cloud');
+  }catch(e){setSync('error')}
+  pushBusy=false;
+  if(pushDirty)scheduleRemote();
+}
+async function pullRemote(){
+  if(!fbUser||!fbDb)return;
+  let snap;
+  try{snap=await fbDb.collection('users').doc(fbUser.uid).get()}catch(e){setSync('error');return}
+  if(!snap.exists){pushDirty=true;await pushRemote();return}
+  const r=snap.data(),rt=r.savedAt||0,lt=data.savedAt||0;
+  if(rt>lt||(rt>0&&!hasContent())){
+    let o=null;try{o=JSON.parse(r.data)}catch(e){}
+    if(o&&Array.isArray(o.sets)){
+      try{localStorage.setItem(KEY+'.backup',localStorage.getItem(KEY)||'')}catch(e){}
+      o.theme=data.theme;o.savedAt=rt;
+      try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){setSync('error');return}
+      location.reload();
+      return;
+    }
+  }
+  if(lt>rt){pushDirty=true;await pushRemote()}
+  setSync('cloud');
+}
+const accMsg=(t,ok)=>{const m=document.getElementById('accmsg');if(m){m.textContent=t;m.style.color=ok?'var(--ok)':'var(--bad)'}};
+const ACC_ERR={
+  'auth/invalid-email':'Некорректная почта.',
+  'auth/missing-email':'Напиши свою почту.',
+  'auth/missing-password':'Напиши пароль.',
+  'auth/weak-password':'Пароль слишком короткий: минимум 6 символов.',
+  'auth/email-already-in-use':'Аккаунт с этой почтой уже есть: нажми «Войти».',
+  'auth/invalid-credential':'Неверная почта или пароль.',
+  'auth/wrong-password':'Неверная почта или пароль.',
+  'auth/user-not-found':'Неверная почта или пароль.',
+  'auth/too-many-requests':'Слишком много попыток, попробуй через несколько минут.',
+  'auth/network-request-failed':'Нет подключения к интернету.',
+  'auth/popup-closed-by-user':'Вход отменён.',
+  'auth/cancelled-popup-request':'Вход отменён.',
+  'auth/popup-blocked':'Браузер заблокировал окно: войди по почте и паролю.',
+  'auth/unauthorized-domain':'Этот адрес не разрешён в Firebase.',
+  'auth/operation-not-allowed':'Этот способ входа не включён.'
+};
+const accErr=e=>ACC_ERR[e&&e.code]||('Что-то пошло не так'+(e&&e.code?' ('+e.code+')':'')+'.');
+const accVals=()=>({em:(document.getElementById('acc-em')||{}).value||'',pw:(document.getElementById('acc-pw')||{}).value||''});
+function accountView(){
+  if(fbUser){
+    return `<div class="top">${back('home')}<h1>Аккаунт ☁️</h1></div>
+    <div class="panel stack"><p>Ты вошла как <b>${esc(fbUser.email||fbUser.displayName||'')}</b>.</p>
+    <p class="small muted">Наборы слов, трекер и прогресс сохраняются в облаке. На другом устройстве достаточно войти в тот же аккаунт.</p>
+    <button class="btn" data-act="accsync">Синхронизировать сейчас</button>
+    <button class="btn ghost" data-act="accout">Выйти</button>
+    <div class="small" id="accmsg" role="status"></div></div>`;
+  }
+  return `<div class="top">${back('home')}<h1>Вход ☁️</h1></div>
+  <div class="panel stack"><p class="muted">Войди, чтобы всё сохранялось в облаке: слова и трекер. На другом устройстве достаточно войти в тот же аккаунт.</p>
+  <button class="btn primary" data-act="accgoogle">Продолжить с Google</button>
+  <div class="small muted" style="text-align:center">или по почте</div>
+  <input class="inp" id="acc-em" type="email" placeholder="Почта" autocomplete="email" inputmode="email" autocapitalize="off">
+  <input class="inp" id="acc-pw" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="current-password">
+  <div class="row"><button class="btn primary" data-act="accin">Войти</button><button class="btn" data-act="accnew">Создать аккаунт</button></div>
+  <button class="btn sm ghost" data-act="accreset">Забыла пароль?</button>
+  <div class="small" id="accmsg" role="status"></div></div>`;
+}
+Object.assign(A,{
+  acc:()=>go('account'),
+  accgoogle:async()=>{
+    if(!fbAuth){accMsg('Сервис недоступен: проверь подключение.');return}
+    try{await fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){accMsg(accErr(e))}
+  },
+  accin:async()=>{
+    if(!fbAuth){accMsg('Сервис недоступен: проверь подключение.');return}
+    const v=accVals();
+    try{await fbAuth.signInWithEmailAndPassword(v.em.trim(),v.pw)}catch(e){accMsg(accErr(e))}
+  },
+  accnew:async()=>{
+    if(!fbAuth){accMsg('Сервис недоступен: проверь подключение.');return}
+    const v=accVals();
+    try{await fbAuth.createUserWithEmailAndPassword(v.em.trim(),v.pw)}catch(e){accMsg(accErr(e))}
+  },
+  accreset:async()=>{
+    if(!fbAuth){accMsg('Сервис недоступен: проверь подключение.');return}
+    const v=accVals();
+    if(!v.em.trim()){accMsg('Напиши свою почту и нажми ещё раз.');return}
+    try{await fbAuth.sendPasswordResetEmail(v.em.trim());accMsg('Отправила письмо, чтобы сменить пароль.',true)}catch(e){accMsg(accErr(e))}
+  },
+  accout:async()=>{try{await fbAuth.signOut()}catch(e){}go('home')},
+  accsync:async()=>{
+    accMsg('Синхронизирую…',true);
+    pushDirty=true;await pushRemote();await pullRemote();
+    if(V.view==='account')accMsg(syncState==='error'?'Не получается сохранить в облако.':'Всё сохранено в облаке ✓',syncState!=='error');
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target&&e.target.id==='acc-pw'){e.preventDefault();A.accin()}
+});
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&fbUser&&V.view==='home'&&!pushT&&!pushBusy)pullRemote();
+});
+const loadScript=src=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+async function initSync(){
+  try{if(typeof claude!=='undefined'&&claude.use)sampleFn=await claude.use('sample')}catch(e){}
+  try{
+    const B='https://www.gstatic.com/firebasejs/10.12.2/';
+    await loadScript(B+'firebase-app-compat.js');
+    await Promise.all([loadScript(B+'firebase-auth-compat.js'),loadScript(B+'firebase-firestore-compat.js')]);
+    firebase.initializeApp(FB_CONFIG);
+    fbAuth=firebase.auth();fbDb=firebase.firestore();
+  }catch(e){setSync('off');return}
+  fbAuth.onAuthStateChanged(u=>{
+    fbUser=u;
+    if(!u){setSync('out');if(V.view==='account')render();return}
+    setSync('cloud');
+    if(V.view==='account')go('home');
+    pullRemote();
+  });
+}
+
+
+render();
+initSync();
+initNotes();
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
