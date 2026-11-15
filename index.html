@@ -111,7 +111,7 @@ h1{font-size:1.5rem} h2{font-size:1.15rem}
 .dot.on{background:var(--ok)}
 
 /* flip card */
-.flip{perspective:1200px}
+.flip{perspective:1200px;position:relative}
 .flip-in{position:relative;height:min(52vh,320px);min-height:220px;transition:transform .45s;transform-style:preserve-3d;cursor:pointer}
 .flip.on .flip-in{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;
@@ -319,6 +319,32 @@ textarea.inp{min-height:110px;resize:vertical}
 .ckt>b{font-size:1.05rem}
 .ckg{font-weight:700}
 .ckr{margin-top:6px;padding:8px 12px;min-height:0;font-size:.9rem}
+.pcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.pcal .ph{text-align:center;font-size:.72rem;color:var(--muted)}
+.pnav{display:flex;gap:8px;align-items:center}
+.pd{all:unset;box-sizing:border-box;cursor:pointer;aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;border:2px solid transparent;background:rgba(120,120,120,.16);color:var(--muted);position:relative;line-height:1.05}
+.pd b{font-size:.78rem;line-height:1}
+.pd.l1{background:var(--accent-soft);color:var(--fg);border-color:var(--pink)}
+.pd.l2{background:#F8D77A;color:#3B2A00}
+.pd.l3{background:var(--ok);color:#fff}
+.pd.l4{background:linear-gradient(135deg,#8FE3FF,#B79CFF 55%,#FF9BD7);color:#2a1450;box-shadow:0 0 0 1px rgba(255,255,255,.6) inset,0 4px 14px -6px rgba(140,110,255,.8)}
+.pd.fut{opacity:.35}
+.pd.today{border-color:var(--fg)}
+.pd.sel{outline:3px solid var(--accent);outline-offset:1px}
+.plegend{display:flex;gap:10px;flex-wrap:wrap}
+.plegend span{display:inline-flex;align-items:center;gap:5px}
+.plegend .pd{width:16px;height:16px;aspect-ratio:auto;border-radius:5px;display:inline-block}
+.lq-bar{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--line)}
+.lq-bar i{display:block;height:100%;transition:width .4s}
+.lq-leg{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted)}
+.lq-leg span{display:inline-flex;align-items:center}
+.lq-leg b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
+.stchip{padding:2px 8px;border-radius:99px;font-size:.72rem;font-weight:700;background:var(--line);white-space:nowrap}
+.stchip.st1{background:var(--warn);color:#3b2a00}
+.stchip.st2{background:#5aa9ff;color:#06264a}
+.stchip.st3{background:var(--ok);color:#fff}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mtl{min-height:64px;justify-content:center;text-align:center}
 .exc{padding:12px;border-radius:16px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:8px}
 .srow{display:grid;grid-template-columns:1.4em minmax(0,1fr) auto minmax(0,1fr) auto;gap:8px;align-items:center}
 .sn{font-weight:700;color:var(--muted);text-align:center}
@@ -482,7 +508,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').replace(/[.,!?;:"'«»()\-–—]/g,' ').replace(/\s+/g,' ').trim();
 
 /* ---------- данные ---------- */
-const BUILTIN=[{"id": "f1", "name": "To be & Vocabulary in Use", "cards": [{"t": "DESCRIBE", "d": "описывать, характеризовать, излагать словами", "x": "We use the verb be to describe people and things. — Мы используем глагол be, чтобы описывать людей и предметы.", "id": "q01-0"}, {"t": "BOTH", "d": "оба, обе, и тот и другой, одновременно", "x": "My sisters are both married. — Обе мои сестры замужем.", "id": "q01-1"}, {"t": "BELOW", "d": "ниже, внизу, далее по тексту, под", "x": "Use the words below. — Используй слова ниже.", "id": "q01-2"}, {"t": "WEST", "d": "запад, западный", "x": "Kate has a house in the west of England. — У Кейт есть дом на западе Англии.", "id": "q01-3"}, {"t": "HAVE GOT", "d": "иметь, у кого-то есть", "x": "He's got two children, Mia and Joe. — У него двое детей — Мия и Джо.", "id": "q01-4"}, {"t": "STEP-BROTHER", "d": "сводный брат", "x": "He's got a step-brother called Adam. — У него есть сводный брат по имени Адам.", "id": "q01-5"}, {"t": "CLOSE TO", "d": "близко к, рядом с, близкий", "x": "The bank is close to the station. — Банк находится рядом со станцией.", "id": "q01-6"}, {"t": "BRANCH", "d": "ветка, филиал, отрасль", "x": "A bird is sitting on a branch. — Птица сидит на ветке.", "id": "q02-0"}, {"t": "BRUNCH", "d": "поздний завтрак совмещённый с обедом", "x": "We had brunch at eleven. — Мы поздно позавтракали в одиннадцать.", "id": "q02-1"}, {"t": "BUTCHER", "d": "мясник, мясная лавка", "x": "The butcher sells meat. — Мясник продаёт мясо.", "id": "q02-2"}, {"t": "RAW", "d": "сырой, необработанный", "x": "Raw means not cooked. — Сырой означает не приготовленный.", "id": "q02-3"}, {"t": "LAY THE TABLE", "d": "накрывать на стол", "x": "Please lay the table. — Пожалуйста, накрой на стол.", "id": "q02-4"}, {"t": "FLOUR", "d": "мука", "x": "Add flour to the mixture. — Добавь муку в смесь.", "id": "q02-5"}, {"t": "FLOOR", "d": "этаж, пол", "x": "The classroom is on the second floor. — Класс находится на втором этаже.", "id": "q02-6"}, {"t": "FROZEN", "d": "замороженный, застывший", "x": "I buy frozen vegetables. — Я покупаю замороженные овощи.", "id": "q02-7"}, {"t": "LEAF", "d": "лист растения, лист бумаги", "x": "A leaf fell from the tree. — С дерева упал лист.", "id": "q02-8"}, {"t": "GROUND", "d": "земля, грунт, поверхность", "x": "The seeds are in the ground. — Семена в земле.", "id": "q02-9"}, {"t": "DIG", "d": "копать, рыть", "x": "I dig in the garden. — Я копаю в саду.", "id": "q02-10"}, {"t": "COUNT", "d": "считать, подсчитывать, иметь значение", "x": "Count from one to ten. — Посчитай от одного до десяти.", "id": "q02-11"}, {"t": "ADD UP", "d": "складывать числа, суммировать, сходиться", "x": "Add up these numbers. — Сложи эти числа.", "id": "q02-12"}]}, {"id": "f2", "name": "Movies, Princess & Stative Verbs", "cards": [{"t": "ROUGH", "d": "тяжёлый, суровый, грубый, неровный, приблизительный", "x": "It's been a rough week. — Это была тяжёлая неделя.", "id": "q03-0"}, {"t": "TELL", "d": "сказать кому-то, рассказать, сообщить", "x": "Tell me the truth. — Скажи мне правду.", "id": "q03-1"}, {"t": "SAY → SAID", "d": "сказать, произнести", "x": "She said hello. — Она поздоровалась.", "id": "q03-2"}, {"t": "NOTHING LEFT TO LOSE", "d": "нечего терять", "x": "I've got nothing left to lose. — Мне больше нечего терять.", "id": "q03-3"}, {"t": "LET ME GET THIS STRAIGHT", "d": "дай мне уточнить, правильно ли я понимаю", "x": "Let me get this straight: you're leaving? — Дай уточню: ты уходишь?", "id": "q03-4"}, {"t": "PRETEND", "d": "притворяться, делать вид", "x": "Stop pretending. — Перестань притворяться.", "id": "q03-5"}, {"t": "ISN'T THAT WHAT THEY SAY?", "d": "разве не так говорят?", "x": "Isn't that what they say? — Разве не так говорят?", "id": "q03-6"}, {"t": "THE SAME WAY", "d": "таким же образом, точно так же", "x": "We did it the same way. — Мы сделали это таким же образом.", "id": "q03-7"}, {"t": "APLENTY", "d": "в изобилии, в большом количестве", "x": "There were Princesses aplenty. — Принцесс было множество.", "id": "q05-0"}, {"t": "FRIGHTFUL", "d": "ужасный, страшный, пугающий", "x": "It was really frightful! — Это было действительно ужасно!", "id": "q05-1"}, {"t": "MIDST", "d": "середина, центр, среди, в разгаре", "x": "In the midst of it all came a knocking at the town gate. — В разгар всего этого в ворота города постучали.", "id": "q05-2"}, {"t": "YET", "d": "ещё, пока, однако, всё же", "x": "Yet she claimed to be a real Princess. — И всё же она утверждала, что настоящая принцесса.", "id": "q05-3"}, {"t": "UNLESS", "d": "если не, если только не", "x": "Unless somebody has taken it. — Если только кто-нибудь не забрал это.", "id": "q05-4"}, {"t": "ONCE", "d": "однажды, когда-то, один раз, как только", "x": "Once there was a Prince. — Однажды жил-был принц.", "id": "q05-5"}, {"t": "LIKE", "d": "нравиться, любить", "x": "I like this song. — Мне нравится эта песня.", "id": "q06-0"}, {"t": "LOVE", "d": "любить, обожать", "x": "She loves chocolate. — Она любит шоколад.", "id": "q06-1"}, {"t": "HATE", "d": "ненавидеть, очень не любить", "x": "I hate cold weather. — Я терпеть не могу холодную погоду.", "id": "q06-2"}, {"t": "PREFER", "d": "предпочитать", "x": "I prefer tea to coffee. — Я предпочитаю чай кофе.", "id": "q06-3"}, {"t": "NEED", "d": "нуждаться, быть необходимым", "x": "I need your help. — Мне нужна твоя помощь.", "id": "q06-4"}, {"t": "WANT", "d": "хотеть", "x": "He wants a new phone. — Он хочет новый телефон.", "id": "q06-5"}, {"t": "KNOW", "d": "знать", "x": "I know the answer. — Я знаю ответ.", "id": "q06-6"}, {"t": "BELIEVE", "d": "верить, считать", "x": "I believe you. — Я тебе верю.", "id": "q06-7"}, {"t": "UNDERSTAND", "d": "понимать", "x": "I understand the question. — Я понимаю вопрос.", "id": "q06-8"}, {"t": "REMEMBER", "d": "помнить, вспоминать", "x": "I remember her name. — Я помню её имя.", "id": "q06-9"}, {"t": "MEAN", "d": "значить, означать, иметь в виду", "x": "What does this word mean? — Что означает это слово?", "id": "q06-10"}, {"t": "HEAR", "d": "слышать", "x": "I hear music. — Я слышу музыку.", "id": "q06-11"}, {"t": "SEE", "d": "видеть", "x": "I see a bird. — Я вижу птицу.", "id": "q06-12"}, {"t": "SMELL", "d": "пахнуть, чувствовать запах", "x": "The flowers smell lovely. — Цветы приятно пахнут.", "id": "q06-13"}, {"t": "TASTE", "d": "иметь вкус, ощущать вкус", "x": "This soup tastes delicious. — Этот суп очень вкусный.", "id": "q06-14"}, {"t": "BELONG", "d": "принадлежать", "x": "This bag belongs to me. — Эта сумка принадлежит мне.", "id": "q06-15"}, {"t": "CONTAIN", "d": "содержать", "x": "This bottle contains water. — В этой бутылке вода.", "id": "q06-16"}, {"t": "COST", "d": "стоить", "x": "The tickets cost twenty euros. — Билеты стоят двадцать евро.", "id": "q06-17"}, {"t": "OWN", "d": "владеть, иметь в собственности", "x": "They own a small house. — У них есть небольшой дом.", "id": "q06-18"}]}, {"id": "f3", "name": "Confusing Words", "cards": [{"t": "THIS", "d": "этот, эта, это", "x": "This book is mine. — Эта книга моя.", "id": "q04-0"}, {"t": "THAT", "d": "тот, та, то, что", "x": "That house is beautiful. — Тот дом красивый.", "id": "q04-1"}, {"t": "THESE", "d": "эти", "x": "These flowers are pink. — Эти цветы розовые.", "id": "q04-2"}, {"t": "THOSE", "d": "те", "x": "Those people are my friends. — Те люди — мои друзья.", "id": "q04-3"}, {"t": "THROUGH", "d": "через, сквозь, по, посредством", "x": "I walked through the forest. — Я прошла через лес.", "id": "q04-4"}, {"t": "THOUGH", "d": "хотя, однако, несмотря на то что", "x": "Though I'm tired, I'll study. — Хотя я устала, я буду заниматься.", "id": "q04-5"}, {"t": "THOUGHT", "d": "мысль, думал, думала", "x": "I thought about you. — Я думала о тебе.", "id": "q04-6"}, {"t": "TOUGH", "d": "трудный, тяжёлый, жёсткий, выносливый", "x": "It was a tough day. — Это был тяжёлый день.", "id": "q04-7"}, {"t": "THOROUGH", "d": "тщательный, основательный", "x": "She did a thorough check. — Она провела тщательную проверку.", "id": "q04-8"}, {"t": "THROUGHOUT", "d": "на протяжении, по всему пространству", "x": "It rained throughout the day. — Дождь шёл весь день.", "id": "q04-9"}, {"t": "THROW", "d": "бросать, кидать", "x": "Don't throw the ball inside. — Не бросай мяч в помещении.", "id": "q04-10"}, {"t": "THERE", "d": "там", "x": "There is a café near here. — Рядом есть кафе.", "id": "q04-11"}, {"t": "THEIR", "d": "их", "x": "Their house is big. — Их дом большой.", "id": "q04-12"}, {"t": "THEY'RE", "d": "они есть, они являются", "x": "They're at home. — Они дома.", "id": "q04-13"}, {"t": "THEN", "d": "затем, потом, тогда", "x": "We ate and then left. — Мы поели, а потом ушли.", "id": "q04-14"}, {"t": "THAN", "d": "чем", "x": "She is taller than me. — Она выше меня.", "id": "q04-15"}, {"t": "WHERE", "d": "где, куда", "x": "Where are you? — Где ты?", "id": "q04-16"}, {"t": "WERE", "d": "были", "x": "We were tired. — Мы устали.", "id": "q04-17"}, {"t": "WE'RE", "d": "мы есть, мы являемся", "x": "We're ready. — Мы готовы.", "id": "q04-18"}, {"t": "WHETHER", "d": "ли", "x": "I don't know whether she'll come. — Не знаю, придёт ли она.", "id": "q04-19"}, {"t": "WEATHER", "d": "погода", "x": "The weather is lovely. — Погода прекрасная.", "id": "q04-20"}, {"t": "WHO", "d": "кто", "x": "Who is she? — Кто она?", "id": "q04-21"}, {"t": "WHOSE", "d": "чей, чья, чьё, чьи", "x": "Whose bag is this? — Чья это сумка?", "id": "q04-22"}, {"t": "WHO'S", "d": "кто есть, кто является", "x": "Who's your teacher? — Кто твой преподаватель?", "id": "q04-23"}, {"t": "WHAT", "d": "что, какой", "x": "What is your name? — Как тебя зовут?", "id": "q04-24"}, {"t": "WHICH", "d": "который, какой из", "x": "Which dress do you prefer? — Какое платье ты предпочитаешь?", "id": "q04-25"}, {"t": "HERE", "d": "здесь, сюда", "x": "Come here, please. — Подойди сюда, пожалуйста.", "id": "q04-26"}, {"t": "HEAR", "d": "слышать", "x": "Can you hear me? — Ты меня слышишь?", "id": "q04-27"}, {"t": "TO", "d": "к, в, частица перед инфинитивом", "x": "I want to learn English. — Я хочу учить английский.", "id": "q04-28"}, {"t": "TOO", "d": "тоже, слишком", "x": "I'm tired too. — Я тоже устала.", "id": "q04-29"}, {"t": "TWO", "d": "два", "x": "I have two cats. — У меня две кошки.", "id": "q04-30"}, {"t": "QUITE", "d": "довольно, вполне", "x": "It's quite easy. — Это довольно легко.", "id": "q04-31"}, {"t": "QUIET", "d": "тихий, спокойный", "x": "This room is quiet. — В этой комнате тихо.", "id": "q04-32"}, {"t": "LOSE", "d": "терять, проигрывать", "x": "Don't lose your keys. — Не потеряй ключи.", "id": "q04-33"}, {"t": "LOOSE", "d": "свободный, неплотный, не тугой", "x": "These jeans are too loose. — Эти джинсы слишком свободные.", "id": "q04-34"}, {"t": "ALL", "d": "все, весь", "x": "All my friends are here. — Все мои друзья здесь.", "id": "q04-35"}, {"t": "WHOLE", "d": "целый, весь", "x": "I read the whole book. — Я прочитала всю книгу.", "id": "q04-36"}, {"t": "OTHER", "d": "другой, остальные", "x": "Other students agreed. — Другие студенты согласились.", "id": "q04-37"}, {"t": "ANOTHER", "d": "ещё один, другой", "x": "Can I have another cup? — Можно мне ещё одну чашку?", "id": "q04-38"}]}, {"id": "f4", "name": "Have, Past Simple & Collocations", "cards": [{"t": "HAVE A HEADACHE", "d": "иметь головную боль, болит голова", "x": "I've got a headache. — У меня болит голова.", "id": "q07-0"}, {"t": "HAVE FUN", "d": "веселиться, хорошо проводить время", "x": "Have fun! — Хорошо проведи время!", "id": "q07-1"}, {"t": "HAVE A KING OR QUEEN", "d": "иметь короля или королеву", "x": "Does this country have a king or queen? — В этой стране есть король или королева?", "id": "q07-2"}, {"t": "HAVE A DRIVING LICENCE", "d": "иметь водительские права", "x": "I have a driving licence. — У меня есть водительские права.", "id": "q07-3"}, {"t": "HAVE ANY BROTHERS OR SISTERS", "d": "иметь братьев или сестёр", "x": "Have you got any brothers or sisters? — У тебя есть братья или сёстры?", "id": "q07-4"}, {"t": "HAVE A TEMPERATURE", "d": "иметь повышенную температуру", "x": "She's got a temperature. — У неё температура.", "id": "q07-5"}, {"t": "HAVE LUNCH", "d": "обедать", "x": "I have lunch at one. — Я обедаю в час.", "id": "q07-6"}, {"t": "HAVE ANY MOUNTAINS", "d": "иметь горы, располагать горными районами", "x": "Does Holland have any mountains? — В Голландии есть горы?", "id": "q07-7"}, {"t": "HAVE A CUP OF COFFEE", "d": "выпить чашку кофе", "x": "I have a cup of coffee every morning. — Я выпиваю чашку кофе каждое утро.", "id": "q07-8"}, {"t": "CARRY → CARRIED", "d": "нести, переносить, перевозить", "x": "She carried a heavy bag. — Она несла тяжёлую сумку.", "id": "q08-0"}, {"t": "HURRY → HURRIED", "d": "спешить, торопиться", "x": "She hurried home. — Она поспешила домой.", "id": "q08-1"}, {"t": "ROB → ROBBED", "d": "грабить, обкрадывать", "x": "They robbed a bank. — Они ограбили банк.", "id": "q08-2"}, {"t": "INSTEAD OF", "d": "вместо", "x": "Instead of coffee, I had tea. — Вместо кофе я выпила чай.", "id": "q09-0"}, {"t": "IMPROVE", "d": "улучшать", "x": "I want to improve my English. — Я хочу улучшить свой английский.", "id": "q09-1"}, {"t": "AVOID", "d": "избегать", "x": "Try to avoid mistakes. — Старайся избегать ошибок.", "id": "q09-2"}, {"t": "DEAL WITH", "d": "разбираться с чем-либо, справляться", "x": "I can deal with this problem. — Я могу справиться с этой проблемой.", "id": "q09-3"}, {"t": "IN DETAIL", "d": "подробно", "x": "Please explain it in detail. — Пожалуйста, объясни это подробно.", "id": "q09-4"}, {"t": "PRECISE", "d": "точный", "x": "We need a precise answer. — Нам нужен точный ответ.", "id": "q09-5"}, {"t": "ESPECIALLY", "d": "особенно", "x": "I like English, especially speaking. — Мне нравится английский, особенно разговорная практика.", "id": "q09-6"}, {"t": "INCLUDE", "d": "включать", "x": "The course includes speaking practice. — Курс включает разговорную практику.", "id": "q09-7"}, {"t": "STRICTLY FORBIDDEN", "d": "строго запрещено", "x": "Smoking is strictly forbidden here. — Здесь курить строго запрещено.", "id": "q09-8"}, {"t": "BITTERLY COLD", "d": "очень холодно, ужасно холодный", "x": "It was bitterly cold yesterday. — Вчера было ужасно холодно.", "id": "q09-9"}, {"t": "PITCH DARK", "d": "совершенно темно, кромешная тьма", "x": "It was pitch dark outside. — На улице было совершенно темно.", "id": "q09-10"}, {"t": "SUBSTANTIAL MEAL", "d": "сытный, плотный приём пищи", "x": "We had a substantial meal. — Мы плотно поели.", "id": "q09-11"}, {"t": "BITTERLY DISAPPOINTED", "d": "крайне разочарованный, глубоко разочарованный", "x": "She was bitterly disappointed. — Она была глубоко разочарована.", "id": "q09-12"}, {"t": "VALID PASSPORT", "d": "действительный паспорт", "x": "You need a valid passport. — Тебе нужен действительный паспорт.", "id": "q09-13"}, {"t": "LIVE MUSIC", "d": "живая музыка", "x": "We listened to live music. — Мы слушали живую музыку.", "id": "q09-14"}, {"t": "HEAVY SNOW", "d": "сильный снегопад", "x": "There was heavy snow last night. — Прошлой ночью был сильный снегопад.", "id": "q09-15"}, {"t": "MAKE A MISTAKE", "d": "совершить ошибку", "x": "Everyone can make a mistake. — Каждый может совершить ошибку.", "id": "q09-16"}, {"t": "PULL SOMEBODY'S LEG", "d": "разыгрывать кого-либо, подшучивать", "x": "Are you pulling my leg? — Ты меня разыгрываешь?", "id": "q09-17"}, {"t": "A STORM IN A TEACUP", "d": "буря в стакане воды, шумиха из-за пустяка", "x": "It's a storm in a teacup. — Это буря в стакане воды.", "id": "q09-18"}, {"t": "KEY RING", "d": "кольцо для ключей, брелок", "x": "My keys are on a key ring. — Мои ключи на кольце для ключей.", "id": "q09-19"}, {"t": "LEAVE UNIVERSITY", "d": "окончить университет, уйти из университета", "x": "I left university five years ago. — Я окончила университет пять лет назад.", "id": "q09-20"}, {"t": "MAKE A DECISION", "d": "принять решение", "x": "I made a decision yesterday. — Я вчера приняла решение.", "id": "q09-21"}, {"t": "TAKE UP A PROFESSION", "d": "начать заниматься профессией, выбрать профессию", "x": "He decided to take up a creative profession. — Он решил выбрать творческую профессию.", "id": "q09-22"}, {"t": "PLAY THE GUITAR", "d": "играть на гитаре", "x": "She plays the guitar. — Она играет на гитаре.", "id": "q09-23"}, {"t": "WRITE SONGS", "d": "писать песни", "x": "He writes songs in English. — Он пишет песни на английском.", "id": "q09-24"}, {"t": "MAKE RECORDINGS", "d": "делать записи, записывать музыку", "x": "I made some recordings. — Я сделала несколько записей.", "id": "q09-25"}, {"t": "HAVE A HEAVY COLD", "d": "сильно простудиться, иметь сильную простуду", "x": "I had a heavy cold last week. — На прошлой неделе я сильно простудилась.", "id": "q09-26"}, {"t": "SEND RECORDINGS TO A RECORD COMPANY", "d": "отправлять записи в звукозаписывающую компанию", "x": "He sent recordings to a record company. — Он отправил записи в звукозаписывающую компанию.", "id": "q09-27"}, {"t": "GET A JOB", "d": "устроиться на работу", "x": "She got a job last month. — В прошлом месяце она устроилась на работу.", "id": "q09-28"}, {"t": "FAST-FOOD RESTAURANT", "d": "ресторан быстрого питания", "x": "He works in a fast-food restaurant. — Он работает в ресторане быстрого питания.", "id": "q09-29"}]}];
+const BUILTIN=[{"id": "f1", "name": "To be & Vocabulary in Use", "cards": [{"t": "DESCRIBE", "d": "описывать, характеризовать, излагать словами", "x": "We use the verb be to describe people and things. — Мы используем глагол be, чтобы описывать людей и предметы.", "id": "q01-0"}, {"t": "BOTH", "d": "оба, обе, и тот и другой, одновременно", "x": "My sisters are both married. — Обе мои сестры замужем.", "id": "q01-1"}, {"t": "BELOW", "d": "ниже, внизу, далее по тексту, под", "x": "Use the words below. — Используй слова ниже.", "id": "q01-2"}, {"t": "WEST", "d": "запад, западный", "x": "Kate has a house in the west of England. — У Кейт есть дом на западе Англии.", "id": "q01-3"}, {"t": "HAVE GOT", "d": "иметь, у кого-то есть", "x": "He's got two children, Mia and Joe. — У него двое детей — Мия и Джо.", "id": "q01-4"}, {"t": "STEP-BROTHER", "d": "сводный брат", "x": "He's got a step-brother called Adam. — У него есть сводный брат по имени Адам.", "id": "q01-5"}, {"t": "CLOSE TO", "d": "близко к, рядом с, близкий", "x": "The bank is close to the station. — Банк находится рядом со станцией.", "id": "q01-6"}, {"t": "BRANCH", "d": "ветка, филиал, отрасль", "x": "A bird is sitting on a branch. — Птица сидит на ветке.", "id": "q02-0"}, {"t": "BRUNCH", "d": "поздний завтрак совмещённый с обедом", "x": "We had brunch at eleven. — Мы поздно позавтракали в одиннадцать.", "id": "q02-1"}, {"t": "BUTCHER", "d": "мясник, мясная лавка", "x": "The butcher sells meat. — Мясник продаёт мясо.", "id": "q02-2"}, {"t": "RAW", "d": "сырой, необработанный", "x": "Raw means not cooked. — Сырой означает не приготовленный.", "id": "q02-3"}, {"t": "LAY THE TABLE", "d": "накрывать на стол", "x": "Please lay the table. — Пожалуйста, накрой на стол.", "id": "q02-4"}, {"t": "FLOUR", "d": "мука", "x": "Add flour to the mixture. — Добавь муку в смесь.", "id": "q02-5"}, {"t": "FLOOR", "d": "этаж, пол", "x": "The classroom is on the second floor. — Класс находится на втором этаже.", "id": "q02-6"}, {"t": "FROZEN", "d": "замороженный, застывший", "x": "I buy frozen vegetables. — Я покупаю замороженные овощи.", "id": "q02-7"}, {"t": "LEAF", "d": "лист растения, лист бумаги", "x": "A leaf fell from the tree. — С дерева упал лист.", "id": "q02-8"}, {"t": "GROUND", "d": "земля, грунт, поверхность", "x": "The seeds are in the ground. — Семена в земле.", "id": "q02-9"}, {"t": "DIG", "d": "копать, рыть", "x": "I dig in the garden. — Я копаю в саду.", "id": "q02-10"}, {"t": "COUNT", "d": "считать, подсчитывать, иметь значение", "x": "Count from one to ten. — Посчитай от одного до десяти.", "id": "q02-11"}, {"t": "ADD UP", "d": "складывать числа, суммировать, сходиться", "x": "Add up these numbers. — Сложи эти числа.", "id": "q02-12"}]}, {"id": "f2", "name": "Movies, Princess & Stative Verbs", "cards": [{"t": "ROUGH", "d": "тяжёлый, суровый, грубый, неровный, приблизительный", "x": "It's been a rough week. — Это была тяжёлая неделя.", "id": "q03-0"}, {"t": "TELL", "d": "сказать кому-то, рассказать, сообщить", "x": "Tell me the truth. — Скажи мне правду.", "id": "q03-1"}, {"t": "SAY → SAID", "d": "сказать, произнести", "x": "She said hello. — Она поздоровалась.", "id": "q03-2"}, {"t": "NOTHING LEFT TO LOSE", "d": "нечего терять", "x": "I've got nothing left to lose. — Мне больше нечего терять.", "id": "q03-3"}, {"t": "LET ME GET THIS STRAIGHT", "d": "дай мне уточнить, правильно ли я понимаю", "x": "Let me get this straight: you're leaving? — Дай уточню: ты уходишь?", "id": "q03-4"}, {"t": "PRETEND", "d": "притворяться, делать вид", "x": "Stop pretending. — Перестань притворяться.", "id": "q03-5"}, {"t": "ISN'T THAT WHAT THEY SAY?", "d": "разве не так говорят?", "x": "Isn't that what they say? — Разве не так говорят?", "id": "q03-6"}, {"t": "THE SAME WAY", "d": "таким же образом, точно так же", "x": "We did it the same way. — Мы сделали это таким же образом.", "id": "q03-7"}, {"t": "APLENTY", "d": "в изобилии, в большом количестве", "x": "There were Princesses aplenty. — Принцесс было множество.", "id": "q05-0"}, {"t": "FRIGHTFUL", "d": "ужасный, страшный, пугающий", "x": "It was really frightful! — Это было действительно ужасно!", "id": "q05-1"}, {"t": "MIDST", "d": "середина, центр, среди, в разгаре", "x": "In the midst of it all came a knocking at the town gate. — В разгар всего этого в ворота города постучали.", "id": "q05-2"}, {"t": "YET", "d": "ещё, пока, однако, всё же", "x": "Yet she claimed to be a real Princess. — И всё же она утверждала, что настоящая принцесса.", "id": "q05-3"}, {"t": "UNLESS", "d": "если не, если только не", "x": "Unless somebody has taken it. — Если только кто-нибудь не забрал это.", "id": "q05-4"}, {"t": "ONCE", "d": "однажды, когда-то, один раз, как только", "x": "Once there was a Prince. — Однажды жил-был принц.", "id": "q05-5"}, {"t": "LIKE", "d": "нравиться, любить", "x": "I like this song. — Мне нравится эта песня.", "id": "q06-0"}, {"t": "LOVE", "d": "любить, обожать", "x": "She loves chocolate. — Она любит шоколад.", "id": "q06-1"}, {"t": "HATE", "d": "ненавидеть, очень не любить", "x": "I hate cold weather. — Я терпеть не могу холодную погоду.", "id": "q06-2"}, {"t": "PREFER", "d": "предпочитать", "x": "I prefer tea to coffee. — Я предпочитаю чай кофе.", "id": "q06-3"}, {"t": "NEED", "d": "нуждаться, быть необходимым", "x": "I need your help. — Мне нужна твоя помощь.", "id": "q06-4"}, {"t": "WANT", "d": "хотеть", "x": "He wants a new phone. — Он хочет новый телефон.", "id": "q06-5"}, {"t": "KNOW", "d": "знать", "x": "I know the answer. — Я знаю ответ.", "id": "q06-6"}, {"t": "BELIEVE", "d": "верить, считать", "x": "I believe you. — Я тебе верю.", "id": "q06-7"}, {"t": "UNDERSTAND", "d": "понимать", "x": "I understand the question. — Я понимаю вопрос.", "id": "q06-8"}, {"t": "REMEMBER", "d": "помнить, вспоминать", "x": "I remember her name. — Я помню её имя.", "id": "q06-9"}, {"t": "MEAN", "d": "значить, означать, иметь в виду", "x": "What does this word mean? — Что означает это слово?", "id": "q06-10"}, {"t": "HEAR", "d": "слышать", "x": "I hear music. — Я слышу музыку.", "id": "q06-11"}, {"t": "SEE", "d": "видеть", "x": "I see a bird. — Я вижу птицу.", "id": "q06-12"}, {"t": "SMELL", "d": "пахнуть, чувствовать запах", "x": "The flowers smell lovely. — Цветы приятно пахнут.", "id": "q06-13"}, {"t": "TASTE", "d": "иметь вкус, ощущать вкус", "x": "This soup tastes delicious. — Этот суп очень вкусный.", "id": "q06-14"}, {"t": "BELONG", "d": "принадлежать", "x": "This bag belongs to me. — Эта сумка принадлежит мне.", "id": "q06-15"}, {"t": "CONTAIN", "d": "содержать", "x": "This bottle contains water. — В этой бутылке вода.", "id": "q06-16"}, {"t": "COST", "d": "стоить", "x": "The tickets cost twenty euros. — Билеты стоят двадцать евро.", "id": "q06-17"}, {"t": "OWN", "d": "владеть, иметь в собственности", "x": "They own a small house. — У них есть небольшой дом.", "id": "q06-18"}]}, {"id": "f3", "name": "Confusing Words", "cards": [{"t": "THIS", "d": "этот, эта, это", "x": "This book is mine. — Эта книга моя.", "id": "q04-0"}, {"t": "THAT", "d": "тот, та, то, что", "x": "That house is beautiful. — Тот дом красивый.", "id": "q04-1"}, {"t": "THESE", "d": "эти", "x": "These flowers are pink. — Эти цветы розовые.", "id": "q04-2"}, {"t": "THOSE", "d": "те", "x": "Those people are my friends. — Те люди — мои друзья.", "id": "q04-3"}, {"t": "THROUGH", "d": "через, сквозь, по, посредством", "x": "I walked through the forest. — Я прошла через лес.", "id": "q04-4"}, {"t": "THOUGH", "d": "хотя, однако, несмотря на то что", "x": "Though I'm tired, I'll study. — Хотя я устала, я буду заниматься.", "id": "q04-5"}, {"t": "THOUGHT", "d": "мысль, думал, думала", "x": "I thought about you. — Я думала о тебе.", "id": "q04-6"}, {"t": "TOUGH", "d": "трудный, тяжёлый, жёсткий, выносливый", "x": "It was a tough day. — Это был тяжёлый день.", "id": "q04-7"}, {"t": "THOROUGH", "d": "тщательный, основательный", "x": "She did a thorough check. — Она провела тщательную проверку.", "id": "q04-8"}, {"t": "THROUGHOUT", "d": "на протяжении, по всему пространству", "x": "It rained throughout the day. — Дождь шёл весь день.", "id": "q04-9"}, {"t": "THROW", "d": "бросать, кидать", "x": "Don't throw the ball inside. — Не бросай мяч в помещении.", "id": "q04-10"}, {"t": "THERE", "d": "там", "x": "There is a café near here. — Рядом есть кафе.", "id": "q04-11"}, {"t": "THEIR", "d": "их", "x": "Their house is big. — Их дом большой.", "id": "q04-12"}, {"t": "THEY'RE", "d": "они есть, они являются", "x": "They're at home. — Они дома.", "id": "q04-13"}, {"t": "THEN", "d": "затем, потом, тогда", "x": "We ate and then left. — Мы поели, а потом ушли.", "id": "q04-14"}, {"t": "THAN", "d": "чем", "x": "She is taller than me. — Она выше меня.", "id": "q04-15"}, {"t": "WHERE", "d": "где, куда", "x": "Where are you? — Где ты?", "id": "q04-16"}, {"t": "WERE", "d": "были", "x": "We were tired. — Мы устали.", "id": "q04-17"}, {"t": "WE'RE", "d": "мы есть, мы являемся", "x": "We're ready. — Мы готовы.", "id": "q04-18"}, {"t": "WHETHER", "d": "ли", "x": "I don't know whether she'll come. — Не знаю, придёт ли она.", "id": "q04-19"}, {"t": "WEATHER", "d": "погода", "x": "The weather is lovely. — Погода прекрасная.", "id": "q04-20"}, {"t": "WHO", "d": "кто", "x": "Who is she? — Кто она?", "id": "q04-21"}, {"t": "WHOSE", "d": "чей, чья, чьё, чьи", "x": "Whose bag is this? — Чья это сумка?", "id": "q04-22"}, {"t": "WHO'S", "d": "кто есть, кто является", "x": "Who's your teacher? — Кто твой преподаватель?", "id": "q04-23"}, {"t": "WHAT", "d": "что, какой", "x": "What is your name? — Как тебя зовут?", "id": "q04-24"}, {"t": "WHICH", "d": "который, какой из", "x": "Which dress do you prefer? — Какое платье ты предпочитаешь?", "id": "q04-25"}, {"t": "HERE", "d": "здесь, сюда", "x": "Come here, please. — Подойди сюда, пожалуйста.", "id": "q04-26"}, {"t": "HEAR", "d": "слышать", "x": "Can you hear me? — Ты меня слышишь?", "id": "q04-27"}, {"t": "TO", "d": "к, в, частица перед инфинитивом", "x": "I want to learn English. — Я хочу учить английский.", "id": "q04-28"}, {"t": "TOO", "d": "тоже, слишком", "x": "I'm tired too. — Я тоже устала.", "id": "q04-29"}, {"t": "TWO", "d": "два", "x": "I have two cats. — У меня две кошки.", "id": "q04-30"}, {"t": "QUITE", "d": "довольно, вполне", "x": "It's quite easy. — Это довольно легко.", "id": "q04-31"}, {"t": "QUIET", "d": "тихий, спокойный", "x": "This room is quiet. — В этой комнате тихо.", "id": "q04-32"}, {"t": "LOSE", "d": "терять, проигрывать", "x": "Don't lose your keys. — Не потеряй ключи.", "id": "q04-33"}, {"t": "LOOSE", "d": "свободный, неплотный, не тугой", "x": "These jeans are too loose. — Эти джинсы слишком свободные.", "id": "q04-34"}, {"t": "ALL", "d": "все, весь", "x": "All my friends are here. — Все мои друзья здесь.", "id": "q04-35"}, {"t": "WHOLE", "d": "целый, весь", "x": "I read the whole book. — Я прочитала всю книгу.", "id": "q04-36"}, {"t": "OTHER", "d": "другой, остальные", "x": "Other students agreed. — Другие студенты согласились.", "id": "q04-37"}, {"t": "ANOTHER", "d": "ещё один, другой", "x": "Can I have another cup? — Можно мне ещё одну чашку?", "id": "q04-38"}]}, {"id": "f4", "name": "Have, Past Simple & Collocations", "cards": [{"t": "HAVE A HEADACHE", "d": "иметь головную боль, болит голова", "x": "I've got a headache. — У меня болит голова.", "id": "q07-0"}, {"t": "HAVE FUN", "d": "веселиться, хорошо проводить время", "x": "Have fun! — Хорошо проведи время!", "id": "q07-1"}, {"t": "HAVE A KING OR QUEEN", "d": "иметь короля или королеву", "x": "Does this country have a king or queen? — В этой стране есть король или королева?", "id": "q07-2"}, {"t": "HAVE A DRIVING LICENCE", "d": "иметь водительские права", "x": "I have a driving licence. — У меня есть водительские права.", "id": "q07-3"}, {"t": "HAVE ANY BROTHERS OR SISTERS", "d": "иметь братьев или сестёр", "x": "Have you got any brothers or sisters? — У тебя есть братья или сёстры?", "id": "q07-4"}, {"t": "HAVE A TEMPERATURE", "d": "иметь повышенную температуру", "x": "She's got a temperature. — У неё температура.", "id": "q07-5"}, {"t": "HAVE LUNCH", "d": "обедать", "x": "I have lunch at one. — Я обедаю в час.", "id": "q07-6"}, {"t": "HAVE ANY MOUNTAINS", "d": "иметь горы, располагать горными районами", "x": "Does Holland have any mountains? — В Голландии есть горы?", "id": "q07-7"}, {"t": "HAVE A CUP OF COFFEE", "d": "выпить чашку кофе", "x": "I have a cup of coffee every morning. — Я выпиваю чашку кофе каждое утро.", "id": "q07-8"}, {"t": "CARRY → CARRIED", "d": "нести, переносить, перевозить", "x": "She carried a heavy bag. — Она несла тяжёлую сумку.", "id": "q08-0"}, {"t": "HURRY → HURRIED", "d": "спешить, торопиться", "x": "She hurried home. — Она поспешила домой.", "id": "q08-1"}, {"t": "ROB → ROBBED", "d": "грабить, обкрадывать", "x": "They robbed a bank. — Они ограбили банк.", "id": "q08-2"}, {"t": "INSTEAD OF", "d": "вместо", "x": "Instead of coffee, I had tea. — Вместо кофе я выпила чай.", "id": "q09-0"}, {"t": "IMPROVE", "d": "улучшать", "x": "I want to improve my English. — Я хочу улучшить свой английский.", "id": "q09-1"}, {"t": "AVOID", "d": "избегать", "x": "Try to avoid mistakes. — Старайся избегать ошибок.", "id": "q09-2"}, {"t": "DEAL WITH", "d": "разбираться с чем-либо, справляться", "x": "I can deal with this problem. — Я могу справиться с этой проблемой.", "id": "q09-3"}, {"t": "IN DETAIL", "d": "подробно", "x": "Please explain it in detail. — Пожалуйста, объясни это подробно.", "id": "q09-4"}, {"t": "PRECISE", "d": "точный", "x": "We need a precise answer. — Нам нужен точный ответ.", "id": "q09-5"}, {"t": "ESPECIALLY", "d": "особенно", "x": "I like English, especially speaking. — Мне нравится английский, особенно разговорная практика.", "id": "q09-6"}, {"t": "INCLUDE", "d": "включать", "x": "The course includes speaking practice. — Курс включает разговорную практику.", "id": "q09-7"}, {"t": "STRICTLY FORBIDDEN", "d": "строго запрещено", "x": "Smoking is strictly forbidden here. — Здесь курить строго запрещено.", "id": "q09-8"}, {"t": "BITTERLY COLD", "d": "очень холодно, ужасно холодный", "x": "It was bitterly cold yesterday. — Вчера было ужасно холодно.", "id": "q09-9"}, {"t": "PITCH DARK", "d": "совершенно темно, кромешная тьма", "x": "It was pitch dark outside. — На улице было совершенно темно.", "id": "q09-10"}, {"t": "SUBSTANTIAL MEAL", "d": "сытный, плотный приём пищи", "x": "We had a substantial meal. — Мы плотно поели.", "id": "q09-11"}, {"t": "BITTERLY DISAPPOINTED", "d": "крайне разочарованный, глубоко разочарованный", "x": "She was bitterly disappointed. — Она была глубоко разочарована.", "id": "q09-12"}, {"t": "VALID PASSPORT", "d": "действительный паспорт", "x": "You need a valid passport. — Тебе нужен действительный паспорт.", "id": "q09-13"}, {"t": "LIVE MUSIC", "d": "живая музыка", "x": "We listened to live music. — Мы слушали живую музыку.", "id": "q09-14"}, {"t": "HEAVY SNOW", "d": "сильный снегопад", "x": "There was heavy snow last night. — Прошлой ночью был сильный снегопад.", "id": "q09-15"}, {"t": "MAKE A MISTAKE", "d": "совершить ошибку", "x": "Everyone can make a mistake. — Каждый может совершить ошибку.", "id": "q09-16"}, {"t": "PULL SOMEBODY'S LEG", "d": "разыгрывать кого-либо, подшучивать", "x": "Are you pulling my leg? — Ты меня разыгрываешь?", "id": "q09-17"}, {"t": "A STORM IN A TEACUP", "d": "буря в стакане воды, шумиха из-за пустяка", "x": "It's a storm in a teacup. — Это буря в стакане воды.", "id": "q09-18"}, {"t": "KEY RING", "d": "кольцо для ключей, брелок", "x": "My keys are on a key ring. — Мои ключи на кольце для ключей.", "id": "q09-19"}, {"t": "LEAVE UNIVERSITY", "d": "окончить университет, уйти из университета", "x": "I left university five years ago. — Я окончила университет пять лет назад.", "id": "q09-20"}, {"t": "MAKE A DECISION", "d": "принять решение", "x": "I made a decision yesterday. — Я вчера приняла решение.", "id": "q09-21"}, {"t": "TAKE UP A PROFESSION", "d": "начать заниматься профессией, выбрать профессию", "x": "He decided to take up a creative profession. — Он решил выбрать творческую профессию.", "id": "q09-22"}, {"t": "PLAY THE GUITAR", "d": "играть на гитаре", "x": "She plays the guitar. — Она играет на гитаре.", "id": "q09-23"}, {"t": "WRITE SONGS", "d": "писать песни", "x": "He writes songs in English. — Он пишет песни на английском.", "id": "q09-24"}, {"t": "MAKE RECORDINGS", "d": "делать записи, записывать музыку", "x": "I made some recordings. — Я сделала несколько записей.", "id": "q09-25"}, {"t": "HAVE A HEAVY COLD", "d": "сильно простудиться, иметь сильную простуду", "x": "I had a heavy cold last week. — На прошлой неделе я сильно простудилась.", "id": "q09-26"}, {"t": "SEND RECORDINGS TO A RECORD COMPANY", "d": "отправлять записи в звукозаписывающую компанию", "x": "He sent recordings to a record company. — Он отправил записи в звукозаписывающую компанию.", "id": "q09-27"}, {"t": "GET A JOB", "d": "устроиться на работу", "x": "She got a job last month. — В прошлом месяце она устроилась на работу.", "id": "q09-28"}, {"t": "FAST-FOOD RESTAURANT", "d": "ресторан быстрого питания", "x": "He works in a fast-food restaurant. — Он работает в ресторане быстрого питания.", "id": "q09-29"}]}, {"id": "k1", "name": "Разговорный клуб", "cards": [{"t": "cosy", "d": "уютный", "x": "", "id": "k1-0"}, {"t": "For example", "d": "например", "x": "", "id": "k1-1"}, {"t": "Novels", "d": "романы (книги)", "x": "", "id": "k1-2"}, {"t": "Psychology", "d": "психология", "x": "", "id": "k1-3"}, {"t": "How often?", "d": "как часто?", "x": "", "id": "k1-4"}, {"t": "Rarely", "d": "редко", "x": "", "id": "k1-5"}, {"t": "Beginning", "d": "начало", "x": "", "id": "k1-6"}, {"t": "Come back", "d": "возвращаться", "x": "", "id": "k1-7"}, {"t": "wear", "d": "носить (одежду)", "x": "", "id": "k1-8"}, {"t": "Less clothing", "d": "меньше одежды", "x": "", "id": "k1-9"}, {"t": "Country house", "d": "загородный дом", "x": "", "id": "k1-10"}, {"t": "25 degrees warm/cold", "d": "25 градусов тепла/холода", "x": "", "id": "k1-11"}, {"t": "Cool", "d": "прохладный / крутой (сленг)", "x": "", "id": "k1-12"}, {"t": "Usually", "d": "обычно", "x": "", "id": "k1-13"}, {"t": "Garden bed", "d": "садовая клумба / грядка", "x": "", "id": "k1-14"}, {"t": "How's it going?", "d": "Как дела? / Как оно?", "x": "", "id": "k1-15"}, {"t": "How are things?", "d": "Как дела? / Как обстановка?", "x": "", "id": "k1-16"}, {"t": "What's new?", "d": "Что нового?", "x": "", "id": "k1-17"}, {"t": "How have you been?", "d": "Как ты поживал(а) (в последнее время)?", "x": "", "id": "k1-18"}, {"t": "Hey, how's everything?", "d": "Привет, как всё?", "x": "", "id": "k1-19"}, {"t": "Can't complain.", "d": "Не могу пожаловаться. (Неплохо.)", "x": "", "id": "k1-20"}, {"t": "Anyway, what about you?", "d": "Кстати, а как у тебя дела?", "x": "", "id": "k1-21"}, {"t": "Same old, same old.", "d": "Всё по-старому.", "x": "", "id": "k1-22"}, {"t": "I've had better days.", "d": "Бывали дни и получше. (Дела не очень.)", "x": "", "id": "k1-23"}, {"t": "Nothing much, really", "d": "Да ничего особенного, если честно.", "x": "", "id": "k1-24"}, {"t": "No way!", "d": "Да ну! / Не может быть!", "x": "", "id": "k1-25"}, {"t": "You're kidding!", "d": "Ты шутишь! / Да ладно!", "x": "", "id": "k1-26"}, {"t": "That sounds interesting.", "d": "Звучит интересно.", "x": "", "id": "k1-27"}, {"t": "Seriously?", "d": "Серьезно?", "x": "", "id": "k1-28"}, {"t": "That's wild!", "d": "Обалдеть! / Это безумие!", "x": "", "id": "k1-29"}, {"t": "By the way...", "d": "Кстати...", "x": "", "id": "k1-30"}, {"t": "What happened next?", "d": "Что случилось потом?", "x": "", "id": "k1-31"}, {"t": "Tell me more!", "d": "Расскажи мне больше! / Давай подробности!", "x": "", "id": "k1-32"}, {"t": "Speaking of which...", "d": "Кстати, об этом...", "x": "", "id": "k1-33"}, {"t": "What's going on?", "d": "Что происходит?", "x": "", "id": "k1-34"}, {"t": "That reminds me...", "d": "Это напомнило мне...", "x": "", "id": "k1-35"}, {"t": "That makes sense.", "d": "Это логично. / В этом есть смысл.", "x": "", "id": "k1-36"}, {"t": "Exactly!", "d": "Именно так! / Точно!", "x": "", "id": "k1-37"}, {"t": "You've got a point.", "d": "Тут ты прав(а). / Справедливое замечание.", "x": "", "id": "k1-38"}, {"t": "Each to their own.", "d": "Каждому своё. (У каждого свой вкус.)", "x": "", "id": "k1-39"}, {"t": "I'm not so sure about that.", "d": "Я в этом не так уверен(а).", "x": "", "id": "k1-40"}, {"t": "I guess so.", "d": "Полагаю, что так. / Наверное, да.", "x": "", "id": "k1-41"}, {"t": "It was nice chatting with you!", "d": "Было приятно пообщаться с тобой!", "x": "", "id": "k1-42"}, {"t": "Take care!", "d": "Береги себя! / Давай!", "x": "", "id": "k1-43"}, {"t": "Let's catch up soon!", "d": "Давай скоро увидимся/поболтаем!", "x": "", "id": "k1-44"}, {"t": "See you soon!", "d": "До скорой встречи!", "x": "", "id": "k1-45"}, {"t": "shelves", "d": "полки", "x": "", "id": "k1-46"}, {"t": "Cupboards", "d": "шкафы (для посуды/вещей) / буфеты", "x": "", "id": "k1-47"}, {"t": "Counter/worktop", "d": "прилавок / столешница / рабочая поверхность", "x": "", "id": "k1-48"}, {"t": "Teapot", "d": "заварочный чайник", "x": "", "id": "k1-49"}, {"t": "Pot", "d": "кастрюля / горшок", "x": "", "id": "k1-50"}, {"t": "Pan", "d": "сковорода", "x": "", "id": "k1-51"}, {"t": "Rolling", "d": "раскатывание (например, rolling pin - скалка) / вращающийся", "x": "", "id": "k1-52"}, {"t": "Fair hair", "d": "светлые волосы", "x": "", "id": "k1-53"}, {"t": "stone wall", "d": "каменная стена", "x": "", "id": "k1-54"}, {"t": "fence", "d": "забор / ограда", "x": "", "id": "k1-55"}, {"t": "Trainers/sneakers", "d": "кроссовки", "x": "", "id": "k1-56"}, {"t": "Beard/moustache", "d": "борода / усы", "x": "", "id": "k1-57"}, {"t": "Fur coat", "d": "шуба / шерстяное пальто", "x": "", "id": "k1-58"}, {"t": "siblings", "d": "братья и сестры (родные)", "x": "", "id": "k1-59"}, {"t": "Grandparents", "d": "бабушка и дедушка", "x": "", "id": "k1-60"}, {"t": "Mother-in-law", "d": "свекровь / теща", "x": "", "id": "k1-61"}, {"t": "Father-in-law", "d": "свекор / тесть", "x": "", "id": "k1-62"}, {"t": "Stepfather", "d": "отчим", "x": "", "id": "k1-63"}, {"t": "Stepmother", "d": "мачеха", "x": "", "id": "k1-64"}, {"t": "hometown", "d": "родной город", "x": "", "id": "k1-65"}, {"t": "I consider", "d": "я считаю / я полагаю", "x": "", "id": "k1-66"}, {"t": "Times a week", "d": "раз в неделю", "x": "", "id": "k1-67"}, {"t": "Eat out", "d": "есть в кафе / питаться вне дома", "x": "", "id": "k1-68"}, {"t": "Game console", "d": "игровая консоль", "x": "", "id": "k1-69"}, {"t": "Neutral", "d": "нейтральный", "x": "", "id": "k1-70"}, {"t": "To fall in love with", "d": "влюбиться во (что-то/кого-то)", "x": "", "id": "k1-71"}, {"t": "Recently", "d": "недавно", "x": "", "id": "k1-72"}, {"t": "Turkiye", "d": "Турция", "x": "", "id": "k1-73"}, {"t": "Dish/meal", "d": "блюдо / еда (прием пищи)", "x": "", "id": "k1-74"}, {"t": "Spend time", "d": "проводить время", "x": "", "id": "k1-75"}, {"t": "Lay", "d": "класть / лежать", "x": "", "id": "k1-76"}, {"t": "Surf the Internet", "d": "сидеть в интернете / блуждать по сети", "x": "", "id": "k1-77"}, {"t": "What kind of music?", "d": "какую музыку (ты слушаешь)?", "x": "", "id": "k1-78"}, {"t": "It depends on my mood", "d": "это зависит от моего настроения", "x": "", "id": "k1-79"}, {"t": "Desperate Housewives", "d": "Отчаянные домохозяйки (сериал)", "x": "", "id": "k1-80"}, {"t": "To make/to force", "d": "заставлять / принуждать", "x": "", "id": "k1-81"}, {"t": "First/second/third", "d": "первый/второй/третий", "x": "", "id": "k1-82"}, {"t": "I like them both", "d": "они мне оба нравятся", "x": "", "id": "k1-83"}, {"t": "I like them the same", "d": "они мне нравятся одинаково", "x": "", "id": "k1-84"}, {"t": "Early", "d": "рано / ранний", "x": "", "id": "k1-85"}, {"t": "To have a sweet tooth", "d": "быть сладкоежкой", "x": "", "id": "k1-86"}, {"t": "foreign", "d": "иностранный / зарубежный", "x": "", "id": "k1-87"}]}];
 let data;
 try{data=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){data=null}
 if(!data||!Array.isArray(data.sets))data={sets:[]};
@@ -520,8 +546,8 @@ let raf=0;
 const clearTimers=()=>{timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[];if(raf){cancelAnimationFrame(raf);raf=0}};
 const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
 const cur=()=>getSet(V.id);
-const qOf=c=>cur().dir==='dt'?c.d:c.t;
-const aOf=c=>cur().dir==='dt'?c.t:c.d;
+const qOf=c=>((S&&(S.m==='learn'||S.m==='test')&&S.qd)||cur().dir)==='dt'?c.d:c.t;
+const aOf=c=>((S&&(S.m==='learn'||S.m==='test')&&S.qd)||cur().dir)==='dt'?c.t:c.d;
 const mastered=s=>s.cards.length?Math.round(s.cards.filter(c=>c.lvl>=3).length/s.cards.length*100):0;
 const plural=(n,a,b,c)=>{const m=n%100,k=n%10;return (m>10&&m<20)?c:k===1?a:(k>=2&&k<=4)?b:c};
 const cnt=n=>n+' '+plural(n,'слово','слова','слов');
@@ -601,7 +627,7 @@ function setView(){
   ${s.cards.length<2?`<div class="panel muted">Добавьте хотя бы два слова, чтобы открыть режимы. <button class="btn sm" data-act="edit" data-id="${s.id}">Добавить слова</button></div>`:`
   <div class="modes">
    <button class="mode" data-act="start" data-m="cards">${ico.cards}<b>Карточки</b><span>Переверните и отметьте, знаете ли слово</span></button>
-   <button class="mode" data-act="start" data-m="learn">${ico.learn}<b>Учить</b><span>Части по ${PART} слов: тест, ввод, общая сводка</span></button>
+   <button class="mode" data-act="start" data-m="learn">${ico.learn}<b>Учить</b><span>Раунды как в Quizlet: выбор, верно/неверно, пары, ввод</span></button>
    <button class="mode" data-act="start" data-m="review">${ico.review}<b>${TX.rvTitle}</b><span>${dueN(s)?TX.rvDue(dueN(s)):TX.rvDesc}</span></button>
    <button class="mode" data-act="start" data-m="test">${ico.test}<b>Тест</b><span>Верно/неверно, выбор и ввод. Итог в конце</span></button>
    <button class="mode" data-act="start" data-m="match">${ico.match}<b>Подбор пар</b><span>Соедините слова на время${s.best?` · рекорд ${s.best} с`:''}</span></button>
@@ -609,7 +635,7 @@ function setView(){
   <h2 style="margin-top:4px">Игры</h2>
   <div class="modes">
    <button class="mode" data-act="start" data-m="blocks">${ico.blocks}<b>Блоки</b><span>Отвечайте верно и заполняйте поле блоками${s.blocksBest?` · рекорд ${s.blocksBest}`:''}</span></button>
-   <button class="mode" data-act="start" data-m="blast">${ico.blast}<b>Blast</b><span>Сбивайте летящие слова, вписывая ответ${s.blastBest?` · рекорд ${s.blastBest}`:''}</span></button>
+   <button class="mode" data-act="start" data-m="blast">${ico.blast}<b>Gravity</b><span>Уровни: слова падают, впиши ответ раньше, чем упадут${s.blastBest?` · рекорд ${s.blastBest}`:''}</span></button>
    <button class="mode" data-act="start" data-m="gems">${ico.gems}<b>Кристаллы</b><span>60 секунд, серия ответов дороже кристалл${s.gemBest?` · рекорд ${s.gemBest}`:''}</span></button>
   </div>`}
   ${statsHtml(s)}
@@ -635,22 +661,43 @@ function editView(){
 }
 
 /* --- карточки --- */
-function cardsStart(){const s=cur();S={m:'cards',queue:shuffle(s.cards),i:0,know:0,again:0,flip:false}}
+const CDEF={side:'',shuf:1,star:0};
+const ccfgOf=s=>{const c=Object.assign({},CDEF,s.ccfg||{});if(!c.side)c.side=s.dir==='dt'?'dt':'td';return c};
+function cardsStart(){
+  const s=cur(),cfg=ccfgOf(s);
+  let base=s.cards.slice();
+  if(cfg.star&&base.some(c=>c.star))base=base.filter(c=>c.star);
+  S={m:'cards',cfg,queue:cfg.shuf?shuffle(base):base,i:0,know:[],again:[],flip:false,hist:[],setOpen:false,sides:{}};
+}
+const cardSide=c=>{const cf=S.cfg.side;if(cf!=='both')return cf;if(!S.sides[c.id])S.sides[c.id]=Math.random()<.5?'td':'dt';return S.sides[c.id]};
 function cardsView(){
   const s=cur();
-  const head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
-  if(S.i>=S.queue.length){
-    return `${head}<div class="panel result"><h2>Круг пройден</h2><div class="big">${S.know}/${S.know+S.again}</div><p class="muted">Знали сразу: ${S.know}. Вернулись к повтору: ${S.again}.</p>
-    <div class="row"><button class="btn primary" data-act="start" data-m="cards">Ещё раз</button><button class="btn" data-act="start" data-m="learn">Перейти к «Учить»</button></div></div>${summary()}`;
+  const head=`<div class="top">${back('open',esc(s.name))}<span class="row" style="gap:8px;flex-wrap:nowrap"><button class="btn sq" data-act="cset" aria-label="Настройки" title="Настройки">⚙️</button>${toolsHtml()}</span></div>`;
+  if(S.setOpen){
+    const ch=(on,act,attr,lab)=>`<button class="chipb ${on?'on':''}" data-act="${act}" ${attr} aria-pressed="${!!on}">${lab}</button>`;
+    const stars=s.cards.filter(c=>c.star).length;
+    return `${head}<div class="panel stack"><h2>Настройки карточек</h2>
+      <div class="small muted">Что показывать сначала</div><div class="row">${[['td','Слово'],['dt','Перевод'],['both','Оба']].map(([k,l])=>ch(S.cfg.side===k,'cside','data-v="'+k+'"',l)).join('')}</div>
+      <div class="row">${ch(S.cfg.shuf,'cshuf','','Перемешивать')}${ch(S.cfg.star,'cstaronly','','Только отмеченные ⭐ ('+stars+')')}</div>
+      <div class="row"><button class="btn primary" data-act="capply">Готово</button></div></div>`;
   }
-  const c=S.queue[S.i],q=qOf(c),a=aOf(c);
+  if(S.i>=S.queue.length){
+    const k=S.know.length,l=S.again.length,tot=k+l||1;
+    return `${head}<div class="panel result"><div class="big">🎉</div><h2>${l?'Круг пройден':'Ты молодец!'}</h2>
+      <div class="tiles" style="margin:12px 0"><div class="tile2"><b style="color:var(--ok)">${k}</b><span class="small muted">знаю</span></div><div class="tile2"><b style="color:var(--warn)">${l}</b><span class="small muted">ещё учу</span></div></div>
+      <div class="lq-bar"><i style="width:${k/tot*100}%;background:var(--ok)"></i><i style="width:${l/tot*100}%;background:var(--warn)"></i></div>
+      <div class="row" style="justify-content:center;margin-top:12px">${l?`<button class="btn primary" data-act="crep">Повторить непонятные (${l})</button>`:''}<button class="btn ${l?'':'primary'}" data-act="start" data-m="cards">Начать заново</button><button class="btn" data-act="start" data-m="learn">Перейти к «Учить»</button></div></div>${summary()}`;
+  }
+  const c=S.queue[S.i],sd=cardSide(c),q=sd==='dt'?c.d:c.t,a=sd==='dt'?c.t:c.d;
   return `${head}
-  <div class="row"><span class="small muted">${S.i+1} из ${S.queue.length}</span><div class="bar blue grow"><span style="width:${S.i/S.queue.length*100}%"></span></div></div>
+  <div class="row" style="justify-content:space-between;align-items:center"><span class="stchip st1">Учу ${S.again.length}</span><span class="small muted">${S.i+1} / ${S.queue.length}</span><span class="stchip st3">Знаю ${S.know.length}</span></div>
+  <div class="bar blue"><span style="width:${S.i/S.queue.length*100}%"></span></div>
   <div class="flip ${S.flip?'on':''}" id="flip"><div class="flip-in" data-act="flip" tabindex="0" role="button" aria-label="Перевернуть карточку">
-    <div class="face"><span class="lab">${s.dir==='dt'?'Перевод':'Слово'}</span><span class="${fsClass(q)}">${esc(q)}</span></div>
-    <div class="face back"><span class="lab">${s.dir==='dt'?'Слово':'Перевод'}</span><div><span class="${fsClass(a)}">${esc(a)}</span>${c.x?`<div class="ex">${esc(c.x)}</div>`:''}</div></div></div></div>
-  <div class="row" style="justify-content:center"><button class="btn bad" data-act="again">✕ Не знаю</button><button class="btn" data-act="flip">Перевернуть</button><button class="btn ok" data-act="know">✓ Знаю</button></div>
-  <p class="small muted" style="text-align:center;margin:0">Пробел — перевернуть, ← не знаю, → знаю</p>`;
+    <div class="face"><span class="lab">${sd==='dt'?'Перевод':'Слово'}</span><span class="${fsClass(q)}">${esc(q)}</span></div>
+    <div class="face back"><span class="lab">${sd==='dt'?'Слово':'Перевод'}</span><div><span class="${fsClass(a)}">${esc(a)}</span>${c.x?`<div class="ex">${esc(c.x)}</div>`:''}</div></div></div>
+    <button class="btn sq cstar" data-act="cstar" aria-label="Отметить звёздочкой" aria-pressed="${!!c.star}" style="position:absolute;top:10px;right:10px;z-index:2">${c.star?'⭐':'☆'}</button></div>
+  <div class="row" style="justify-content:center"><button class="btn sq" data-act="cundo" aria-label="Назад" ${S.hist.length?'':'disabled'}>↶</button><button class="btn bad" data-act="again">✕ Не знаю</button><button class="btn" data-act="flip">Перевернуть</button><button class="btn ok" data-act="know">✓ Знаю</button></div>
+  <p class="small muted" style="text-align:center;margin:0">Пробел — перевернуть, ← не знаю, → знаю, Z — назад</p>`;
 }
 
 /* --- учить --- */
@@ -864,177 +911,320 @@ const lbar=(pct,n,all,from)=>{
   const ticks=Array.from({length:Math.max(0,Math.ceil(all/PART)-1)},(_,k)=>`<i class="lb-tick" style="left:${(k+1)*PART/all*100}%"></i>`).join('');
   return `<div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="${all}" aria-valuenow="${n}"><div class="lb-track"><span class="lb-fill" style="width:${pct}%;--from:${f}%;--to:${pct}%"></span>${ticks}<b class="lb-knob ${up?'up':''}" style="left:${pct}%;--from:${f}%;--to:${pct}%">${n>=PART?Math.round(pct)+'%':''}</b></div><span class="lb-end">${TX.left(all-n)}</span></div>`;
 };
-function learnStart(){
-  const s=cur();
-  /* продолжаем с места остановки: выученные слова пропускаем, слова с ошибками идут первыми */
-  const todo=s.cards.filter(c=>!isLd(s,c));
-  const order=[...todo.filter(c=>c.hard),...todo.filter(c=>!c.hard)];
-  const parts=[];
-  for(let i=0;i<order.length;i+=PART)parts.push(order.slice(i,i+PART));
-  S={m:'learn',parts,phase:'menu',p:0,round:1,queue:[],card:null,fb:null,done:new Set(),
-     stats:parts.map(()=>({mc:0,mcMiss:0,ty:0,tyMiss:0})),miss:{},failed:{},undo:null,base:0};
-  if(!parts.length){S.phase='alldone';return}
-  startPart(0);
+/* ---------- Заучивание в стиле Quizlet: раунды, 4 типа вопросов, уровни слов ---------- */
+const LDEF={n:7,mc:1,tf:1,mt:1,wr:1,ans:'',shuf:1};
+const lcfgOf=s=>{const c=Object.assign({},LDEF,s.lcfg||{});if(!c.ans)c.ans=s.dir==='dt'?'dt':'td';return c};
+const ST_NAME=['Новые','Учу','Знакомо','Выучено'],ST_ONE=['Новое','Учу','Знакомо','Выучено'];
+const stOf=(s,c)=>isLd(s,c)||(c.lvl||0)>=3?3:(c.lvl||0)===2?2:((c.lvl||0)===1||c.hard||c.at)?1:0;
+function setSt(s,c,v){
+  c.lvl=v;c.at=Date.now();
+  if(v===3){s.ld=[...new Set([...(s.ld||[]),c.id])];noteLearned(c.id)}else s.ld=(s.ld||[]).filter(x=>x!==c.id);
 }
-function startPart(p){
-  S.p=p;S.base=ldCount(cur());S.phase='mc';S.round=1;S.queue=shuffle(S.parts[p]);
-  S.stats[p]={mc:0,mcMiss:0,ty:0,tyMiss:0};
-  S.parts[p].forEach(c=>{delete S.miss[c.id]});
-  S.done.delete(p);S.failed={};
+const PRAISE=['Верно!','Отлично!','Так держать!','Молодец!','Супер!','Точно!','Класс!'];
+const stCounts=s=>{const n=[0,0,0,0];s.cards.forEach(c=>n[stOf(s,c)]++);return n};
+function learnStart(){
+  const s=cur(),cfg=lcfgOf(s);
+  S={m:'learn',cfg,phase:'q',round:0,queue:[],card:null,kind:'mc',fb:null,typed:'',hn:0,miss:{},rs:null,cfgOpen:false,qd:cfg.ans==='dt'?'dt':'td',touched:{}};
+  learnRound();
+}
+function learnRound(){
+  const s=cur(),cfg=S.cfg;
+  const open=s.cards.filter(c=>stOf(s,c)<3);
+  if(!open.length){S.phase='alldone';return}
+  const by=st=>open.filter(c=>stOf(s,c)===st);
+  const learning=by(1).sort((a,b)=>(S.miss[b.id]||0)-(S.miss[a.id]||0)||(b.at||0)-(a.at||0)).slice(0,cfg.n);
+  const fam=shuffle(by(2)),fresh=cfg.shuf?shuffle(by(0)):by(0);
+  let rem=cfg.n-learning.length;
+  const nf=Math.min(fam.length,Math.ceil(rem/2));
+  const nn=Math.min(fresh.length,rem-nf);
+  const nf2=Math.min(fam.length,rem-nn);
+  const pick=[...learning,...fam.slice(0,nf2),...fresh.slice(0,nn)];
+  S.round++;S.pool=pick;S.total=pick.length;
+  S.queue=shuffle(pick).map(c=>({c,t:0}));
+  S.rs={ok:0,bad:0,before:Object.fromEntries(pick.map(c=>[c.id,stOf(s,c)]))};
+  S.phase='q';
   learnNext();
 }
 function learnNext(){
-  S.fb=null;S.typed='';S.hn=0;
-  const part=S.parts[S.p];
-  if(S.phase==='mc'&&!S.queue.length){
-    if(S.round<ROUNDS){S.round++;S.queue=shuffle(part)}
-    else{S.phase='type';S.queue=shuffle(part)}
+  S.fb=null;S.typed='';S.hn=0;S.mt=null;S.tf=null;S.thinking=false;
+  if(!S.queue.length){S.phase='partdone';ding();return render()}
+  const s=cur(),cfg=S.cfg,it=S.queue.shift(),c=it.c;
+  S.card=c;S.it=it;
+  S.qd=cfg.ans==='both'?(Math.random()<.5?'td':'dt'):cfg.ans;
+  const st=stOf(s,c),a=aOf(c);
+  const others=[...new Set(shuffle(s.cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(a))))];
+  let kinds=[];
+  if(st>=2&&cfg.wr)kinds=['wr'];
+  else{
+    if(cfg.mc)kinds.push('mc','mc');
+    if(cfg.tf)kinds.push('tf');
+    if(cfg.mt&&st<2&&!S.miss[c.id]&&S.queue.some(q=>q.c.id!==c.id&&stOf(s,q.c)<2)&&S.queue.length>=2)kinds.push('mt');
+    if(!kinds.length)kinds=cfg.wr?['wr']:['mc'];
   }
-  if(S.phase==='type'&&!S.queue.length){
-    S.done.add(S.p);
-    {const ss=cur();ss.ld=[...new Set([...(ss.ld||[]),...S.parts[S.p].map(c=>c.id)])]}
-    save();
-    if(S.p+1<S.parts.length){S.phase='partdone';ding();return render()}
-    S.phase='final';return render();
-  }
-  const c=S.queue.shift();S.card=c;
-  S.kind=S.phase==='mc'?'mc':'typed';
-  if(S.kind==='mc'){
-    const others=[...new Set(shuffle(cur().cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(aOf(c)))))].slice(0,3);
-    if(!others.length)S.kind='typed';else S.opts=shuffle([aOf(c),...others]);
+  if(it.t>0&&st<2&&cfg.mc)kinds=['mc'];
+  let k=kinds[Math.floor(Math.random()*kinds.length)];
+  if((k==='mc'||k==='tf')&&!others.length)k=cfg.wr?'wr':'tf';
+  if(k==='mc'&&others.length<2)k=cfg.tf?'tf':(cfg.wr?'wr':'mc');
+  S.kind=k;
+  if(k==='mc')S.opts=shuffle([a,...others.slice(0,3)]);
+  else if(k==='tf'){
+    const truth=!others.length||Math.random()<.5;
+    S.tf={truth,show:truth?a:others[0]};
+  }else if(k==='mt'){
+    const mates=[];
+    for(let i=0;i<S.queue.length&&mates.length<3;i++){const q=S.queue[i];if(q.c.id!==c.id&&stOf(s,q.c)<2&&!mates.some(m=>m.c.id===q.c.id)){mates.push(q)}}
+    S.queue=S.queue.filter(q=>!mates.includes(q));
+    const cs=[it,...mates].map(x=>x.c);
+    const tiles=[];
+    cs.forEach(x=>{tiles.push({cid:x.id,side:'q',txt:qOf(x)});tiles.push({cid:x.id,side:'a',txt:aOf(x)})});
+    S.mt={cards:cs,items:[it,...mates],tiles:shuffle(tiles),sel:null,done:{},miss:{},flash:null};
   }
   render();
 }
-function learnView(){
-  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
-  const nP=S.parts.length;
-  const rng=i=>S.parts[i].map(c=>c.t).join(' · ');
-  if(S.phase==='alldone'){
-    return `${head}<div class="panel result"><div class="big">🎉</div><h2>Все слова набора выучены</h2><p class="muted">Можно пройти набор заново или закрепить слова в других режимах.</p>
-      <div class="row" style="justify-content:center"><button class="btn primary" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div></div>`;
-  }
-  if(S.phase==='partdone'){
-    const st=S.stats[S.p],clean=!st.mcMiss&&!st.tyMiss,cnt=S.done.size;
-    const all=s.cards.length,words=ldCount(s);
-    const bad=S.parts[S.p].filter(c=>S.miss[c.id]).map(c=>c.t);
-    const hardNote=bad.length?`<p class="small" style="margin:0">Слова с ошибками: ${bad.join(" · ")}. В следующий раз начнём с них.</p>`:'';
-    return `${head}${lbar(words/all*100,words,all,S.pf)}<div class="panel result"><div class="big">🎉</div><h2>${clean?'Всё правильно, молодец!':'Часть пройдена, молодец!'}</h2>
-      <p class="muted">Прогресс сохранён. Выучено слов в этом наборе: ${words} из ${all}.</p>
-      ${clean?'':`<p class="small muted">Ошибок в тесте: ${st.mcMiss}, при вводе: ${st.tyMiss}.</p>`}
-      ${hardNote}
-      <div class="row" style="justify-content:center"><button class="btn primary" data-act="partnext">Продолжить</button><button class="btn" data-act="partstop">На сегодня закончить</button></div></div>`;
-  }
-  if(S.phase==='final'){
-    const tot=S.stats.reduce((a,t)=>({mc:a.mc+t.mc,mcMiss:a.mcMiss+t.mcMiss,ty:a.ty+t.ty,tyMiss:a.tyMiss+t.tyMiss}),{mc:0,mcMiss:0,ty:0,tyMiss:0});
-    const hard=s.cards.filter(c=>S.miss[c.id]).sort((x,y)=>S.miss[y.id]-S.miss[x.id]);
-    const again=hard.length?`<button class="btn primary" data-act="start" data-m="learn">Повторить слова с ошибками</button>`:'';
-    return `${head}<div class="panel result"><h2>Общая сводка</h2><div class="big">${accOf(tot)}%</div>
-      <p class="muted">Пройдено частей: ${S.done.size} из ${nP}. Ошибок в тесте: ${tot.mcMiss} из ${tot.mc}. Ошибок при вводе: ${tot.tyMiss} из ${tot.ty}.</p></div>${summary()}
-    <div class="panel"><h2 style="margin-bottom:8px">По частям</h2><div class="terms">${S.parts.map((p,i)=>{const st=S.stats[i],d=S.done.has(i);
-      return `<div class="part"><div class="grow"><b>Часть ${i+1}</b><div class="small muted">${rng(i)}</div></div>
-      <div class="small" style="text-align:right">${d?`тест −${st.mcMiss} · ввод −${st.tyMiss}<br><b>${accOf(st)}%</b>`:'<span class="muted">не пройдена</span>'}</div></div>`}).join('')}</div></div>
-    ${hard.length?`<div class="panel"><h2 style="margin-bottom:8px">Слова, которые стоит повторить</h2><div class="terms">${hard.map(c=>`<div class="term"><div class="t">${esc(qOf(c))}</div><div class="d">${esc(aOf(c))} · ошибок: ${S.miss[c.id]}</div></div>`).join('')}</div></div>`:'<div class="panel">Ни одной ошибки во всём модуле.</div>'}
-    <div class="row">${again}<button class="btn ${again?'':'primary'}" data-act="restart">Пройти заново</button><button class="btn" data-act="open">К набору</button></div>`;
-  }
-  const c=S.card,q=qOf(c),a=aOf(c),size=S.parts[S.p].length;
-  const steps=(ROUNDS+1)*size,doneSteps=(S.phase==='mc'?(S.round-1)*size:ROUNDS*size)+Math.max(0,size-S.queue.length-1);
-  const m=Math.min(100,Math.round(doneSteps/steps*100));
-  const stage=S.phase==='mc'?`Тест, круг ${S.round} из ${ROUNDS}`:'Впишите слова сами';
-  /* на полоске — только выученные слова: целые пройденные части + слова текущей части, уже верно введённые */
-  const all=s.cards.length,learned=ldCount(s);
-  const pct=Math.min(100,Math.max(S.base+m/100*S.parts[S.p].length,learned)/all*100);
-  const pfrom=S.pf==null?pct:S.pf;S.pf=pct;
-  let body='';
-  if(S.kind==='mc'){
-    body=`<div class="opts">${S.opts.map((o,i)=>{
-      let cls='';if(S.fb){if(o===a)cls='right';else if(S.fb.pick===i)cls='wrong'}
-      return `<button class="opt ${cls}" data-act="mc" data-i="${i}" ${S.fb?'disabled':''}>${esc(o)}</button>`}).join('')}</div>${S.fb?'':`<div class="row end"><button class="btn ghost sm" data-act="skip">Не уверена?</button></div>`}`;
+/* итог ответа по одному слову */
+function learnGrade(c,ok,kind,quiet){
+  const s=cur(),st=stOf(s,c);
+  rec(c.id,ok);
+  if(ok){
+    S.rs.ok++;
+    if(kind==='wr'||(!S.cfg.wr&&st>=2))setSt(s,c,3);
+    else if(st<2)setSt(s,c,2);
+    else{c.at=Date.now()}
   }else{
-    body=`<form id="typed" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введите ответ" ${S.fb||S.thinking?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
+    S.rs.bad++;S.miss[c.id]=(S.miss[c.id]||0)+1;
+    setSt(s,c,1);c.hard=true;
+    const t=(S.it&&S.it.c===c?S.it.t:0)+1;
+    if(t<=3)S.queue.push({c,t});
+  }
+  if(!quiet)save();
+}
+function learnAnswer(ok,pick,fuzzy){
+  const c=S.card;
+  learnGrade(c,ok,S.kind==='wr'?'wr':S.kind);
+  S.fb={ok,pick,fuzzy,praise:PRAISE[Math.floor(Math.random()*PRAISE.length)],fix:!ok&&S.kind==='wr'};
+  S.aiMsg='';render();
+  if(ok){ding();later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok&&S.card===c)learnNext()},fuzzy||c.x?3200:1000)}
+}
+async function learnSubmit(v){
+  const c=S.card,a=aOf(c);S.typed=v;
+  let ok=isRight(v,a,c),fuzzy=ok&&!answerParts(a).includes(norm(v));
+  if(!ok&&sampleFn&&v.trim()){
+    S.thinking=true;render();
+    ok=await aiJudge(qOf(c),a,v);
+    if(!S||S.m!=='learn'||S.card!==c)return;
+    S.thinking=false;fuzzy=ok;
+  }
+  learnAnswer(ok,-1,fuzzy);
+}
+function learnFix(v){
+  const c=S.card,a=aOf(c);
+  if(isRight(v,a,c)||norm(v)===norm(String(a).split(/[;,\/]/)[0])){learnNext();return}
+  S.fixBad=true;render();
+  const el=document.getElementById('ans');if(el){el.value=v;el.focus()}
+}
+function learnBoardTap(i){
+  const m=S.mt;if(!m||m.flash)return;
+  const t=m.tiles[i];if(!t||m.done[i])return;
+  if(m.sel==null){m.sel=i;return render()}
+  if(m.sel===i){m.sel=null;return render()}
+  const u=m.tiles[m.sel];
+  if(u.cid===t.cid&&u.side!==t.side){
+    m.done[i]=m.done[m.sel]=true;m.sel=null;ding();
+    if(Object.keys(m.done).length>=m.tiles.length)return learnBoardDone();
+    return render();
+  }
+  m.miss[u.cid]=m.miss[t.cid]=true;m.flash=[m.sel,i];m.sel=null;render();
+  const mm=m;later(()=>{if(S&&S.mt===mm){mm.flash=null;render()}},550);
+}
+function learnBoardDone(){
+  const m=S.mt;
+  m.items.forEach(it=>{S.it=it;learnGrade(it.c,!m.miss[it.c.id],'mt',true)});
+  save();
+  S.fb={ok:true,board:true,praise:'Все пары найдены!'};render();ding();
+  later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.board)learnNext()},900);
+}
+function learnBar(s){
+  const n=stCounts(s),tot=s.cards.length||1;
+  const col=['var(--line)','var(--warn)','#5aa9ff','var(--ok)'];
+  return `<div class="lq-bar" role="img" aria-label="Выучено ${n[3]} из ${s.cards.length}">${[3,2,1,0].map(i=>`<i style="width:${n[i]/tot*100}%;background:${col[i]}"></i>`).join('')}</div>
+  <div class="lq-leg small">${[3,2,1,0].map(i=>`<span><b style="background:${col[i]}"></b>${ST_NAME[i]} ${n[i]}</span>`).join('')}</div>`;
+}
+function learnSettings(){
+  const c=S.cfg;
+  const chip=(on,act,attr,lab)=>`<button class="chipb ${on?'on':''}" data-act="${act}" ${attr} aria-pressed="${!!on}">${lab}</button>`;
+  return `<div class="panel stack"><h2>Настройки заучивания</h2>
+    <div class="small muted">Слов в раунде</div><div class="row">${[5,7,10,15,20].map(n=>chip(c.n===n,'lcn','data-n="'+n+'"',n)).join('')}</div>
+    <div class="small muted">Типы вопросов</div><div class="row">${[['mc','Выбор ответа'],['tf','Верно / неверно'],['mt','Пары'],['wr','Ввод']].map(([k,l])=>chip(c[k],'lct','data-k="'+k+'"',l)).join('')}</div>
+    <div class="small muted">Что показывать</div><div class="row">${[['td','Слово'],['dt','Перевод'],['both','Оба']].map(([k,l])=>chip(c.ans===k,'lca','data-v="'+k+'"',l)).join('')}</div>
+    <div class="row">${chip(c.shuf,'lcs','','Перемешивать новые слова')}</div>
+    <div class="row"><button class="btn primary" data-act="lapply">Готово</button><button class="btn bad" data-act="lreset">Сбросить прогресс</button></div></div>`;
+}
+function learnView(){
+  const s=cur(),head=`<div class="top">${back('open',esc(s.name))}<span class="row" style="gap:8px;flex-wrap:nowrap"><button class="btn sq" data-act="lset" aria-label="Настройки" title="Настройки">⚙️</button>${toolsHtml()}</span></div>`;
+  if(S.cfgOpen)return head+learnSettings();
+  if(S.phase==='alldone'){
+    return `${head}${learnBar(s)}<div class="panel result"><div class="big">🎉</div><h2>Все слова выучены!</h2><p class="muted">Ты прошла весь набор. Можно начать заново или закрепить слова в играх.</p>
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="restart">Начать заново</button><button class="btn" data-act="open">К набору</button></div></div>`;
+  }
+  if(S.phase==='partdone'||S.phase==='final'){
+    const rs=S.rs,all=rs.ok+rs.bad,after=S.pool.map(c=>({c,b:rs.before[c.id],a:stOf(s,c)}));
+    const up=after.filter(x=>x.a>x.b).length;
+    const list=after.map(x=>`<div class="term"><div class="t">${esc(x.c.t)}</div><div class="d">${esc(x.c.d)}</div><div class="small" style="text-align:right"><span class="stchip st${x.a}">${ST_ONE[x.a]}</span></div></div>`).join('');
+    const hard=s.cards.filter(c=>S.miss[c.id]).sort((p,q)=>S.miss[q.id]-S.miss[p.id]);
+    return `${head}${learnBar(s)}<div class="panel result"><div class="big">${S.phase==='final'?'✅':'🎉'}</div><h2>${S.phase==='final'?'Занятие завершено':'Раунд '+S.round+' пройден'}</h2>
+      <p class="muted">Верных ответов: ${rs.ok} из ${all}${up?' · стало лучше у '+up+' '+plural(up,'слова','слов','слов'):''}</p>
+      <div class="row" style="justify-content:center"><button class="btn primary" data-act="partnext">${S.phase==='final'?'Продолжить учить':'Продолжить'}</button>${S.phase==='final'?'':'<button class="btn" data-act="partstop">На сегодня хватит</button>'}<button class="btn ghost" data-act="open">К набору</button></div></div>
+      <div class="panel"><h2 style="margin-bottom:8px">Слова этого раунда</h2><div class="terms">${list}</div></div>
+      ${S.phase==='final'&&hard.length?`<div class="panel"><h2 style="margin-bottom:8px">Стоит повторить</h2><div class="terms">${hard.map(c=>`<div class="term"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)} · ошибок: ${S.miss[c.id]}</div></div>`).join('')}</div></div>`:''}`;
+  }
+  const c=S.card,q=qOf(c),a=aOf(c);
+  const rem=new Set([c.id,...S.queue.map(x=>x.c.id),...((S.mt&&S.mt.cards)||[]).map(x=>x.id)]).size;
+  const done=Math.max(0,S.total-rem);
+  let body='',tag='',big=`<div class="word">${esc(q)}</div>${S.qd!=='dt'?spkBtn(c.t):''}`;
+  if(S.kind==='mc'){
+    tag='Выбери '+(S.qd==='dt'?'слово':'перевод');
+    body=`<div class="opts">${S.opts.map((o,i)=>{let cls='';if(S.fb){if(o===a)cls='right';else if(S.fb.pick===i)cls='wrong'}
+      return `<button class="opt ${cls}" data-act="mc" data-i="${i}" ${S.fb?'disabled':''}><span class="muted" style="margin-right:8px">${i+1}</span>${esc(o)}</button>`}).join('')}</div>${S.fb?'':`<div class="row end"><button class="btn ghost sm" data-act="skip">Не знаю</button></div>`}`;
+  }else if(S.kind==='tf'){
+    tag='Верно или неверно?';
+    body=`<div class="panel stack" style="text-align:center"><div class="small muted">${S.qd==='dt'?'Слово':'Перевод'}</div><div class="word" style="font-size:1.4rem">${esc(S.tf.show)}</div></div>
+      <div class="row" style="justify-content:center"><button class="btn primary ${S.fb&&S.tf.truth?'':''}" data-act="ltf" data-v="1" ${S.fb?'disabled':''}>Верно</button><button class="btn" data-act="ltf" data-v="0" ${S.fb?'disabled':''}>Неверно</button></div>${S.fb?'':`<div class="row end"><button class="btn ghost sm" data-act="skip">Не знаю</button></div>`}`;
+  }else if(S.kind==='mt'){
+    tag='Найди пары';big='';
+    const m=S.mt;
+    body=`<div class="opts">${m.tiles.map((t,i)=>{const cls=m.done[i]?'right':(m.flash&&m.flash.includes(i))?'wrong':(m.sel===i?'sel':'');return `<button class="opt mtl ${cls}" data-act="lmt" data-i="${i}" ${m.done[i]?'disabled':''}>${esc(t.txt)}</button>`}).join('')}</div>`;
+  }else{
+    tag='Впиши '+(S.qd==='dt'?'слово':'перевод');
+    if(S.fb&&S.fb.fix){
+      body='';
+    }else{
+      body=`<form id="typed" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введи ответ" ${S.fb||S.thinking?'disabled':''} value="${esc(S.typed||'')}" autocapitalize="off" autocorrect="off" spellcheck="false">
       ${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':''}
-      ${S.fb||S.thinking?'':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="skip">Не уверена?</button></div>`}</div></form>`;
+      ${S.fb||S.thinking?'':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="skip">Не знаю</button></div>`}</div></form>`;
+    }
   }
   let fb='';
   if(S.fb){
-    fb=S.fb.ok?`<div class="fb ok">${S.fb.fuzzy?'Верно, засчитано по смыслу':'Верно'}${S.fb.fuzzy?`<small>Как в наборе: ${esc(a)}</small>`:''}${exHtml(c,true)}</div>`:`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${exHtml(c)}${S.kind==='typed'&&S.typed?`<small class="muted">Вы ввели: ${esc(S.typed)}</small>`:''}</div>
-      <div class="row">${S.kind==='typed'&&S.typed?`<button class="btn sm" data-act="override">Я был прав</button>`:''}<button class="btn primary" data-act="next">Дальше</button></div>`;
+    if(S.fb.board)fb=`<div class="fb ok">${S.fb.praise}</div>`;
+    else if(S.fb.ok)fb=`<div class="fb ok">${S.fb.fuzzy?'Верно, засчитано по смыслу':S.fb.praise}${S.fb.fuzzy?`<small>Как в наборе: ${esc(a)}</small>`:''}${exHtml(c,true)}</div>`;
+    else fb=`<div class="fb bad">Правильный ответ<small>${esc(a)}</small>${exHtml(c)}${S.kind==='wr'&&S.typed?`<small class="muted">Ты ввела: ${esc(S.typed)}</small>`:''}</div>
+      ${S.fb.fix?`<form id="fixf" autocomplete="off"><div class="stack"><div class="small muted">Впиши правильный ответ, чтобы запомнить${S.fixBad?' (пока не совпадает)':''}:</div><input class="inp" id="ans" placeholder="${esc(a)}" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus><div class="row"><button class="btn primary" type="submit">Дальше</button>${S.typed?`<button class="btn sm" type="button" data-act="override">Я была права</button>`:''}</div></div></form>`
+      :`<div class="row"><button class="btn primary" data-act="next">Дальше</button></div>`}`;
   }
-  return `${head}
-  ${lbar(pct,learned,all,pfrom)}
-  <div class="small muted" style="text-align:center">Часть ${S.p+1} из ${nP} · ${partRange()} · ${stage}</div>
-  <div class="q"><span class="tag">${S.kind==='mc'?'Выберите ответ':'Впишите ответ'} · ${s.dir==='dt'?'слово':'перевод'}</span><div class="word">${esc(q)}</div>${s.dir!=='dt'?spkBtn(c.t):''}</div>
+  return `${head}${learnBar(s)}
+  <div class="small muted" style="text-align:center">Раунд ${S.round} · ${done} из ${S.total}</div>
+  <div class="q"><span class="tag">${tag}</span>${big}</div>
   ${body}${fb}`;
-}
-function learnAnswer(ok,pick,fuzzy){
-  const c=S.card,st=S.stats[S.p],typedPhase=S.phase==='type';
-  rec(c.id,ok);
-  S.undo={prevFailed:!!S.failed[c.id]};
-  if(S.kind==='mc'){st.mc++;if(!ok)st.mcMiss++}else{st.ty++;if(!ok)st.tyMiss++}
-  if(!ok){
-    S.miss[c.id]=(S.miss[c.id]||0)+1;
-    if(typedPhase){S.failed[c.id]=true;S.queue.push(c)}else c.lvl=0;
-  }else if(typedPhase){c.lvl=S.failed[c.id]?2:3;if(c.lvl>=3)noteLearned(c.id)}
-  S.fb={ok,pick,fuzzy};S.aiMsg='';save();render();
-  if(ok)ding();
-  if(ok)later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok){learnNext()}},fuzzy||c.x?3200:1000);
 }
 
 /* --- тест --- */
+const TDEF={n:15,tf:1,mc:1,wr:1,mt:1,ans:''};
+const tcfgOf=s=>{const c=Object.assign({},TDEF,s.tcfg||{});if(!c.ans)c.ans=s.dir==='dt'?'dt':'td';return c};
+function testBuild(cards,cfg){
+  const s=cur();
+  const dir=cfg.ans==='dt'?'dt':'td';
+  const A_=c=>dir==='dt'?c.t:c.d;
+  const kinds=['tf','mc','wr','mt'].filter(k=>cfg[k]);
+  const pool=shuffle(cards).slice(0,cfg.n>=99?cards.length:Math.min(cfg.n,cards.length));
+  const qs=[];let i=0,ki=0;
+  while(i<pool.length){
+    let k=kinds[ki++%kinds.length];
+    if(k==='mt'){
+      const grp=pool.slice(i,i+4);
+      if(grp.length<2)k=kinds.find(x=>x!=='mt')||'wr';
+      else{
+        const tiles=shuffle(grp.flatMap(c=>[{cid:c.id,side:'q',txt:dir==='dt'?c.d:c.t},{cid:c.id,side:'a',txt:A_(c)}]));
+        qs.push({c:grp[0],cs:grp,k:'mt',a:grp.map(c=>(dir==='dt'?c.d:c.t)+' — '+A_(c)).join('; '),board:{tiles,sel:null,done:{},miss:{},flash:null},dir});
+        i+=grp.length;continue;
+      }
+    }
+    const c=pool[i++];
+    const o={c,k,a:A_(c),dir};
+    if(s.cards.length<2&&k!=='wr')o.k=k='wr';
+    if(k==='mc'){const others=[...new Set(shuffle(s.cards.filter(x=>x.id!==c.id).map(A_).filter(x=>norm(x)!==norm(o.a))))].slice(0,3);if(others.length<1)o.k='wr';else o.opts=shuffle([o.a,...others])}
+    if(k==='tf'){const truth=Math.random()<.5;const wrong=shuffle(s.cards.filter(x=>x.id!==c.id&&norm(A_(x))!==norm(o.a)));o.shown=(truth||!wrong.length)?o.a:A_(wrong[0]);o.truth=o.shown===o.a}
+    qs.push(o);
+  }
+  return qs;
+}
 function testStart(){
-  const s=cur(),cs=shuffle(s.cards).slice(0,Math.min(15,s.cards.length));
-  const kinds=['mc','tf','typed'];
-  const qs=cs.map((c,i)=>{
-    let k=kinds[i%3];if(s.cards.length<2&&k!=='typed')k='typed';
-    const o={c,k,a:aOf(c)};
-    if(k==='mc'){const others=[...new Set(shuffle(s.cards.filter(x=>x.id!==c.id).map(aOf).filter(x=>norm(x)!==norm(o.a))))].slice(0,3);o.opts=shuffle([o.a,...others])}
-    if(k==='tf'){const truth=Math.random()<.5;const wrong=shuffle(s.cards.filter(x=>x.id!==c.id&&norm(aOf(x))!==norm(o.a)));o.shown=(truth||!wrong.length)?o.a:aOf(wrong[0]);o.truth=o.shown===o.a}
-    return o;
-  });
-  S={m:'test',qs:shuffle(qs),i:0,res:[]};
+  const s=cur(),cfg=tcfgOf(s);
+  S={m:'test',phase:'set',cfg,qs:[],i:0,res:[]};
+}
+function testRun(cards){
+  S.qs=testBuild(cards,S.cfg);S.i=0;S.res=[];S.phase='q';
+  S.qd=S.cfg.ans==='dt'?'dt':'td';
 }
 function testView(){
   const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
-  if(S.i>=S.qs.length){
-    const ok=S.res.filter(r=>r.ok).length,n=S.qs.length,wrong=S.res.filter(r=>!r.ok);
-    return `${head}<div class="panel result"><h2>Результат теста</h2><div class="big">${ok}/${n}</div><p class="muted">${Math.round(ok/n*100)}% верных ответов</p></div>${summary()}
-    ${wrong.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${wrong.map(r=>`<div class="term"><div class="t">${esc(qOf(r.q.c))}</div><div class="d">${esc(r.q.a)}${r.q.c.x?`<div class="small muted">${esc(r.q.c.x)}</div>`:''}${r.given?`<br><span style="color:var(--bad)">Вы: ${esc(r.given)}</span>`:''}</div></div>`).join('')}</div></div>`:''}
-    <div class="row"><button class="btn primary" data-act="start" data-m="test">Новый тест</button><button class="btn" data-act="open">К набору</button></div>`;
+  if(S.phase==='set'){
+    const c=S.cfg,ch=(on,act,attr,lab)=>`<button class="chipb ${on?'on':''}" data-act="${act}" ${attr} aria-pressed="${!!on}">${lab}</button>`;
+    return `${head}<div class="panel stack"><h2>Тест</h2><div class="small muted">Настрой тест и нажми «Начать». Результат покажу в конце.</div>
+      <div class="small muted">Вопросов</div><div class="row">${[5,10,15,20,99].map(n=>ch(c.n===n,'tn','data-n="'+n+'"',n>=99?'Все ('+s.cards.length+')':n)).join('')}</div>
+      <div class="small muted">Типы вопросов</div><div class="row">${[['tf','Верно / неверно'],['mc','Выбор ответа'],['mt','Пары'],['wr','Ввод']].map(([k,l])=>ch(c[k],'tt','data-k="'+k+'"',l)).join('')}</div>
+      <div class="small muted">Что спрашивать</div><div class="row">${[['td','Слово → перевод'],['dt','Перевод → слово']].map(([k,l])=>ch(c.ans===k,'ta','data-v="'+k+'"',l)).join('')}</div>
+      <div class="row"><button class="btn primary" data-act="tgo">Начать тест</button></div></div>`;
   }
-  const q=S.qs[S.i],w=qOf(q.c);let body='',lab='';
+  if(S.i>=S.qs.length){
+    const ok=S.res.filter(r=>r.ok).length,n=S.qs.length,wrong=S.res.filter(r=>!r.ok),pct=n?Math.round(ok/n*100):0;
+    const grade=pct>=90?'Отлично! 🎉':pct>=70?'Хороший результат 👍':pct>=50?'Неплохо, есть над чем поработать':'Стоит ещё повторить 💪';
+    return `${head}<div class="panel result"><h2>Результат теста</h2><div class="big">${pct}%</div><p class="muted">${grade}</p>
+      <div class="tiles" style="margin:12px 0"><div class="tile2"><b style="color:var(--ok)">${ok}</b><span class="small muted">верно</span></div><div class="tile2"><b style="color:var(--bad)">${wrong.length}</b><span class="small muted">неверно</span></div></div></div>${summary()}
+    ${wrong.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${wrong.map(r=>`<div class="term"><div class="t">${esc(r.q.k==='mt'?'Пары':(r.q.dir==='dt'?r.q.c.d:r.q.c.t))}</div><div class="d">${esc(r.q.a)}${r.q.c.x&&r.q.k!=='mt'?`<div class="small muted">${esc(r.q.c.x)}</div>`:''}${r.given?`<br><span style="color:var(--bad)">Ты: ${esc(r.given)}</span>`:''}</div></div>`).join('')}</div></div>`:''}
+    <div class="row"><button class="btn primary" data-act="tgo">Новый тест</button>${wrong.length?'<button class="btn" data-act="tagain">Повторить ошибки</button>':''}<button class="btn ghost" data-act="tset">Настройки</button><button class="btn" data-act="open">К набору</button></div>`;
+  }
+  const q=S.qs[S.i],w=q.k==='mt'?'':(q.dir==='dt'?q.c.d:q.c.t);let body='',lab='';
   if(q.k==='mc'){lab='Выберите ответ';body=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" data-act="tmc" data-i="${i}">${esc(o)}</button>`).join('')}</div>`}
   if(q.k==='tf'){lab='Верно ли соответствие?';body=`<div class="q" style="background:var(--accent-soft)"><div class="word">${esc(q.shown)}</div></div><div class="row"><button class="btn ok" data-act="ttf" data-v="1">Верно</button><button class="btn bad" data-act="ttf" data-v="0">Неверно</button></div>`}
-  if(q.k==='typed'){lab='Впишите ответ';body=`<form id="ttyped" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введите ответ" ${S.thinking?'disabled':''} autocapitalize="off" autocorrect="off" spellcheck="false">${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="tskip">Не знаю</button></div>`}</div></form>`}
+  if(q.k==='mt'){lab='Найдите пары';const b=q.board;body=`<div class="opts">${b.tiles.map((t,i)=>{const cls=b.done[i]?'right':(b.flash&&b.flash.includes(i))?'wrong':(b.sel===i?'sel':'');return `<button class="opt mtl ${cls}" data-act="ttile" data-i="${i}" ${b.done[i]?'disabled':''}>${esc(t.txt)}</button>`}).join('')}</div>`}
+  if(q.k==='wr'){lab='Впишите ответ';body=`<form id="ttyped" autocomplete="off"><div class="stack">${hintLine()}<input class="inp" id="ans" placeholder="Введите ответ" ${S.thinking?'disabled':''} autocapitalize="off" autocorrect="off" spellcheck="false">${S.thinking?'<div class="small muted">Проверяю по смыслу…</div>':`<div class="row"><button class="btn primary" type="submit">Ответить</button><button class="btn ghost" type="button" data-act="hint">${TX.hint}</button><button class="btn ghost" type="button" data-act="tskip">Пропустить</button></div>`}</div></form>`}
   return `${head}<div class="row"><span class="small muted">Вопрос ${S.i+1} из ${S.qs.length}</span><div class="bar blue grow"><span style="width:${S.i/S.qs.length*100}%"></span></div></div>
-  <div class="q"><span class="tag">${lab}</span><div class="word">${esc(w)}</div></div>${body}`;
+  <div class="q"><span class="tag">${lab}</span>${w?`<div class="word">${esc(w)}</div>`:''}</div>${body}`;
 }
-function testAnswer(ok,given){if(ok)ding();rec(S.qs[S.i].c.id,ok);S.res.push({q:S.qs[S.i],ok,given});S.i++;S.hn=0;render()}
+function testAnswer(ok,given){const q=S.qs[S.i];if(ok)ding();(q.cs||[q.c]).forEach(c=>{if(q.k!=='mt')rec(c.id,ok)});S.res.push({q,ok,given});S.i++;S.hn=0;render()}
+function testBoardTap(i){
+  const q=S.qs[S.i];if(!q||q.k!=='mt')return;const b=q.board;if(b.flash)return;
+  const t=b.tiles[i];if(!t||b.done[i])return;
+  if(b.sel==null){b.sel=i;return render()}
+  if(b.sel===i){b.sel=null;return render()}
+  const u=b.tiles[b.sel];
+  if(u.cid===t.cid&&u.side!==t.side){
+    b.done[i]=b.done[b.sel]=true;b.sel=null;ding();
+    if(Object.keys(b.done).length>=b.tiles.length){q.cs.forEach(c=>rec(c.id,!b.miss[c.id]));const bad=Object.keys(b.miss).length;S.res.push({q,ok:!bad,given:''});S.i++;return render()}
+    return render();
+  }
+  b.miss[u.cid]=b.miss[t.cid]=true;b.flash=[b.sel,i];b.sel=null;render();
+  later(()=>{if(S&&S.m==='test'&&S.qs[S.i]===q){b.flash=null;render()}},550);
+}
 
 /* --- подбор пар --- */
 function matchStart(){
   const s=cur(),cs=shuffle(s.cards).slice(0,Math.min(6,s.cards.length));
   const tiles=shuffle(cs.flatMap(c=>[{id:uid(),p:c.id,txt:c.t},{id:uid(),p:c.id,txt:c.d}]));
-  S={m:'match',tiles,sel:null,no:[],gone:new Set(),start:Date.now(),t:0,pairs:cs.length,done:false,miss:0};
-  timers.push(setInterval(()=>{if(!S||S.m!=='match'||S.done)return;S.t=((Date.now()-S.start)/1000);const el=document.getElementById('clock');if(el)el.textContent=S.t.toFixed(1)+' с'},100));
+  S={m:'match',phase:'intro',tiles,sel:null,no:[],gone:new Set(),start:0,t:0,pairs:cs.length,done:false,miss:0};
 }
 function matchView(){
   const s=cur(),head=`<div class="top">${back('open',esc(s.name))}<span class="brand" id="clock" style="font-size:1.1rem">${S.t.toFixed(1)} с</span>${toolsHtml()}</div>`;
   if(S.done){
     const t=S.final;
-    return `${head}<div class="panel result"><h2>Готово</h2><div class="big">${t.toFixed(1)} с</div><p class="muted">${s.best&&Math.abs(s.best-t)<.05?'Новый рекорд!':`Рекорд: ${s.best} с`}${S.miss?` · ошибок: ${S.miss}`:''}</p>
+    return `${head}<div class="panel result"><h2>Готово</h2><div class="big">${t.toFixed(1)} с</div><p class="muted">${s.best&&Math.abs(s.best-t)<.05?'Новый рекорд!':`Рекорд: ${s.best} с`}${S.miss?` · ошибок: ${S.miss} (штраф +${(S.miss*0.5).toFixed(1)} с)`:''}</p>
     <div class="row"><button class="btn primary" data-act="start" data-m="match">Ещё раз</button><button class="btn" data-act="open">К набору</button></div></div>${summary()}`;
   }
-  return `${head}<p class="muted small" style="margin:0">Нажмите на слово и на его перевод.</p>
+  if(S.phase==='intro'){
+    return `${head}<div class="panel result"><div class="big">🧩</div><h2>Подбор пар</h2><p class="muted">Соедини слова с переводом как можно быстрее. Нажми на слово и на его перевод. За каждую ошибку к времени добавляется 0,5 с.</p>${s.best?`<p class="small">Твой рекорд: <b>${s.best} с</b></p>`:''}<div class="row" style="justify-content:center"><button class="btn primary" data-act="mstart">Начать игру</button></div></div>`;
+  }
+  return `${head}<p class="muted small" style="margin:0">Нажмите на слово и на его перевод. Ошибка: +0,5 с.</p>
   <div class="match">${S.tiles.map(t=>`<button class="tile ${S.gone.has(t.id)?'gone':''} ${S.sel===t.id?'sel':''} ${S.no.includes(t.id)?'no':''}" data-act="tile" data-id="${t.id}">${esc(t.txt)}</button>`).join('')}</div>`;
 }
 function tileClick(id){
-  if(S.done||S.no.length||S.gone.has(id))return;
+  if(S.phase!=='play'||S.done||S.no.length||S.gone.has(id))return;
   if(!S.sel){S.sel=id;return render()}
   if(S.sel===id){S.sel=null;return render()}
   const a=S.tiles.find(t=>t.id===S.sel),b=S.tiles.find(t=>t.id===id);
   if(a.p===b.p&&a.txt!==b.txt||a.p===b.p){
     S.gone.add(a.id);S.gone.add(b.id);S.sel=null;ding();rec(a.p,true);
     if(S.gone.size===S.tiles.length){
-      S.done=true;S.final=(Date.now()-S.start)/1000;
+      S.done=true;S.final=(Date.now()-S.start)/1000+S.miss*0.5;
       const s=cur();if(!s.best||S.final<s.best){s.best=Math.round(S.final*10)/10;save()}
       S.final=Math.round(S.final*10)/10;
     }
@@ -1095,8 +1285,15 @@ function gemsAnswer(i){
 /* Blast: слова летят вниз медленно, впишите ответ, чтобы сбить. Ответ проверяется по смыслу */
 const LIVES=5;
 function blastStart(){
-  S={m:'blast',deck:shuffle(cur().cards).slice(0,15),spawned:0,foes:[],lives:LIVES,score:0,killed:0,lost:0,end:false,t:0,nextSpawn:0.6,last:0,aiBusy:false};
-  later(blastInit,0);
+  S={m:'blast',phase:'intro',level:1,deck:[],spawned:0,foes:[],lives:LIVES,score:0,killed:0,lost:0,end:true,t:0,nextSpawn:0.6,last:0,aiBusy:false,missed:{},total:0,record:false};
+}
+function blastLevel(){
+  const cs=cur().cards;
+  const n=Math.min(cs.length,8+S.level*2,22);
+  const first=cs.filter(c=>S.missed[c.id]),rest=shuffle(cs.filter(c=>!S.missed[c.id]));
+  S.deck=[...shuffle(first),...rest].slice(0,n);
+  S.spawned=0;S.foes=[];S.t=0;S.nextSpawn=.6;S.aiBusy=false;S.lvlKilled=0;S.end=false;S.phase='play';
+  render();later(blastInit,0);
 }
 function blastInit(){
   if(!S||S.m!=='blast')return;
@@ -1106,7 +1303,7 @@ function blastInit(){
     const arena=document.getElementById('arena');if(!arena)return;
     const dt=Math.min(.05,(now-S.last)/1000);S.last=now;S.t+=dt;
     const H=arena.clientHeight,W=arena.clientWidth;
-    if(S.spawned<S.deck.length&&S.t>=S.nextSpawn&&S.foes.length<3)blastSpawn(arena,W);
+    if(S.spawned<S.deck.length&&S.t>=S.nextSpawn&&S.foes.length<Math.min(4,2+S.level))blastSpawn(arena,W);
     for(const f of S.foes.slice()){
       f.y+=f.v*dt;f.el.style.transform=`translate(${f.x}px,${f.y}px)`;
       if(f.y+f.h>=H-6)blastMiss(f);
@@ -1121,13 +1318,13 @@ function blastSpawn(arena,W){
   const c=S.deck[S.spawned++];
   const el=document.createElement('div');el.className='foe';el.textContent=qOf(c);arena.appendChild(el);
   const w=el.offsetWidth,h=el.offsetHeight;
-  const f={c,el,x:4+Math.random()*Math.max(1,W-w-8),y:-h,h,v:11+Math.min(10,S.spawned*.7)};
+  const f={c,el,x:4+Math.random()*Math.max(1,W-w-8),y:-h,h,v:8+S.level*2.2+Math.min(8,S.spawned*.6)};
   el.style.transform=`translate(${f.x}px,${f.y}px)`;
   S.foes.push(f);
-  S.nextSpawn=S.t+Math.max(5,7.5-S.spawned*.15);
+  S.nextSpawn=S.t+Math.max(3.2,7.2-S.level*.5-S.spawned*.12);
 }
 function blastMiss(f){
-  S.foes=S.foes.filter(x=>x!==f);f.el.remove();S.lives--;S.lost++;rec(f.c.id,false);
+  S.foes=S.foes.filter(x=>x!==f);f.el.remove();S.lives--;S.lost++;S.missed[f.c.id]=(S.missed[f.c.id]||0)+1;rec(f.c.id,false);
   const l=document.getElementById('blives');if(l)l.textContent='♥'.repeat(Math.max(0,S.lives))+'♡'.repeat(LIVES-Math.max(0,S.lives));
   const m=document.getElementById('bmsg');if(m)m.textContent='Пропущено: '+qOf(f.c)+' = '+aOf(f.c);
   if(S.lives<=0)blastEnd();
@@ -1135,7 +1332,7 @@ function blastMiss(f){
 function killFoe(f){
   if(!S||S.end||!S.foes.includes(f))return;
   S.foes=S.foes.filter(x=>x!==f);f.el.classList.add('boom');later(()=>f.el.remove(),350);
-  S.killed++;S.score+=10;ding();rec(f.c.id,true);
+  S.killed++;S.lvlKilled=(S.lvlKilled||0)+1;S.score+=10+Math.max(0,Math.round((1-f.y/Math.max(1,document.getElementById('arena')?document.getElementById('arena').clientHeight:1))*10));delete S.missed[f.c.id];ding();rec(f.c.id,true);
   const sc=document.getElementById('bscore');if(sc)sc.textContent=S.score;
 }
 /* если по буквам не нашлось, Claude смотрит, подходит ли ответ по смыслу к одному из летящих слов */
@@ -1171,18 +1368,30 @@ function blastShoot(v){
 }
 function blastEnd(){
   S.end=true;if(raf){cancelAnimationFrame(raf);raf=0}
-  const s=cur();if(!s.blastBest||S.score>s.blastBest){s.blastBest=S.score;S.record=true;save()}
-  render();
+  const s=cur();
+  if(S.lives>0){S.phase='lvl';S.score+=S.lives*20}else S.phase='over';
+  if(!s.blastBest||S.score>s.blastBest){s.blastBest=S.score;S.record=true}
+  if(S.level>(s.blastLvl||0))s.blastLvl=S.level;
+  save();render();
 }
 function blastView(){
   const s=cur(),head=`<div class="top">${back('open',esc(s.name))}${toolsHtml()}</div>`;
-  if(S.end)return `${head}<div class="panel result"><h2>${S.lives>0?'Все слова сбиты':'Игра окончена'}</h2><div class="big">${S.score}</div>
-    <p class="muted">Сбито: ${S.killed} из ${S.deck.length}${S.record?' · новый рекорд!':s.blastBest?` · рекорд ${s.blastBest}`:''}</p>${endBtns('blast')}</div>${summary()}`;
+  if(S.phase==='intro')return `${head}<div class="panel result"><div class="big">☄️</div><h2>Gravity</h2>
+    <p class="muted">Слова падают на планету. Впиши ответ и нажми Enter, пока слово не упало. С каждым уровнем слова падают быстрее, а те, что пропустила, возвращаются.</p>
+    ${s.blastBest?`<p class="small">Рекорд: <b>${s.blastBest}</b> очков${s.blastLvl?' · уровень '+s.blastLvl:''}</p>`:''}<div class="row" style="justify-content:center"><button class="btn primary" data-act="bgo">Начать игру</button><button class="btn" data-act="open">К набору</button></div></div>`;
+  if(S.phase==='lvl')return `${head}<div class="panel result"><div class="big">🚀</div><h2>Уровень ${S.level} пройден!</h2><div class="big">${S.score}</div>
+    <p class="muted">Сбито на этом уровне: ${S.lvlKilled} из ${S.deck.length} · бонус за жизни: +${S.lives*20}</p>
+    <div class="row" style="justify-content:center"><button class="btn primary" data-act="gnext">Уровень ${S.level+1}</button><button class="btn" data-act="open">К набору</button></div></div>`;
+  if(S.phase==='over'){
+    const cs=cur().cards.filter(c=>S.missed[c.id]);
+    return `${head}<div class="panel result"><h2>Игра окончена</h2><div class="big">${S.score}</div>
+    <p class="muted">Уровень ${S.level} · сбито слов: ${S.killed}${S.record?' · новый рекорд!':s.blastBest?` · рекорд ${s.blastBest}`:''}</p>${endBtns('blast')}</div>${cs.length?`<div class="panel"><h2 style="margin-bottom:8px">Над чем поработать</h2><div class="terms">${cs.map(c=>`<div class="term"><div class="t">${esc(qOf(c))}</div><div class="d">${esc(aOf(c))}</div></div>`).join('')}</div></div>`:''}${summary()}`;
+  }
   return `${head}
-  <div class="row"><span class="brand" id="blives" style="font-size:1.1rem;color:var(--pink)">${'♥'.repeat(S.lives)+'♡'.repeat(LIVES-S.lives)}</span><span class="grow"></span><span class="tag">Очки</span><b id="bscore">${S.score}</b></div>
+  <div class="row"><span class="brand" id="blives" style="font-size:1.1rem;color:var(--pink)">${'♥'.repeat(S.lives)+'♡'.repeat(LIVES-S.lives)}</span><span class="small muted">Уровень ${S.level}</span><span class="grow"></span><span class="tag">Очки</span><b id="bscore">${S.score}</b></div>
   <div class="arena" id="arena"><div class="ground"></div></div>
   <div class="small muted" id="bmsg" style="min-height:1.4em"></div>
-  <form id="blastform" autocomplete="off"><div class="row"><input class="inp grow" id="ans" placeholder="Впишите ответ и нажмите Enter" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn primary" type="submit">Выстрел</button></div></form>`;
+  <form id="blastform" autocomplete="off"><div class="row"><input class="inp grow" id="ans" placeholder="Впиши ответ и нажми Enter" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="btn primary" type="submit">Выстрел</button></div></form>`;
 }
 
 /* Блоки: за верный ответ три блока, перетащите их на поле и собирайте линии */
@@ -1349,23 +1558,12 @@ async function aiJudge(asked,want,said){
     return /^\s*да/i.test((r&&r.text)||'');
   }catch(e){return false}
 }
-async function learnSubmit(v){
-  const c=S.card,a=aOf(c);S.typed=v;
-  let ok=isRight(v,a,c),fuzzy=ok&&!answerParts(a).includes(norm(v));
-  if(!ok&&sampleFn&&v.trim()){
-    S.thinking=true;render();
-    ok=await aiJudge(qOf(c),a,v);
-    if(!S||S.m!=='learn'||S.card!==c)return;
-    S.thinking=false;fuzzy=ok;
-  }
-  learnAnswer(ok,-1,fuzzy);
-}
 async function testSubmit(v){
   const q=S.qs[S.i];
   let ok=isRight(v,q.a,q.c);
   if(!ok&&sampleFn&&v.trim()){
     S.thinking=true;render();
-    ok=await aiJudge(qOf(q.c),q.a,v);
+    ok=await aiJudge(q.dir==='dt'?q.c.d:q.c.t,q.a,v);
     if(!S||S.m!=='test'||S.qs[S.i]!==q)return;
     S.thinking=false;
   }
@@ -1464,32 +1662,53 @@ const A={
   },
   /* карточки */
   flip:()=>{S.flip=!S.flip;const f=document.getElementById('flip');if(f)f.classList.toggle('on',S.flip)},
-  know:()=>{const c=S.queue[S.i];ding();rec(c.id,true);{const pv=c.lvl||0;c.lvl=Math.min(3,pv+1);if(pv<3&&c.lvl>=3)noteLearned(c.id)}S.know++;S.i++;S.flip=false;save();render()},
-  again:()=>{const c=S.queue[S.i];rec(c.id,false);c.lvl=0;S.again++;S.i++;S.flip=false;save();render()},
+  know:()=>{const c=S.queue[S.i];if(!c)return;ding();rec(c.id,true);const pv=c.lvl||0,ph=c.hard;S.hist.push({c,k:'k',pv,ph});c.lvl=Math.min(3,pv+1);if(pv<3&&c.lvl>=3)noteLearned(c.id);S.know.push(c.id);S.i++;S.flip=false;save();render()},
+  again:()=>{const c=S.queue[S.i];if(!c)return;rec(c.id,false);S.hist.push({c,k:'a',pv:c.lvl||0,ph:c.hard});c.lvl=0;S.again.push(c.id);S.i++;S.flip=false;save();render()},
+  cundo:()=>{const h=S.hist.pop();if(!h)return;h.c.lvl=h.pv;h.c.hard=h.ph;const arr=h.k==='k'?S.know:S.again;const i=arr.lastIndexOf(h.c.id);if(i>=0)arr.splice(i,1);S.i=Math.max(0,S.i-1);S.flip=false;save();render()},
+  cstar:(d)=>{const c=S.queue[S.i];if(!c)return;c.star=!c.star;save();render()},
+  cset:()=>{S.setOpen=!S.setOpen;render()},
+  cside:(d)=>{S.cfg.side=d.v;render()},
+  cshuf:()=>{S.cfg.shuf=S.cfg.shuf?0:1;render()},
+  cstaronly:()=>{S.cfg.star=S.cfg.star?0:1;render()},
+  capply:()=>{const cfg=Object.assign({},S.cfg);cur().ccfg=cfg;save();cardsStart();render()},
+  crep:()=>{const ids=new Set(S.again);const q=S.queue.filter(c=>ids.has(c.id));S.queue=S.cfg.shuf?shuffle(q):q;S.i=0;S.know=[];S.again=[];S.hist=[];S.flip=false;render()},
   /* учить */
   mc:(d)=>{const o=S.opts[+d.i];learnAnswer(o===aOf(S.card),+d.i)},
+  ltf:(d)=>{learnAnswer((d.v==='1')===S.tf.truth,-1)},
+  lmt:(d)=>learnBoardTap(+d.i),
   skip:()=>{S.typed='';learnAnswer(false,-1)},
   next:()=>learnNext(),
   override:()=>{
-    const c=S.card,st=S.stats[S.p];
-    recFlip(c.id);
-    if(S.kind==='typed'){st.tyMiss--}else st.mcMiss--;
-    S.miss[c.id]=Math.max(0,(S.miss[c.id]||1)-1);if(!S.miss[c.id])delete S.miss[c.id];
-    if(S.phase==='type'){
-      const i=S.queue.lastIndexOf(c);if(i>=0)S.queue.splice(i,1);
-      if(!S.undo||!S.undo.prevFailed)delete S.failed[c.id];
-      c.lvl=S.failed[c.id]?2:3;
-      if(c.lvl>=3)noteLearned(c.id);
-    }
-    S.fb={ok:true};save();render();ding();later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok)learnNext()},500)},
-  partnext:()=>{if(S&&S.m==='learn'&&S.phase==='partdone')startPart(S.p+1)},
+    const c=S.card;recFlip(c.id);
+    S.rs.bad--;S.rs.ok++;S.miss[c.id]=Math.max(0,(S.miss[c.id]||1)-1);if(!S.miss[c.id])delete S.miss[c.id];
+    const i=S.queue.map(x=>x.c).lastIndexOf(c);if(i>=0)S.queue.splice(i,1);
+    setSt(cur(),c,3);S.fb={ok:true,praise:'Хорошо, засчитано'};S.fixBad=false;save();render();ding();
+    later(()=>{if(S&&S.m==='learn'&&S.fb&&S.fb.ok)learnNext()},500)},
+  partnext:()=>{if(S&&S.m==='learn'&&(S.phase==='partdone'||S.phase==='final'))learnRound()},
   partstop:()=>{if(S&&S.m==='learn'&&S.phase==='partdone'){S.phase='final';save();render()}},
-  restart:()=>{if(!confirm('Сбросить прогресс этого набора? Это нельзя отменить.'))return;cur().ld=[];cur().cards.forEach(c=>{c.lvl=0;c.hard=false});markReset(cur());save();A.start({m:'learn'})},
+  restart:()=>{if(!confirm('Сбросить прогресс этого набора? Это нельзя отменить.'))return;cur().ld=[];cur().cards.forEach(c=>{c.lvl=0;c.hard=false;delete c.at});markReset(cur());save();A.start({m:'learn'})},
+  lset:()=>{S.cfgOpen=!S.cfgOpen;render()},
+  lcn:(d)=>{S.cfg.n=+d.n;render()},
+  lct:(d)=>{const c=S.cfg,on=['mc','tf','mt','wr'].filter(k=>c[k]);if(c[d.k]&&on.length<=1){toast('Нужен хотя бы один тип вопросов');return}c[d.k]=c[d.k]?0:1;render()},
+  lca:(d)=>{S.cfg.ans=d.v;render()},
+  lcs:()=>{S.cfg.shuf=S.cfg.shuf?0:1;render()},
+  lapply:()=>{cur().lcfg=Object.assign({},S.cfg);save();S.cfgOpen=false;S.round=Math.max(0,S.round-1);learnRound();render()},
+  lreset:()=>A.restart(),
   /* тест */
   tmc:(d)=>{const q=S.qs[S.i],o=q.opts[+d.i];testAnswer(o===q.a,o===q.a?'':o)},
   ttf:(d)=>{const q=S.qs[S.i];const ok=(d.v==='1')===q.truth;testAnswer(ok,ok?'':(q.truth?'Неверно':'Верно'))},
   tskip:()=>testAnswer(false,''),
+  ttile:(d)=>testBoardTap(+d.i),
+  tn:(d)=>{S.cfg.n=+d.n;render()},
+  tt:(d)=>{const c=S.cfg,on=['tf','mc','mt','wr'].filter(k=>c[k]);if(c[d.k]&&on.length<=1){toast('Нужен хотя бы один тип вопросов');return}c[d.k]=c[d.k]?0:1;render()},
+  ta:(d)=>{S.cfg.ans=d.v;render()},
+  tgo:()=>{cur().tcfg=Object.assign({},S.cfg);save();const cfg=S.cfg;S.cfg=cfg;testRun(cur().cards);render();window.scrollTo(0,0)},
+  tset:()=>{S.phase='set';render()},
+  tagain:()=>{const ids=new Set(S.res.filter(r=>!r.ok).flatMap(r=>(r.q.cs||[r.q.c]).map(c=>c.id)));const cards=cur().cards.filter(c=>ids.has(c.id));if(!cards.length)return;const cfg=Object.assign({},S.cfg,{n:99});const keep=S.cfg;S.cfg=cfg;testRun(cards);S.cfg=keep;render();window.scrollTo(0,0)},
   tile:(d)=>tileClick(d.id),
+  bgo:()=>{if(S&&S.m==='blast'){blastLevel()}},
+  gnext:()=>{if(S&&S.m==='blast'){S.level++;blastLevel()}},
+  mstart:()=>{S.phase='play';S.start=Date.now();timers.push(setInterval(()=>{if(!S||S.m!=='match'||S.done)return;S.t=(Date.now()-S.start)/1000+S.miss*0.5;const el=document.getElementById('clock');if(el)el.textContent=S.t.toFixed(1)+' с'},100));render()},
   /* игры */
   gans:(d)=>gemsAnswer(+d.i),
   bans:(d)=>blocksAnswer(+d.i),
@@ -1508,6 +1727,7 @@ document.addEventListener('submit',e=>{
   e.preventDefault();
   const inp=document.getElementById('ans');if(!inp||!S)return;
   const v=inp.value;
+  if(e.target.id==='fixf'){learnFix(v);return}
   if(e.target.id==='typed'){learnSubmit(v);return}
   if(e.target.id==='rtyped'){reviewSubmit(v);return}
   if(e.target.id==='blastform'){blastShoot(v);return}
@@ -1520,8 +1740,10 @@ document.addEventListener('keydown',e=>{
     if(e.key===' '){e.preventDefault();A.flip()}
     else if(e.key==='ArrowRight')A.know();
     else if(e.key==='ArrowLeft')A.again();
+    else if(e.key==='z'||e.key==='Z'||e.key==='я'||e.key==='Я')A.cundo();
   }
-  if(e.key==='Enter'&&S.m==='learn'&&S.fb&&!S.fb.ok&&tag!=='button'){e.preventDefault();learnNext()}
+  if(e.key==='Enter'&&S.m==='learn'&&S.fb&&!S.fb.ok&&!S.fb.fix&&tag!=='button'){e.preventDefault();learnNext()}
+  if(S.m==='learn'&&S.kind==='mc'&&!S.fb&&tag!=='input'&&tag!=='textarea'&&/^[1-4]$/.test(e.key)&&S.opts&&S.opts[+e.key-1]!==undefined)A.mc({i:+e.key-1});
   if(S.m==='cards'&&e.target.classList&&e.target.classList.contains('flip-in')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();A.flip()}
 });
 
@@ -1852,7 +2074,7 @@ const lnum=s=>String(s==null?'':s).split('+').reduce((a,b)=>a+(parseFloat(String
 const lfmt=s=>String(s==null?'':s).replace('.',',');
 const ldate=iso=>{const [y,m,d]=iso.split('-').map(Number);return DOW_RU[dowOf(iso)]+', '+d+' '+MONTHS[m-1]};
 const lrender=()=>{const y=window.scrollY;render();window.scrollTo(0,y)};
-let LF={tab:'today',date:null,wk:null,body:null,exSel:null,affTh:'all',affAdd:false};
+let LF={pm:null,pd:null,p14:0,tab:'today',date:null,wk:null,body:null,exSel:null,affTh:'all',affAdd:false};
 
 function LFD(){
   const L=data.life||(data.life={});
@@ -1888,7 +2110,8 @@ function lItems(date){
   if(g)out.push({k:'g',e:'🏋️‍♀️',n:'Зал: '+(L_TYPES[g]||g).toLowerCase(),type:g});
   S.habits.forEach(h=>{if(h.id==='pool'&&cyc)return;out.push({k:'h:'+h.id,e:h.e||'✨',n:h.n,opt:h.opt?1:0})});
   if(S.flexOn!==false)out.push({k:'x',e:'🧘‍♀️',n:'МФР, пилатес или растяжка',sub:'между тренировками, что-то одно',opt:1,flex:1});
-  S.sup.forEach(s=>(s.slots||[]).forEach(sl=>out.push({k:'s:'+s.id+':'+sl,e:'💊',n:s.n,sub:s.dose||'',slot:sl})));
+  S.sup.forEach(s=>(s.slots||[]).forEach(sl=>out.push({k:'s:'+s.id+':'+sl,e:'💊',n:s.n,sub:s.dose||'',slot:sl,opt:1})));
+  ((r&&r.todo)||[]).forEach(t=>out.push({k:'t:'+t.id,e:'📝',n:t.t,todo:t.id}));
   return out;
 }
 function isDone(date,k){
@@ -1899,6 +2122,77 @@ function isDone(date,k){
   return false;
 }
 function dayPct(date){const it=lItems(date).filter(i=>!i.opt);if(!it.length)return null;return Math.round(it.filter(i=>isDone(date,i.k)).length/it.length*100)}
+
+
+/* ---------- прогресс: календарь, уровни дней, английский вместе с «Моим днём» ---------- */
+const LV_NAME=['пока пусто','немного','хороший день','зелёный день','бриллиантовый день'];
+const LV_ICON=['⚪','🌱','🟡','🟢','💎'];
+function dayInfo(date){
+  const L=LFD(),r=lday(date)||{done:{},todo:[]},D=k=>isDone(date,k);
+  const wk=L.wk.filter(w=>w.date===date&&w.type!=='pool'&&wdone(w));
+  const workout=wk.length>0||!!r.done.g||!!r.done.m;
+  const walk=D('h:walk'),zar=D('h:warm');
+  const extra=[];
+  L.set.habits.forEach(h=>{if(h.id!=='warm'&&h.id!=='walk'&&D('h:'+h.id))extra.push(h.n)});
+  if(D('x'))extra.push('МФР, пилатес или растяжка');
+  ((r.todo)||[]).forEach(t=>{if(r.done['t:'+t.id])extra.push(t.t)});
+  const tr=((data.track||{})[date])||{s:[]},eng=(tr.s||[]).filter(x=>x>0).length;
+  if(eng>=NORM)extra.push('Английский: '+eng+' из 5 навыков');
+  const F=L.food;if(F&&F.days&&F.days[date]&&F.wg&&(F.days[date].w||0)>=F.wg)extra.push('Вода: цель выполнена');
+  const pts=(workout?3:0)+(walk?2:0)+(zar?1:0)+extra.length;
+  let lv=0;
+  if(workout&&walk)lv=4;
+  else if(workout||walk||(zar&&extra.length>=2))lv=3;
+  else if(pts>=2)lv=2;else if(pts>=1)lv=1;
+  return {lv,workout,walk,zar,extra,eng,pts,wk,r};
+}
+const pdCell=(d,sel,today)=>{const i=dayInfo(d),f=d>today;return `<button class="pd l${f?0:i.lv} ${d===today?'today':''} ${d===sel?'sel':''} ${f?'fut':''}" data-act="lpd" data-d="${d}" aria-label="${ruDate(d)}: ${LV_NAME[f?0:i.lv]}"><span>${+d.slice(8)}</span>${!f&&i.lv===4?'<b>💎</b>':''}</button>`};
+function p14Html(today,page,sel){
+  const end=addDays(today,-14*page);const days=[];for(let q=13;q>=0;q--)days.push(addDays(end,-q));
+  return `<div class="pnav"><button class="btn sm" data-act="lp14" data-d="1" aria-label="Раньше">‹</button><span class="small muted grow" style="text-align:center">${ruDate(days[0])} – ${ruDate(days[13])}</span><button class="btn sm" data-act="lp14" data-d="-1" aria-label="Позже" ${page<=0?'disabled':''}>›</button></div>
+  <div class="pcal">${days.map(d=>pdCell(d,sel,today)).join('')}</div>`;
+}
+function dayDetail(date){
+  const i=dayInfo(date),L=LFD(),r=i.r;
+  const mk=ok=>ok?'✅':'▫️';
+  const wkn=i.wk.map(w=>wTitle(w)).join(', ');
+  const tr=((data.track||{})[date])||{s:[]};
+  const skills=SKILLS.map((n,q)=>(tr.s&&tr.s[q]>0)?n:null).filter(Boolean);
+  const F=L.food,fd=F&&F.days&&F.days[date],kc=fd?Math.round(ftotal(date).k):0;
+  const mood=r.mood?` · самочувствие ${r.mood}/5`:'',en=r.energy?` · энергия ${r.energy}/5`:'';
+  return `<div class="panel stack"><div class="row" style="justify-content:space-between"><h2>${ldate(date)}</h2><span class="small">${LV_ICON[i.lv]} ${LV_NAME[i.lv]}</span></div>
+    <div class="small">${mk(i.workout)} Тренировка${wkn?': '+esc(wkn):''}</div>
+    <div class="small">${mk(i.walk)} Прогулка, шаги</div>
+    <div class="small">${mk(i.zar)} Утренняя зарядка</div>
+    <div class="small">${mk(i.eng>=NORM)} Английский: ${i.eng} из 5 навыков${skills.length?' ('+esc(skills.join(', '))+')':''}</div>
+    ${i.extra.filter(x=>!/^Английский/.test(x)).map(x=>`<div class="small">✅ ${esc(x)}</div>`).join('')}
+    ${fd?`<div class="small muted">Еда: ${kc} ккал · вода ${fnum((fd.w||0)/1000)} л</div>`:''}
+    ${(mood||en)?`<div class="small muted">${(mood+en).replace(/^ · /,'')}</div>`:''}
+    <div class="row"><button class="btn sm" data-act="lopenday" data-d="${date}">Открыть этот день</button></div></div>`;
+}
+function lifeProg(){
+  const today=isoToday(),pm=LF.pm||today.slice(0,7),sel=LF.pd||today;
+  const [y,m]=pm.split('-').map(Number),first=pm+'-01',n=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const off=(dowOf(first)+6)%7;
+  const cells=[];for(let q=0;q<off;q++)cells.push('<span></span>');
+  const cnt={g:0,d:0,w:0,wl:0,e:0,tot:0};
+  for(let k=1;k<=n;k++){const d=pm+'-'+String(k).padStart(2,'0');cells.push(pdCell(d,sel,today));
+    if(d<=today){const i=dayInfo(d);cnt.tot++;if(i.lv>=3)cnt.g++;if(i.lv===4)cnt.d++;if(i.workout)cnt.w++;if(i.walk)cnt.wl++;if(i.eng>=NORM)cnt.e++}}
+  let streak=0;for(let q=0;q<400;q++){const d=addDays(today,-q),i=dayInfo(d);if(i.lv>=3)streak++;else if(q===0)continue;else break}
+  const mn=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'][m-1];
+  const tile=(v,l)=>`<div class="tile2"><b>${v}</b><span class="small muted">${l}</span></div>`;
+  const pct=cnt.tot?Math.round(cnt.g/cnt.tot*100):0;
+  return `<div class="panel stack"><h2>Общая сводка за ${mn.toLowerCase()}</h2>
+    <div class="tiles">${tile(cnt.d+' 💎','бриллиантовых дней')}${tile(cnt.g,'зелёных и выше')}${tile(streak,'дней подряд зелёных')}${tile(cnt.w,'тренировок')}${tile(cnt.wl,'дней с шагами')}${tile(cnt.e,'дней английского')}</div>
+    <div class="small muted">Хорошо позанималась: ${cnt.g} из ${cnt.tot} дней (${pct}%). Английский и «Мой день» считаются вместе.</div>${fbarL(cnt.g,cnt.tot)}</div>
+  <div class="panel stack"><div class="pnav"><button class="btn sm" data-act="lpm" data-d="-1" aria-label="Прошлый месяц">‹</button><h2 class="grow dtitle">${mn} ${y}</h2><button class="btn sm" data-act="lpm" data-d="1" aria-label="Следующий месяц">›</button></div>
+    <div class="pcal">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>`<span class="ph">${x}</span>`).join('')}${cells.join('')}</div>
+    <div class="plegend small muted"><span><i class="pd l0"></i>пусто</span><span><i class="pd l1"></i>немного</span><span><i class="pd l2"></i>хорошо</span><span><i class="pd l3"></i>зелёный</span><span><i class="pd l4"></i>бриллиант</span></div></div>
+  <div class="panel stack"><h2>Последние 14 дней</h2><div class="small muted">Листай стрелками назад.</div>${p14Html(today,LF.p14||0,sel)}</div>
+  ${dayDetail(sel)}
+  <div class="panel stack"><h2>Как считается день</h2><div class="small" style="line-height:1.5">💎 Тренировка и прогулка в один день.<br>🟢 Была тренировка, или прогулка, или утренняя зарядка и ещё два плюсика (английский, бассейн, МФР, дыхание, массаж, вода, свои дела).<br>🟡 Два плюсика и больше.<br>🌱 Один плюсик.</div></div>`;
+}
+const fbarL=(v,max)=>`<div class="bar"><span style="width:${max?Math.round(v/max*100):0}%"></span></div>`;
 
 /* ---------- аффирмации ---------- */
 const AFF=[
@@ -1946,8 +2240,8 @@ function lifeSummary(){
   const need=it.filter(i=>!i.opt);return 'Сегодня сделано '+need.filter(i=>isDone(t,i.k)).length+' из '+need.length;
 }
 function lifeView(){
-  const tabs=[['today','Сегодня'],['wk','Тренировки'],['body','Тело'],['diary','Дневник'],['more','Ещё']];
-  const body=({today:lifeToday,wk:lifeWk,body:lifeBody,diary:lifeDiary,more:lifeMore})[LF.tab]();
+  const tabs=[['today','Сегодня'],['prog','Прогресс'],['wk','Тренировки'],['body','Тело'],['diary','Дневник'],['more','Ещё']];
+  const body=({today:lifeToday,prog:lifeProg,wk:lifeWk,body:lifeBody,diary:lifeDiary,more:lifeMore})[LF.tab]();
   return `<div class="top"><button class="btn ghost sm" data-act="lhome">← Наборы</button><h1 style="font-size:1.25rem">Мой день 🌸</h1>${fsBtn()}</div>
   <div class="ltabs" role="tablist">${tabs.map(([k,n])=>`<button class="ltab ${LF.tab===k?'on':''}" data-act="ltab" data-k="${k}" role="tab" aria-selected="${LF.tab===k}">${n}</button>`).join('')}</div>${body}`;
 }
@@ -1969,27 +2263,26 @@ function lifeToday(){
   const L=LFD(),S=L.set,today=isoToday(),date=LF.date||today,future=date>today,r=lday(date)||{done:{},aff:{}};
   const items=lItems(date),plan=items.filter(i=>!i.slot&&!i.opt),opts=items.filter(i=>!i.slot&&i.opt),sup=items.filter(i=>i.slot);
   const need=items.filter(i=>!i.opt),dn=need.filter(i=>isDone(date,i.k)).length,pct=need.length?Math.round(dn/need.length*100):0;
-  const bonus=d=>lItems(d).filter(i=>i.opt&&isDone(d,i.k)).length;let wkb=0;for(let q=0;q<7;q++)wkb+=bonus(addDays(date,-q));
+  const bonus=d=>lItems(d).filter(i=>i.opt&&!i.slot&&isDone(d,i.k)).length;let wkb=0;for(let q=0;q<7;q++)wkb+=bonus(addDays(date,-q));
   const m=marathonFor(date);
   const row=i=>{
     const on=isDone(date,i.k);
-    return `<div class="stack" style="gap:6px"><button class="hrow ${on?'on':''}" data-act="ltog" data-k="${esc(i.k)}" aria-pressed="${on}" ${future?'disabled':''}><i>✓</i><span>${i.e} ${esc(i.n)}${i.sub?`<small>${esc(i.sub)}</small>`:''}</span></button>${i.k==='g'?`<div class="row"><button class="btn sm" data-act="lnew" data-t="${i.type}">Записать тренировку</button></div>`:''}</div>`;
+    return `<div class="stack" style="gap:6px"><button class="hrow ${on?'on':''}" data-act="ltog" data-k="${esc(i.k)}" aria-pressed="${on}" ${future?'disabled':''}><i>✓</i><span>${i.e} ${esc(i.n)}${i.sub?`<small>${esc(i.sub)}</small>`:''}</span></button>${i.todo?`<div class="row" style="justify-content:flex-end"><button class="btn sm ghost" data-act="lddel" data-id="${esc(i.todo)}">Убрать дело</button></div>`:''}${i.k==='g'?`<div class="row"><button class="btn sm" data-act="lnew" data-t="${i.type}">Записать тренировку</button></div>`:''}</div>`;
   };
   const slots=L_SLOTS.map(([k,n])=>{
     const its=sup.filter(i=>i.slot===k);if(!its.length)return '';
     return `<div class="stack" style="gap:6px"><div class="small muted">${n}</div><div class="row">${its.map(i=>{const on=isDone(date,i.k);return `<button class="chipb ${on?'on':''}" data-act="ltog" data-k="${esc(i.k)}" aria-pressed="${on}" ${future?'disabled':''}>💊 ${esc(i.n)}${i.sub?' · '+esc(i.sub):''}</button>`}).join('')}</div></div>`;
   }).join('');
-  /* полоска последних 14 дней */
-  const bars=[];for(let i=13;i>=0;i--){const d=addDays(today,-i),p=dayPct(d);bars.push(`<i class="${p?'on':''}" style="height:${p==null?8:Math.max(10,p)}%" title="${ruDate(d)}: ${p==null?'—':p+'%'}"></i>`)}
   const rest=m&&m.label==='Выходной'?'<div class="small muted">🌿 Марафон: сегодня выходной.</div>':'';
   const cyc=S.cycle?`<button class="chipb ${r.per?'on':''}" data-act="lmood" data-k="per" data-v="${r.per?0:1}" ${future?'disabled':''}>🌸 Особые дни</button>`:'';
-  return `${lnav(date,today)}<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span style="width:${pct}%"></span></div><div class="small muted" style="text-align:center">${need.length?`Сделано ${dn} из ${need.length}`:'Пока нет дел на этот день'}${bonus(date)?` · бонус +${bonus(date)} ⭐`:''}</div></div>
+  return `${lnav(date,today)}<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span style="width:${pct}%"></span></div><div class="small muted" style="text-align:center">${need.length?`Сделано ${dn} из ${need.length}`:'Пока нет дел на этот день'} · ${LV_ICON[dayInfo(date).lv]} ${LV_NAME[dayInfo(date).lv]}${bonus(date)?` · бонус +${bonus(date)} ⭐`:''}</div></div>
   ${affCard(date,'am',future)}${affCard(date,'pm',future)}
-  <div class="panel stack"><h2>План дня</h2>${rest}${plan.length?plan.map(row).join(''):'<div class="small muted">Добавь привычки и марафон во вкладке «Ещё».</div>'}</div>
+  <div class="panel stack"><h2>План дня</h2>${rest}${plan.length?plan.map(row).join(''):'<div class="small muted">Добавь привычки и марафон во вкладке «Ещё».</div>'}
+    <div class="row" style="flex-wrap:nowrap"><input class="inp grow" id="ld-new" placeholder="＋ Своё дело на этот день" style="min-width:0" aria-label="Своё дело на этот день"><button class="btn primary" data-act="ldadd" aria-label="Добавить дело">＋</button></div></div>
   ${opts.length?`<div class="panel stack"><h2>По желанию ⭐</h2><div class="small muted">Это не обязательно: сделала — получаешь бонус, не сделала — ничего не теряешь. Бонусов за 7 дней: ${wkb}</div>${opts.map(i=>i.flex?`<div class="stack" style="gap:6px"><div class="small"><b>${i.e} ${esc(i.n)}</b><br><span class="muted">${esc(i.sub)}</span></div><div class="row">${(S.flex||[]).map((n,q)=>{const on=!!r.done['x:'+q];return `<button class="chipb ${on?'on':''}" data-act="ltog" data-k="x:${q}" aria-pressed="${on}" ${future?'disabled':''}>${esc(n)}</button>`}).join('')}</div></div>`:row(i)).join('')}</div>`:''}
-  ${sup.length?`<div class="panel stack"><h2>Добавки</h2>${slots}</div>`:''}
+  ${sup.length?`<div class="panel stack"><h2>Добавки ⭐</h2><div class="small muted">По желанию: в цель дня не входят.</div>${slots}</div>`:''}
   <div class="panel stack"><h2>Как я сегодня</h2>${lfeel(date,r,future)}${cyc}</div>
-  <div class="panel stack"><h2>Последние 14 дней</h2><div class="strip">${bars.join('')}</div></div>`;
+  <div class="panel stack"><div class="row" style="justify-content:space-between"><h2>Последние 14 дней</h2><button class="btn sm ghost" data-act="ltab" data-k="prog">Весь прогресс</button></div>${p14Html(today,0,date)}</div>`;
 }
 
 /* ---------- тренировки ---------- */
@@ -2163,7 +2456,13 @@ function lbackup(){try{const b=new Blob([JSON.stringify(LFD())],{type:'applicati
 Object.assign(A,{
   life:()=>{LF.date=null;go('life')},
   lhome:()=>{LF.wk=null;LF.edit=false;go('home')},
-  ltab:(d)=>{LF.tab=d.k;lrender()},
+  ltab:(d)=>{LF.tab=d.k;window.scrollTo(0,0);lrender()},
+  lpm:(d)=>{const t=isoToday(),pm=LF.pm||t.slice(0,7);let [y,m]=pm.split('-').map(Number);m+=+d.d;if(m<1){m=12;y--}if(m>12){m=1;y++}LF.pm=y+'-'+String(m).padStart(2,'0');lrender()},
+  lpd:(d)=>{LF.pd=d.d;if(LF.tab==='today'){LF.date=d.d;window.scrollTo(0,0)}lrender()},
+  lp14:(d)=>{LF.p14=Math.max(0,(LF.p14||0)+(+d.d));lrender()},
+  lopenday:(d)=>{LF.date=d.d;LF.tab='today';window.scrollTo(0,0);lrender()},
+  ldadd:()=>{const el=document.getElementById('ld-new'),t=(el&&el.value||'').trim();if(!t)return;const r=lday(lcur(),true);r.todo=r.todo||[];r.todo.push({id:uid(),t});ltouch(r);lrender()},
+  lddel:(d)=>{const r=lday(lcur());if(!r||!r.todo)return;r.todo=r.todo.filter(x=>x.id!==d.id);delete r.done['t:'+d.id];ltouch(r);lrender()},
   ldn:(d)=>{const t=addDays(isoToday(),7),n=addDays(lcur(),+d.d);LF.date=n>t?t:n;lrender()},
   ldt:()=>{LF.date=null;lrender()},
   ldgo:(d)=>{LF.date=d.d;window.scrollTo(0,0);lrender()},
@@ -3146,7 +3445,7 @@ document.addEventListener('input',e=>{
   else if(ds.fag&&FT.amt){FT.amt.g=t.value;const c=fcalc(FT.amt.it,fnum0(t.value));const set=(i,v)=>{const el=document.getElementById(i);if(el)el.textContent=v};set('fa-k',Math.round(c.k));set('fa-p',fnum(c.p));set('fa-f',fnum(c.f));set('fa-c',fnum(c.c))}
   else if(ds.fdis!==undefined){FD().dis=t.value;FD().u=Date.now();saveLocal()}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='faq'){e.preventDefault();A.fnet()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='faq'){e.preventDefault();A.fnet()}if(e.key==='Enter'&&e.target&&e.target.id==='ld-new'){e.preventDefault();A.ldadd()}});
 document.addEventListener('change',e=>{
   const t=e.target,ds=t&&t.dataset;if(!t)return;
   if(t.id==='flabel'&&t.files&&t.files[0]){const f=t.files[0];t.value='';readLabel(f);return}
