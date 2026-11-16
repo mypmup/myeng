@@ -263,6 +263,37 @@ textarea.inp{min-height:110px;resize:vertical}
 .wk{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .wk.cur{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
 /* блокнотик */
+.tocw{display:flex;align-items:center;gap:4px}
+.tocw .tocrow{flex:1;min-width:0}
+textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88rem;line-height:1.45}
+.nepv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.nepv{grid-template-columns:1fr}}
+.nepv .np{min-height:160px;border:1px solid var(--line)}
+.nehelp summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.nehelp code{background:var(--accent-soft);padding:1px 6px;border-radius:6px;font-size:.85em;white-space:nowrap}
+.nehelp .nt td{padding:6px 9px}
+.nbtools{gap:8px;margin:2px 0}
+.nbsecs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch}
+.nbsecs .chipb{flex:0 0 auto;white-space:nowrap}
+.nbtr{width:100%;border-collapse:separate;border-spacing:0 4px;font-size:.82rem}
+.nbtr th{font-size:.7rem;font-weight:700;color:var(--muted);text-align:center;padding:2px 3px}
+.nbtr th:first-child{text-align:left}
+.nbtr td{padding:2px 3px;text-align:center}
+.nbtr .trn{text-align:left;font-weight:700;background:#F9E3E9;border-radius:10px 0 0 10px;padding:7px 8px}
+.nbtr .trg td{text-align:left;font-family:'Caveat','Comic Sans MS',cursive;font-weight:700;font-size:1.25rem;color:var(--accent);padding:6px 4px 0}
+.trc{width:30px;height:30px;border-radius:9px;border:2px solid #A59B7C;background:#fff;color:var(--ok);font-weight:900;font-size:1rem;padding:0}
+.trc.on{background:var(--ok-soft);border-color:var(--ok)}
+.mixbtn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;margin:4px 0 10px;border-radius:18px;background:linear-gradient(135deg,var(--accent-soft),var(--surface));border:1.5px solid var(--accent);font-weight:700}
+.mixbtn small{display:block;font-weight:500;font-size:.8rem;color:var(--muted)}
+.mixbtn .mixi{font-size:1.5rem}.mixbtn .mixgo{font-size:1.6rem;color:var(--accent)}
+.mixbtn:disabled{opacity:.55;cursor:default}
+.mixbtn:focus-visible{outline:2px solid var(--accent)}
+.hwp{border-left:4px solid var(--accent)}.hwp.warn{border-left-color:var(--warn)}.hwp.ok{border-left-color:var(--ok)}
+.wsticker{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 12px;border-radius:99px;background:var(--surface);color:var(--fg);border:1.5px solid #5aa9ff;box-shadow:0 8px 24px -10px rgba(0,0,0,.4);font-size:.84rem;font-weight:700;max-width:calc(100vw - 24px);opacity:0;transform:translateY(16px);transition:opacity .35s,transform .35s}
+.wsticker.on{opacity:1;transform:none}
+.wsticker .wdrop{font-size:1.1rem}
+.wsticker .wyes{border:0;border-radius:99px;background:#5aa9ff;color:#06264a;font-weight:800;font-size:.78rem;padding:6px 10px}
+.wsticker .wno{border:0;background:transparent;color:var(--muted);font-size:1.1rem;padding:0 4px}
 :root{--nbmin:max(420px,calc(100vh - 262px))}
 @supports (height:100svh){:root{--nbmin:max(420px,calc(100svh - 262px))}}
 .hand{font-family:'Caveat','Comic Sans MS',cursive;font-weight:700}
@@ -525,7 +556,22 @@ BUILTIN.forEach(b=>{
 try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}
 const saveLocal=keep=>{if(keep!==true)data.savedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}if(keep!==true)scheduleRemote()};
 const save=()=>saveLocal();
-const getSet=id=>data.sets.find(s=>s.id===id);
+/* Микс-повторение: все слова, по которым уже есть прогресс, из всех наборов. Набор живёт только в памяти, карточки — настоящие */
+let MIXC=null;
+function mixRefresh(){
+  const seen=new Set(),cards=[],dirs={td:0,dt:0};
+  data.sets.forEach(s=>{
+    let used=false;
+    s.cards.forEach(c=>{if((c.lvl||0)>0&&!seen.has(c.id)){seen.add(c.id);cards.push(c);used=true}});
+    if(used)dirs[s.dir==='dt'?'dt':'td']++;
+  });
+  if(!MIXC)MIXC={id:'__mix',name:'Микс-повторение 🔀',best:null,mix:1};
+  MIXC.cards=cards;MIXC.dir=dirs.dt>dirs.td?'dt':'td';
+  MIXC.ld=[...new Set(data.sets.flatMap(s=>s.ld||[]))];
+  return MIXC;
+}
+const mixCount=()=>{const seen=new Set();data.sets.forEach(s=>s.cards.forEach(c=>{if((c.lvl||0)>0)seen.add(c.id)}));return seen.size};
+const getSet=id=>id==='__mix'?(MIXC||mixRefresh()):data.sets.find(s=>s.id===id);
 
 /* ---------- звук «дынь» ---------- */
 /* звук вырезан из записи Quizlet (правильный ответ) */
@@ -609,7 +655,11 @@ function home(){
   :`<div class="panel empty stack"><h2>Пока нет ни одного набора</h2><p class="muted">Создайте набор и вставьте слова списком: слово — перевод.</p></div>`;
   return `${quoteHtml()}<div class="top"><div class="brand">Katrin <i>Dictionary</i><img class="bowi" src="data:image/png;base64,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" alt=""></div><div class="row">${themeBtn()}${fsBtn()}<button class="btn sm ghost" data-act="mute" aria-pressed="${data.mute?'true':'false'}">Звук: ${data.mute?'выкл':'вкл'}</button><button class="btn primary" data-act="new">+ Новый набор</button></div></div>
   ${bannerHtml()}
-  <h1>Ваши наборы</h1>${syncLine()}${backupNote()}${list}`;
+  <h1>Ваши наборы</h1>${syncLine()}${backupNote()}${mixBtn()}${list}`;
+}
+function mixBtn(){
+  const n=mixCount();
+  return `<button class="mixbtn" data-act="mix" ${n<2?'disabled':''}><span class="mixi">🔀</span><span class="grow"><b>Микс-повторение</b><small>${n<2?'Появится, когда начнёшь учить слова':`Все слова, которые ты уже учила: ${n}`}</small></span><span class="mixgo">›</span></button>`;
 }
 
 function setView(){
@@ -618,8 +668,8 @@ function setView(){
   const ln=learnedToday(),tdDone=data.day&&data.day.date===isoToday()&&data.day.marked;
   const tdLine=`<div class="small muted">${ln>=MARK_WORDS?`Сегодня выучено слов: ${ln}.`:`Сегодня выучено слов: ${ln} из ${MARK_WORDS}.`} ${tdDone?'🍇 «Слова» отмечены в трекере.':'«Слова» в трекере отметятся сами, когда наберётся '+MARK_WORDS+'.'}</div>`;
   const lv=c=>`<div class="lv">${[1,2,3].map(i=>`<span class="dot ${c.lvl>=i?'on':''}"></span>`).join('')}</div>`;
-  return `<div class="top">${back('home','Наборы')}<div class="row"><button class="btn sm" data-act="edit" data-id="${s.id}">Редактировать</button></div></div>
-  <div class="stack"><h1>${esc(s.name)}</h1>
+  return `<div class="top">${back('home','Наборы')}<div class="row">${s.mix?'':`<button class="btn sm" data-act="edit" data-id="${s.id}">Редактировать</button>`}</div></div>
+  <div class="stack"><h1>${esc(s.name)}</h1>${s.mix?'<div class="small muted">Сюда попадают все слова из всех наборов, по которым уже есть прогресс. Ошибки и успехи записываются в сами наборы.</div>':''}
     <div class="row"><span class="muted small">${cnt(s.cards.length)} · выучено ${mastered(s)}%</span>
     <span class="grow"></span>
     <div class="seg" role="group" aria-label="Что показывать первым"><button class="${s.dir!=='dt'?'on':''}" data-act="dir" data-v="td">Слово → перевод</button><button class="${s.dir==='dt'?'on':''}" data-act="dir" data-v="dt">Перевод → слово</button></div></div>
@@ -639,7 +689,7 @@ function setView(){
    <button class="mode" data-act="start" data-m="gems">${ico.gems}<b>Кристаллы</b><span>60 секунд, серия ответов дороже кристалл${s.gemBest?` · рекорд ${s.gemBest}`:''}</span></button>
   </div>`}
   ${statsHtml(s)}
-  <div class="panel"><div class="row" style="margin-bottom:8px"><h2 class="grow">Слова в наборе</h2><button class="btn sm ghost" data-act="reset">Сбросить прогресс</button></div>
+  <div class="panel"><div class="row" style="margin-bottom:8px"><h2 class="grow">Слова в наборе</h2>${s.mix?'':'<button class="btn sm ghost" data-act="reset">Сбросить прогресс</button>'}</div>
    <div class="row" style="gap:8px;margin-bottom:8px"><input class="inp grow" id="wsearch" placeholder="${TX.search}" value="${esc(WF.q)}" autocomplete="off" style="flex:1;min-width:0"><button class="btn sm ${WF.hard?'primary':''}" data-act="whard" aria-pressed="${WF.hard}">${TX.onlyHard}</button></div>
    <div class="terms" id="termsbox">${s.cards.map(c=>`<div class="term" data-s="${esc((c.t+' '+c.d).toLowerCase())}" data-h="${c.hard?1:0}"><div class="t">${esc(c.t)}</div><div class="d">${esc(c.d)}</div>${lv(c)}</div>`).join('')||'<p class="muted">Пусто</p>'}</div></div>`;
 }
@@ -919,6 +969,8 @@ const stOf=(s,c)=>isLd(s,c)||(c.lvl||0)>=3?3:(c.lvl||0)===2?2:((c.lvl||0)===1||c
 function setSt(s,c,v){
   c.lvl=v;c.at=Date.now();
   if(v===3){s.ld=[...new Set([...(s.ld||[]),c.id])];noteLearned(c.id)}else s.ld=(s.ld||[]).filter(x=>x!==c.id);
+  /* в миксе отметки «выучено» переносим в настоящие наборы */
+  if(s.mix)data.sets.forEach(r=>{if(r.cards.some(k=>k.id===c.id))r.ld=v===3?[...new Set([...(r.ld||[]),c.id])]:(r.ld||[]).filter(x=>x!==c.id)});
 }
 const PRAISE=['Верно!','Отлично!','Так держать!','Молодец!','Супер!','Точно!','Класс!'];
 const stCounts=s=>{const n=[0,0,0,0];s.cards.forEach(c=>n[stOf(s,c)]++);return n};
@@ -1582,7 +1634,8 @@ function render(){
   else if(V.view==='listen')h=listenView();
   else if(V.view==='life')h=lifeView();
   else if(V.view==='food')h=foodView();
-  else if(V.view==='notebook')h=`<div class="top nbtop">${back('home','Наборы')}<h1>Блокнотик 🩷</h1></div>${notebookView()}`;
+  else if(V.view==='notebook')h=`<div class="top nbtop">${back('home','Наборы')}<h1>Блокнотик 🩷</h1></div><div class="row nbtools"><button class="btn sm primary" data-act="nbadd">＋ Новая страница</button><button class="btn sm" data-act="nbeditcur">✎ Править эту</button></div>${nbSecBar()}${notebookView()}`;
+  else if(V.view==='nbedit')h=nbEditView();
   else if(V.view==='play'){
     h=({cards:cardsView,learn:learnView,review:reviewView,test:testView,match:matchView,gems:gemsView,blast:blastView,blocks:blocksView})[S.m]();
   }
@@ -1602,6 +1655,11 @@ const A={
   home:()=>go('home'),
   progress:()=>go('progress'),
   notebook:()=>go('notebook'),
+  mix:()=>{if(mixCount()<2)return;mixRefresh();go('set',{id:'__mix'})},
+  lhw:(d)=>{const S=LFD().set,i=S.hw.indexOf(d.t);if(i>=0)S.hw.splice(i,1);else S.hw.push(d.t);S.u=Date.now();saveLocal();lrender()},
+  lwadd:()=>{const el=document.getElementById('lw-n'),n=el?el.value.trim():'';if(!n)return;const S=LFD().set;S.weekly.push({id:'w'+uid(),e:'📌',n,dow:dowOf(isoToday())});S.u=Date.now();saveLocal();lrender()},
+  lwkdel:(d)=>{const S=LFD().set;S.weekly=S.weekly.filter(w=>w.id!==d.id);S.u=Date.now();saveLocal();lrender()},
+  lwater:()=>{const S=LFD().set;S.waterRem=S.waterRem===0?1:0;S.u=Date.now();saveLocal();lrender()},
   nbnext:()=>nbFlip(1),
   nbprev:()=>nbFlip(-1),
   nbgo:(d)=>{NB.idx=+d.i;render();window.scrollTo(0,0)},
@@ -2082,6 +2140,8 @@ function LFD(){
   L.aff=L.aff||{custom:[],fav:[],hide:[]};
   L.set=L.set||{u:0,habits:[{id:'walk',e:'🚶‍♀️',n:'Прогулка'},{id:'pool',e:'🏊‍♀️',n:'Бассейн / сауна',opt:1}],sup:[],gym:{1:'up',3:'low'},mStart:'',quote:'',cycle:0,tpl:{up:[],low:[],mix:[]},notes:[]};
   const S=L.set;S.habits=S.habits||[];S.sup=S.sup||[];S.gym=S.gym||{};S.tpl=S.tpl||{up:[],low:[],mix:[]};S.notes=S.notes||[];
+  if(!S.v5){S.v5=1;S.weekly=S.weekly||[{id:'sk',e:'🎓',n:'Skillbox',dow:4}];S.hw=S.hw||['h_legs','h_abs','h_arms','h_back'];if(S.waterRem===undefined)S.waterRem=1}
+  S.weekly=S.weekly||[];S.hw=S.hw||[];
   if(!S.v2){S.v2=1;if(!S.habits.some(h=>h.id==='warm'))S.habits.unshift({id:'warm',e:'🤸‍♀️',n:'Утренняя зарядка'});const pl=S.habits.find(h=>h.id==='pool');if(pl)pl.opt=1}
   if(!S.v3){S.v3=1;if(!S.habits.some(h=>h.id==='br_am'))S.habits.push({id:'br_am',e:'🌬️',n:'Дыхательная практика: утро',opt:1});if(!S.habits.some(h=>h.id==='br_pm'))S.habits.push({id:'br_pm',e:'🌙',n:'Дыхательная практика: вечер',opt:1})}
   if(!S.v4){S.v4=1;if(!S.habits.some(h=>h.id==='massage'))S.habits.push({id:'massage',e:'💆‍♀️',n:'Массаж',opt:1})}
@@ -2108,6 +2168,9 @@ function lItems(date){
   if(m&&m.label!=='Выходной')out.push({k:'m',e:'🏠',n:'Марафон: '+m.label,sub:'день '+m.day+' из '+m.total});
   const g=S.gym&&S.gym[dowOf(date)];
   if(g)out.push({k:'g',e:'🏋️‍♀️',n:'Зал: '+(L_TYPES[g]||g).toLowerCase(),type:g});
+  if(!g&&!(m&&m.label!=='Выходной')&&!(m&&m.label==='Выходной'))out.push({k:'w',e:'💪',n:'Тренировка сегодня',sub:'любая: зал, дом или бассейн'});
+  S.weekly.forEach(w=>{if(dowOf(date)===w.dow)out.push({k:'wk:'+w.id,e:w.e||'📌',n:w.n,sub:'по расписанию'})});
+  out.push({k:'e',e:'🇬🇧',n:'Английский',sub:'трекер: от '+NORM+' навыков из 5, отмечается сам'});
   S.habits.forEach(h=>{if(h.id==='pool'&&cyc)return;out.push({k:'h:'+h.id,e:h.e||'✨',n:h.n,opt:h.opt?1:0})});
   if(S.flexOn!==false)out.push({k:'x',e:'🧘‍♀️',n:'МФР, пилатес или растяжка',sub:'между тренировками, что-то одно',opt:1,flex:1});
   S.sup.forEach(s=>(s.slots||[]).forEach(sl=>out.push({k:'s:'+s.id+':'+sl,e:'💊',n:s.n,sub:s.dose||'',slot:sl,opt:1})));
@@ -2118,6 +2181,9 @@ function isDone(date,k){
   const r=lday(date);if(r&&r.done[k])return true;
   if(k==='x')return !!(r&&Object.keys(r.done).some(x=>x.indexOf('x:')===0&&r.done[x]));
   if(k==='g')return LFD().wk.some(w=>w.date===date&&GYM_T.includes(w.type)&&wdone(w));
+  if(k==='w')return LFD().wk.some(w=>w.date===date&&wdone(w));
+  if(k==='e'){const tr=((data.track||{})[date])||{s:[]};return (tr.s||[]).filter(x=>x>0).length>=NORM}
+  if(k==='m')return LFD().wk.some(w=>w.date===date&&HOME_T.includes(w.type)&&wdone(w));
   if(k==='h:pool')return LFD().wk.some(w=>w.date===date&&w.type==='pool'&&wdone(w));
   return false;
 }
@@ -2259,6 +2325,37 @@ function affCard(date,slot,future){
   const fav=LFD().aff.fav.includes(a.id);
   return `<div class="aff ${slot}"><div class="afft">${slot==='am'?'☀️ Утренняя аффирмация':'🌙 Вечерняя аффирмация'}</div><div class="afftx">${esc(a.t)}</div><div class="row" style="justify-content:flex-end;gap:8px"><button class="btn sq" data-act="laffn" data-s="${slot}" aria-label="Показать другую">↻</button><button class="btn sq" data-act="laffv" data-id="${esc(a.id)}" aria-label="В избранное">${fav?'💗':'🤍'}</button></div></div>`;
 }
+/* недельный план домашних тренировок: что из плана ещё осталось до конца недели (воскресенье) */
+function hwWeek(date){
+  const L=LFD(),plan=L.set.hw||[];
+  const dw=(dowOf(date)+6)%7,mon=addDays(date,-dw),sun=addDays(mon,6);
+  const doneT=new Set(L.wk.filter(w=>w.date>=mon&&w.date<=sun&&w.date<=date&&HOME_T.includes(w.type)&&wdone(w)).map(w=>w.type));
+  const left=plan.filter(t=>!doneT.has(t));
+  return {plan,left,done:plan.filter(t=>doneT.has(t)),mon,sun,daysLeft:6-dw+1};
+}
+function hwPanel(date){
+  const L=LFD();if(!(L.set.hw||[]).length)return '';
+  const today=isoToday();if(date>today)return '';
+  const h=hwWeek(date),dl=h.daysLeft,dtxt=dl===1?'сегодня последний день недели':'до воскресенья '+dl+' '+plural(dl,'день','дня','дней');
+  if(!h.left.length)return `<div class="panel hwp ok"><b>🏠 Домашний марафон: все тренировки недели сделаны ✓</b><div class="small muted">Так держать, неделя засчитана.</div></div>`;
+  const urgent=h.left.length>=dl;
+  return `<div class="panel hwp ${urgent?'warn':''}"><b>🏠 Домашний марафон: осталось ${h.left.length} из ${h.plan.length}</b><div class="small" style="margin-top:4px">${h.left.map(t=>esc(L_TYPES[t]||t)).join(' · ')}</div><div class="small muted" style="margin-top:2px">${dtxt}${urgent?'. Чтобы не сорвать план, надо тренироваться почти каждый день.':''}</div>${h.done.length?`<div class="small muted">Уже сделано: ${h.done.map(t=>esc(L_TYPES[t]||t)).join(', ')}</div>`:''}</div>`;
+}
+function weekSummary(date){
+  const today=isoToday();if(date>today)return '';
+  const L=LFD(),dw=(dowOf(date)+6)%7,mon=addDays(date,-dw),F=L.food;
+  let wk=0,eng=0,wat=0,days=0;
+  for(let q=0;q<=dw;q++){
+    const d=addDays(mon,q);if(d>today)break;days++;
+    const i=dayInfo(d);if(i.workout)wk++;if(i.eng>=NORM)eng++;
+    if(F&&F.days&&F.days[d]&&F.wg&&(F.days[d].w||0)>=F.wg)wat++;
+  }
+  const wkl=(L.set.weekly||[]).map(w=>{
+    let ok=false;for(let q=0;q<7;q++){const d=addDays(mon,q);if(dowOf(d)===w.dow&&d<=today&&isDone(d,'wk:'+w.id))ok=true}
+    return '<span class="tag">'+esc(w.e||'')+' '+esc(w.n)+' '+(ok?'✓':'ждёт '+DOW_RU[w.dow])+'</span>';
+  }).join('');
+  return '<div class="panel stack"><h2>Итоги недели</h2><div class="small muted">С понедельника, '+ruDate(mon)+'</div><div class="row" style="gap:6px">'+'<span class="tag">💪 тренировки '+wk+'</span><span class="tag">🇬🇧 английский '+eng+' из '+days+'</span><span class="tag">💧 вода '+wat+' из '+days+'</span>'+wkl+'</div></div>';
+}
 function lifeToday(){
   const L=LFD(),S=L.set,today=isoToday(),date=LF.date||today,future=date>today,r=lday(date)||{done:{},aff:{}};
   const items=lItems(date),plan=items.filter(i=>!i.slot&&!i.opt),opts=items.filter(i=>!i.slot&&i.opt),sup=items.filter(i=>i.slot);
@@ -2277,6 +2374,7 @@ function lifeToday(){
   const cyc=S.cycle?`<button class="chipb ${r.per?'on':''}" data-act="lmood" data-k="per" data-v="${r.per?0:1}" ${future?'disabled':''}>🌸 Особые дни</button>`:'';
   return `${lnav(date,today)}<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span style="width:${pct}%"></span></div><div class="small muted" style="text-align:center">${need.length?`Сделано ${dn} из ${need.length}`:'Пока нет дел на этот день'} · ${LV_ICON[dayInfo(date).lv]} ${LV_NAME[dayInfo(date).lv]}${bonus(date)?` · бонус +${bonus(date)} ⭐`:''}</div></div>
   ${affCard(date,'am',future)}${affCard(date,'pm',future)}
+  ${hwPanel(date)}${weekSummary(date)}
   <div class="panel stack"><h2>План дня</h2>${rest}${plan.length?plan.map(row).join(''):'<div class="small muted">Добавь привычки и марафон во вкладке «Ещё».</div>'}
     <div class="row" style="flex-wrap:nowrap"><input class="inp grow" id="ld-new" placeholder="＋ Своё дело на этот день" style="min-width:0" aria-label="Своё дело на этот день"><button class="btn primary" data-act="ldadd" aria-label="Добавить дело">＋</button></div></div>
   ${opts.length?`<div class="panel stack"><h2>По желанию ⭐</h2><div class="small muted">Это не обязательно: сделала — получаешь бонус, не сделала — ничего не теряешь. Бонусов за 7 дней: ${wkb}</div>${opts.map(i=>i.flex?`<div class="stack" style="gap:6px"><div class="small"><b>${i.e} ${esc(i.n)}</b><br><span class="muted">${esc(i.sub)}</span></div><div class="row">${(S.flex||[]).map((n,q)=>{const on=!!r.done['x:'+q];return `<button class="chipb ${on?'on':''}" data-act="ltog" data-k="x:${q}" aria-pressed="${on}" ${future?'disabled':''}>${esc(n)}</button>`}).join('')}</div></div>`:row(i)).join('')}</div>`:''}
@@ -2442,6 +2540,9 @@ function lifeMore(){
   const hasBak=(()=>{try{return !!localStorage.getItem(KEY+'.bak')}catch(e){return false}})();
   return `<div class="panel stack"><h2>Моя фраза</h2><textarea class="inp" rows="2" data-ls="quote" placeholder="${esc(QUOTE_DEF)}">${esc(S.quote||'')}</textarea><div class="small muted">Она всегда наверху на главном экране. Пусто — останется фраза по умолчанию.</div></div>
   <div class="panel stack"><h2>Домашний марафон</h2><label class="small muted" for="mstart">Дата старта (понедельник первой недели)</label><input class="inp" id="mstart" type="date" value="${esc(S.mStart||'')}" data-ls="mstart"><div class="row"><button class="btn sm" data-act="lmnext">С ближайшего понедельника</button><button class="btn sm ghost" data-act="lmoff">Выключить</button></div><div class="small muted">Расписание на 9 недель подставится по дням в «Сегодня».</div></div>
+  <div class="panel stack"><h2>Недельный план домашних тренировок</h2><div class="small muted">Выбери, какие тренировки должны быть на неделе. Когда ты записываешь тренировку, сайт сам отмечает её в плане и в «Сегодня» показывает, что ещё осталось до воскресенья.</div><div class="row">${HOME_T.map(t=>`<button class="chipb ${(S.hw||[]).includes(t)?'on':''}" data-act="lhw" data-t="${t}" aria-pressed="${(S.hw||[]).includes(t)}">${esc(L_TYPES[t])}</button>`).join('')}</div></div>
+  <div class="panel stack"><h2>Повторяется по неделям</h2>${(S.weekly||[]).map(w=>`<div class="row" style="flex-wrap:nowrap;gap:8px"><span class="grow">${esc(w.e||'')} ${esc(w.n)}</span><select class="inp" data-act-change="lwd" data-id="${esc(w.id)}" aria-label="День недели" style="max-width:6em">${[1,2,3,4,5,6,0].map(d=>`<option value="${d}" ${w.dow===d?'selected':''}>${DOW_RU[d]}</option>`).join('')}</select><button class="x" data-act="lwkdel" data-id="${esc(w.id)}" aria-label="Убрать">×</button></div>`).join('')||'<div class="small muted">Пока пусто.</div>'}<div class="row" style="flex-wrap:nowrap"><input class="inp grow" id="lw-n" placeholder="Например: Skillbox" style="min-width:0"><button class="btn primary" data-act="lwadd">＋</button></div><div class="small muted">Такое дело само появляется в плане дня в выбранный день каждой недели.</div></div>
+  <div class="panel stack"><h2>Напоминания</h2><div class="small muted">Маленькая плашка в углу: вода раз в 2 часа (до 5 раз в день) и подсказка записать завтрак, обед и ужин, если ты их ещё не записала.</div><div class="row"><button class="chipb ${S.waterRem!==0?'on':''}" data-act="lwater" aria-pressed="${S.waterRem!==0}">💧 Напоминания про воду и еду</button></div></div>
   <div class="panel stack"><h2>Зал по дням недели</h2>${gym}</div>
   <div class="panel stack"><h2>Привычки</h2>${habits||'<div class="small muted">Пока пусто.</div>'}<div class="row"><input class="inp" id="lh-e" placeholder="🌿" style="max-width:4.5em" aria-label="Эмодзи"><input class="inp grow" id="lh-n" placeholder="Новая привычка" aria-label="Название" style="flex:1;min-width:0"><button class="btn primary" data-act="lhadd">Добавить</button></div><div class="small muted">Кнопка «по желанию» делает привычку необязательной: она не считается в процентах дня, а даёт бонус.</div></div>
   <div class="panel stack"><h2>МФР, пилатес, растяжка</h2><label class="small muted" for="flexn">Варианты через запятую. В «Сегодня» отметишь тот, что сделала.</label><input class="inp" id="flexn" value="${esc((S.flex||[]).join(', '))}" data-ls="flex"><label class="row" style="gap:10px"><input type="checkbox" data-ls="flexon" ${S.flexOn===false?'':'checked'}> <span class="small">Показывать этот пункт в «Сегодня»</span></label></div>
@@ -2578,8 +2679,259 @@ const SAMPLE_TOPIC={sample:true,section:'Grammar',title:'Пример оформ
 /* два листа: на широком экране и на телефоне в альбомном положении; один лист: телефон стоймя */
 const nbSingle=()=>{const w=window.innerWidth,h=window.innerHeight;return !(w>=760||(w>h&&w>=540))};
 /* запасной вариант: те же конспекты зашиты в страницу, их видно и без входа в claude.ai */
-const NOTES_BAKED=/*NOTES_BAKED*/[{"order":1,"section":"Grammar","title":"01 · Present Simple — to be","pages":[[{"t":"head","n":"01","title":"PRESENT SIMPLE — TO BE","tag":"Grammar","sub":"AM / IS / ARE — быть, являться, находиться."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are","She is happy."],["−","S + am/is/are + not","She isn't happy."],["?","Am/Is/Are + S?","Is she happy?"],["WH?","WH + am/is/are + S?","Where are you?"]],"chip":true}],[{"t":"use","v":"описание, состояние, возраст, профессия, местоположение."},{"t":"sticky","title":"Запомнить","v":"I'm hungry. / I'm cold. / She's 20 years old."}]]},{"order":2,"section":"Grammar","title":"02 · Present Simple — ordinary verbs","pages":[[{"t":"head","n":"02","title":"PRESENT SIMPLE — ORDINARY VERBS","tag":"Grammar"},{"t":"use","v":"привычки, регулярные действия, факты."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V1 (he/she/it + -s)","She works."],["−","S + don't/doesn't + V1","She doesn't work."],["?","Do/Does + S + V1?","Does she work?"],["WH?","WH + do/does + S + V1?","Where does she work?"]],"chip":true}],[{"t":"chips","items":["always","usually","often","sometimes","never","every day"],"label":"Маркеры"},{"t":"warn","v":"После does/doesn't глагол без -s."},{"t":"pair","ok":"Does she like it?","no":"Does she likes it?"}]]},{"order":3,"section":"Grammar","title":"03 · Present Continuous","pages":[[{"t":"head","n":"03","title":"PRESENT CONTINUOUS","tag":"Grammar"},{"t":"use","v":"действие сейчас, временная ситуация, запланированное действие в ближайшем будущем."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are + V-ing","She is reading."],["−","S + am/is/are + not + V-ing","She isn't reading."],["?","Am/Is/Are + S + V-ing?","Is she reading?"],["WH?","WH + am/is/are + S + V-ing?","What is she reading?"]],"chip":true}],[{"t":"chips","items":["now","right now","at the moment","this week"],"label":"Маркеры"},{"t":"list","items":["make → making","swim → swimming","lie → lying"],"title":"Правила -ing"},{"t":"warn","v":"He isn't sleeping, не He aren't sleep."}]]},{"order":4,"section":"Grammar","title":"04 · Present Simple vs Present Continuous","pages":[[{"t":"head","n":"04","title":"PRESENT SIMPLE VS PRESENT CONTINUOUS","tag":"Grammar"},{"t":"table","head":["Present Simple","Present Continuous"],"rows":[["Регулярно, обычно","Сейчас, временно"],["I work every day.","I'm working now."],["She lives in London.","She's staying in London this week."]],"chip":false}],[{"t":"h","v":"Stative verbs"},{"t":"text","v":"глаголы состояния, обычно не используются в Continuous."},{"t":"chips","items":["know","like","love","hate","want","need","understand","believe","remember","prefer","belong","own"]},{"t":"pair","ok":"I know the answer.","no":"I'm knowing the answer."},{"t":"list","items":["I think you're right. — Я считаю, что ты права.","I'm thinking about it. — Я сейчас об этом размышляю."],"title":"THINK"}]]},{"order":5,"section":"Grammar","title":"05 · Have / have got","pages":[[{"t":"head","n":"05","title":"HAVE / HAVE GOT","tag":"Grammar","sub":"Обе конструкции могут означать «иметь», «у кого-то есть»."},{"t":"table","head":["Тип","HAVE GOT","HAVE"],"rows":[["+","I've got a car.","I have a car."],["−","I haven't got a car.","I don't have a car."],["?","Have you got a car?","Do you have a car?"],["He/She +","She's got a car.","She has a car."],["He/She −","She hasn't got a car.","She doesn't have a car."],["He/She ?","Has she got a car?","Does she have a car?"]],"chip":true},{"t":"use","v":"обладание, семья, внешность, некоторые состояния."}],[{"t":"h","v":"HAVE + действия"},{"t":"list","items":["have breakfast — завтракать","have lunch — обедать","have a shower — принимать душ","have a good time — хорошо проводить время"]},{"t":"h","v":"Формы HAVE по временам"},{"t":"table","head":["Время","Пример"],"rows":[["Present Simple","She has breakfast."],["Present Continuous","She's having breakfast."],["Past Simple","She had breakfast."]],"chip":false},{"t":"warn","v":"Have → had → had."}]]},{"order":6,"section":"Grammar","title":"06 · Prepositions of place (1)","pages":[[{"t":"head","n":"06","title":"PREPOSITIONS OF PLACE (1)","tag":"Grammar"},{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["IN","внутри","in the room"],["ON","на поверхности","on the table"],["AT","в точке, месте","at home"],["UNDER","под","under the bed"],["ABOVE","над, выше","above the table"]],"chip":false}],[{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["BELOW","ниже","below the window"],["NEAR","недалеко","near the station"],["NEXT TO","прямо рядом","next to the shop"],["BESIDE","рядом, сбоку","beside me"]],"chip":false},{"t":"sticky","title":"Запомнить целиком","v":"at home, at work, at school, in bed, on the bed."}]]},{"order":7,"section":"Grammar","title":"07 · Prepositions of place (2)","pages":[[{"t":"head","n":"07","title":"PREPOSITIONS OF PLACE (2)","tag":"Grammar"},{"t":"table","head":["Предлог","Перевод"],"rows":[["IN FRONT OF","перед"],["BEHIND","за, позади"],["OPPOSITE","напротив"],["BETWEEN","между"],["OUTSIDE","снаружи"],["INSIDE","внутри"]],"chip":false}],[{"t":"h","v":"Для описания фотографий"},{"t":"list","items":["on the left/right — слева/справа","at the top/bottom — вверху/внизу","in the centre — в центре","at the front/back — впереди/сзади"]}]]},{"order":8,"section":"Grammar","title":"08 · Prepositions of time","pages":[[{"t":"head","n":"08","title":"PREPOSITIONS OF TIME","tag":"Grammar"},{"t":"table","head":["Предлог","Использование","Пример"],"rows":[["AT","точное время","at 8 p.m."],["ON","день, дата","on Monday"],["IN","месяц, год, часть дня","in July, in 2026, in the morning"],["Без предлога","last, next, this, yesterday, tomorrow","last week, tomorrow morning"]],"chip":false}],[{"t":"list","items":["at night","in the morning/afternoon/evening","on Friday evening","last Monday","next year","yesterday evening"],"title":"Запомнить"},{"t":"pair","ok":"last week","no":"in the last week (когда имеем в виду просто «на прошлой неделе»)"}]]},{"order":9,"section":"Grammar","title":"09 · Question words","pages":[[{"t":"head","n":"09","title":"QUESTION WORDS","tag":"Grammar"},{"t":"table","head":["Слово","Перевод"],"rows":[["WHAT","что, какой"],["WHERE","где, куда"],["WHEN","когда"],["WHY","почему"],["WHO","кто"],["WHOSE","чей"],["WHICH","который, какой из"],["HOW","как"],["HOW OLD","сколько лет"],["HOW MANY","сколько (исчисляемые)"],["HOW MUCH","сколько (неисчисляемые, цена)"],["HOW OFTEN","как часто"],["WHAT TIME","во сколько"]],"chip":false}],[{"t":"h","v":"Формула"},{"t":"formula","v":"WH + вспомогательный глагол + S + основной глагол?"},{"t":"list","items":["Where does she live?","Where were you yesterday?"]},{"t":"warn","v":"Если WHO — подлежащее, do/does обычно не нужен."},{"t":"list","items":["Who lives here?"]}]]},{"order":10,"section":"Grammar","title":"10 · Question structure & short answers","pages":[[{"t":"head","n":"10","title":"QUESTION STRUCTURE & SHORT ANSWERS","tag":"Grammar"},{"t":"table","head":["Тип","Пример"],"rows":[["To be","Is she happy?"],["Present Simple","Does she work?"],["Present Continuous","Is she working?"],["Past Simple of be","Was she happy?"]],"chip":false}],[{"t":"list","items":["Are you tired? — Yes, I am.","Does she work? — Yes, she does.","Is he sleeping? — No, he isn't.","Were they ready? — No, they weren't."],"title":"Short answers"},{"t":"warn","v":"В коротком положительном ответе не сокращаем:"},{"t":"pair","ok":"Yes, she is.","no":"Yes, she's."}]]},{"order":11,"section":"Grammar","title":"11 · Past Simple — to be","pages":[[{"t":"head","n":"11","title":"PAST SIMPLE — TO BE","tag":"Grammar","sub":"WAS / WERE — был, была, были."},{"t":"table","head":["Местоимение","Форма"],"rows":[["I / He / She / It","WAS"],["You / We / They","WERE"]],"chip":false},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were","She was happy."],["−","S + wasn't/weren't","She wasn't happy."],["?","Was/Were + S?","Was she happy?"],["WH?","WH + was/were + S?","Where were you?"]],"chip":true}],[{"t":"chips","items":["yesterday","last week","last year","ago","in 2020"],"label":"Маркеры"},{"t":"warn","v":"С was/were не используем did."},{"t":"pair","ok":"Was she tired?","no":"Did she was tired?"}]]},{"order":12,"section":"Grammar","title":"12 · Past Simple — Units 45–46","pages":[[{"t":"head","n":"12","title":"PAST SIMPLE — UNITS 45–46","tag":"Grammar"},{"t":"use","v":"завершённые действия, события, привычки и ситуации в прошлом."},{"t":"h","v":"FORM"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V2 / V-ed","She worked."],["−","S + didn't + V1","She didn't work."],["?","Did + S + V1?","Did she work?"],["WH?","WH + did + S + V1?","Where did she work?"]],"chip":true},{"t":"text","v":"Short answers: Yes, I did. / No, I didn't."},{"t":"h","v":"REGULAR & IRREGULAR VERBS"},{"t":"text","v":"Regular verbs — правильные глаголы, образуются с помощью -ed."},{"t":"table","head":["Правило","Пример"],"rows":[["+ ed","watch → watched"],["После -e → + d","live → lived"],["Удвоение согласной","stop → stopped"],["Согласная + y → ied","carry → carried"],["Гласная + y → ed","play → played"]],"chip":false},{"t":"text","v":"Irregular verbs — неправильные глаголы, форму запоминаем."},{"t":"chips","items":["go → went","buy → bought","do → did","have → had","make → made","see → saw","send → sent"]},{"t":"warn","v":"После did/didn't всегда V1."},{"t":"pair","ok":"Did she go?","no":"Did she went?"}],[{"t":"h","v":"WAS/WERE VS DID"},{"t":"table","head":["TO BE","ORDINARY VERBS"],"rows":[["I was tired.","I worked."],["She wasn't happy.","She didn't work."],["Was she at home?","Did she go home?"],["Where were you?","Where did you go?"]],"chip":false},{"t":"text","v":"Was/were — прошедшие формы глагола to be. Did/didn't — вспомогательные глаголы для вопросов и отрицаний с обычными глаголами."},{"t":"warn","v":"После wasn't/weren't не добавляем be."},{"t":"pair","ok":"They weren't happy.","no":"They weren't be happy."},{"t":"h","v":"USE"},{"t":"list","items":["I watched TV yesterday. — Завершённое действие.","I played tennis every day when I was young. — Привычка в прошлом.","I arrived home, cooked dinner and went to bed. — Последовательность действий.","I lived in London in 2020. — Ситуация в прошлом."]},{"t":"h","v":"TIME EXPRESSIONS"},{"t":"table","head":["Маркер","Перевод"],"rows":[["yesterday","вчера"],["last week/year","на прошлой неделе / в прошлом году"],["two days ago","два дня назад"],["then","затем, потом"],["from ... to","с ... до / с ... по"],["for two weeks","в течение двух недель"]],"chip":false},{"t":"sticky","title":"Главное","v":"утверждение → V2/V-ed; вопрос и отрицание → did/didn't + V1; глагол to be → was/were."}]]},{"order":13,"section":"Grammar","title":"13 · Past Continuous — Unit 47","pages":[[{"t":"head","n":"13","title":"PAST CONTINUOUS — UNIT 47","tag":"Grammar"},{"t":"use","v":"когда действие находилось в процессе в определённый момент в прошлом."},{"t":"h","v":"FORM — ОБРАЗОВАНИЕ"},{"t":"formula","v":"S + was/were + V-ing"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were + V-ing","She was sleeping."],["−","S + wasn't/weren't + V-ing","She wasn't sleeping."],["?","Was/Were + S + V-ing?","Was she sleeping?"],["WH?","WH + was/were + S + V-ing?","What was she doing?"]],"chip":true},{"t":"table","head":["Форма","Местоимения"],"rows":[["Was","I / He / She / It"],["Were","You / We / They"]],"chip":false},{"t":"text","v":"Short answers: Yes, I was. / No, I wasn't."},{"t":"h","v":"USE — УПОТРЕБЛЕНИЕ"},{"t":"ex","en":"I was watching TV at 9 p.m. yesterday.","ru":"Вчера в 9 вечера я смотрела телевизор.","title":"1. Действие в конкретный момент прошлого"},{"t":"ex","en":"She was living in Paris when she had her first baby.","ru":"Она жила в Париже, когда у неё родился первый ребёнок.","title":"2. Временная ситуация в прошлом"},{"t":"ex","en":"The sun was shining when we arrived.","ru":"Когда мы приехали, светило солнце.","title":"3. Описание обстановки в прошлом"},{"t":"ex","en":"I was sleeping when the phone rang.","ru":"Я спала, когда зазвонил телефон.","title":"4. Действие, прерванное другим событием"}],[{"t":"h","v":"PAST SIMPLE VS PAST CONTINUOUS"},{"t":"table","head":["Past Simple","Past Continuous"],"rows":[["Факт или завершённое действие","Процесс в прошлом"],["I cooked dinner.","I was cooking dinner."],["She watched TV.","She was watching TV at 8."],["The phone rang.","I was sleeping when it rang."]],"chip":false},{"t":"h","v":"Past Continuous + when + Past Simple"},{"t":"text","v":"Длительное действие + событие, произошедшее во время него."},{"t":"ex","en":"I was studying when he called.","ru":"Я занималась, когда он позвонил."},{"t":"h","v":"STATIVE VERBS"},{"t":"text","v":"Глаголы состояния обычно не используются в Continuous:"},{"t":"chips","items":["know","like","love","hate","want","need","believe","understand","remember"]},{"t":"pair","ok":"I hated him. — Я его ненавидела.","no":"I was hating him."},{"t":"text","v":"Некоторые глаголы меняют значение:"},{"t":"list","items":["I thought he was right. — Я считала, что он прав.","I was thinking about him. — Я размышляла о нём."]},{"t":"h","v":"TIME MARKERS"},{"t":"list","items":["at 7 o'clock yesterday — вчера в 7 часов","at that moment — в тот момент","when — когда","while — пока, в то время как","all evening — весь вечер"]},{"t":"h","v":"⚠️ COMMON MISTAKES"},{"t":"pair","ok":"She was sleeping.","no":"She were sleeping."},{"t":"pair","ok":"I was watching TV.","no":"I was watch TV."},{"t":"pair","ok":"Were you watching TV?","no":"Did you watching TV?"},{"t":"sticky","title":"Главное запомнить","v":"Past Simple → что произошло?\nPast Continuous → что происходило в тот момент?\nPast Continuous = was/were + V-ing.\nВ Past Continuous не используем did/didn't."}]]},{"order":14,"section":"Vocabulary Notebook 🩷","title":"01 · Collocations, compounds & idioms","pages":[[{"t":"head","n":"01","title":"COLLOCATIONS, COMPOUNDS & IDIOMS","tag":"Vocabulary Notebook","sub":"English Collocations in Use Intermediate • Unit 1"},{"t":"table","head":["Тип","Определение","Пример"],"rows":[["Collocation","Привычное сочетание слов","heavy rain"],["Compound","Составное слово или единое название","teapot"],["Idiom","Устойчивое выражение с переносным смыслом","pull somebody's leg"]],"chip":false},{"t":"sticky","title":"Зачем учить коллокации?","v":"Чтобы говорить естественнее, точнее выражать мысли и улучшать письменный английский."}],[{"t":"h","v":"Collocations"},{"t":"text","v":"слова естественно употребляются вместе, значение обычно понятно."},{"t":"list","items":["make a mistake — совершить ошибку","heavy rain — сильный дождь","bitterly disappointed — глубоко разочарованный","strictly forbidden — строго запрещено"]},{"t":"h","v":"Compounds"},{"t":"text","v":"два или более слова образуют единое название. Могут писаться слитно, через дефис или раздельно."},{"t":"list","items":["teapot — чайник","narrow-minded — ограниченный во взглядах","car park — парковка"]},{"t":"h","v":"Idioms"},{"t":"text","v":"смысл часто невозможно понять дословным переводом."},{"t":"list","items":["pull somebody's leg — разыгрывать кого-то","a storm in a teacup — буря в стакане воды","pass the buck — перекладывать ответственность","be over the moon — быть на седьмом небе от счастья"]}]]},{"order":15,"section":"Описание фотографии","title":"План описания: 6 пунктов","pages":[[{"t":"head","n":"01","tag":"Описание фотографии","title":"ОПИСАНИЕ ФОТОГРАФИИ","sub":"План из 6 пунктов: от общей информации до впечатления."},{"t":"h","v":"1. General information"},{"t":"text","v":"Общая информация о фотографии"},{"t":"list","items":["This is a photo of...","This is a family / a group of friends.","There are three people in the photo.","The photo is indoors / outdoors."]},{"t":"h","v":"2. Foreground"},{"t":"text","v":"Передний план: что находится ближе всего к нам?"},{"t":"list","items":["In the foreground, there is...","There are two people in the foreground.","I can see a table / a dog / a woman"]},{"t":"h","v":"3. Background"},{"t":"text","v":"Задний план: что находится позади людей?"},{"t":"list","items":["In the background, there is...","There are some trees.","There is a big window.","I can see a house / a park / a room."]}],[{"t":"h","v":"4. People: Appearance"},{"t":"text","v":"Внешность людей"},{"t":"list","items":["He is tall / short.","She is young / middle-aged.","He has got short dark hair.","She has got long blonde hair.","He has got blue eyes."]},{"t":"h","v":"5. Clothes"},{"t":"text","v":"Одежда"},{"t":"list","items":["He wears a T-shirt and jeans.","She wears a dress.","He is in a blue shirt.","She has got a black jacket.","They wear casual clothes."]},{"t":"h","v":"6. Final impression"},{"t":"text","v":"Общее впечатление"},{"t":"list","items":["They look happy / friendly / tired.","The family looks happy.","I like this photo because...","I think this is a nice photo."]}]]}];
-function nbTopics(){return NB.pages.length?NB.pages:(NOTES_BAKED.length?NOTES_BAKED:[SAMPLE_TOPIC])}
+const NOTES_BAKED=/*NOTES_BAKED*/[{"key":"ktrack","fixed":true,"order":900,"section":"Трекер","title":"Таблица времён","pages":[[{"t":"head","title":"ТАБЛИЦА ВРЕМЁН","tag":"Трекер","sub":"Отмечай, что уже сделала по каждому времени."},{"t":"tracker"}],[{"t":"h","v":"Для чего используется?"},{"t":"ex","title":"Present Simple","en":"I like coffee.","ru":"Факты, регулярные действия, общие истины."},{"t":"ex","title":"Present Continuous","en":"I am studying now.","ru":"Действия, происходящие сейчас."},{"t":"ex","title":"Present Perfect","en":"I have finished my work.","ru":"Действия, которые начались в прошлом и важны сейчас."},{"t":"ex","title":"Present Perfect Continuous","en":"I have been studying for two hours.","ru":"Действие началось в прошлом и продолжается до сих пор. Важна длительность."},{"t":"ex","title":"Past Simple","en":"I visited Paris.","ru":"Действия в прошлом."},{"t":"ex","title":"Past Continuous","en":"I was sleeping.","ru":"Длительные действия в прошлом."},{"t":"ex","title":"Past Perfect","en":"I had left before he came.","ru":"Действие, которое произошло раньше другого в прошлом."},{"t":"ex","title":"Past Perfect Continuous","en":"I had been waiting for an hour when he came.","ru":"Длительное действие, которое продолжалось до другого момента в прошлом."},{"t":"ex","title":"Future Simple","en":"I will travel.","ru":"Планы, обещания, прогнозы."},{"t":"ex","title":"Future Continuous","en":"I will be studying.","ru":"Длительные действия в будущем."},{"t":"ex","title":"Future Perfect","en":"I will have finished by 8 p.m.","ru":"Действие, которое завершится к определённому моменту в будущем."},{"t":"ex","title":"Future Perfect Continuous","en":"By June I will have been working here for a year.","ru":"Длительность действия к определённому моменту в будущем."}]]},{"order":1,"section":"Времена","title":"01 · Present Simple — to be","pages":[[{"t":"head","n":"01","title":"PRESENT SIMPLE — TO BE","tag":"Grammar","sub":"AM / IS / ARE — быть, являться, находиться."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are","She is happy."],["−","S + am/is/are + not","She isn't happy."],["?","Am/Is/Are + S?","Is she happy?"],["WH?","WH + am/is/are + S?","Where are you?"]],"chip":true}],[{"t":"use","v":"описание, состояние, возраст, профессия, местоположение."},{"t":"sticky","title":"Запомнить","v":"I'm hungry. / I'm cold. / She's 20 years old."}]],"key":"b1"},{"order":2,"section":"Времена","title":"02 · Present Simple — ordinary verbs","pages":[[{"t":"head","n":"02","title":"PRESENT SIMPLE — ORDINARY VERBS","tag":"Grammar"},{"t":"use","v":"привычки, регулярные действия, факты."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V1 (he/she/it + -s)","She works."],["−","S + don't/doesn't + V1","She doesn't work."],["?","Do/Does + S + V1?","Does she work?"],["WH?","WH + do/does + S + V1?","Where does she work?"]],"chip":true}],[{"t":"chips","items":["always","usually","often","sometimes","never","every day"],"label":"Маркеры"},{"t":"warn","v":"После does/doesn't глагол без -s."},{"t":"pair","ok":"Does she like it?","no":"Does she likes it?"}]],"key":"b2"},{"order":3,"section":"Времена","title":"03 · Present Continuous","pages":[[{"t":"head","n":"03","title":"PRESENT CONTINUOUS","tag":"Grammar"},{"t":"use","v":"действие сейчас, временная ситуация, запланированное действие в ближайшем будущем."},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + am/is/are + V-ing","She is reading."],["−","S + am/is/are + not + V-ing","She isn't reading."],["?","Am/Is/Are + S + V-ing?","Is she reading?"],["WH?","WH + am/is/are + S + V-ing?","What is she reading?"]],"chip":true}],[{"t":"chips","items":["now","right now","at the moment","this week"],"label":"Маркеры"},{"t":"list","items":["make → making","swim → swimming","lie → lying"],"title":"Правила -ing"},{"t":"warn","v":"He isn't sleeping, не He aren't sleep."}]],"key":"b3"},{"order":4,"section":"Времена","title":"04 · Present Simple vs Present Continuous","pages":[[{"t":"head","n":"04","title":"PRESENT SIMPLE VS PRESENT CONTINUOUS","tag":"Grammar"},{"t":"table","head":["Present Simple","Present Continuous"],"rows":[["Регулярно, обычно","Сейчас, временно"],["I work every day.","I'm working now."],["She lives in London.","She's staying in London this week."]],"chip":false}],[{"t":"h","v":"Stative verbs"},{"t":"text","v":"глаголы состояния, обычно не используются в Continuous."},{"t":"chips","items":["know","like","love","hate","want","need","understand","believe","remember","prefer","belong","own"]},{"t":"pair","ok":"I know the answer.","no":"I'm knowing the answer."},{"t":"list","items":["I think you're right. — Я считаю, что ты права.","I'm thinking about it. — Я сейчас об этом размышляю."],"title":"THINK"}]],"key":"b4"},{"key":"kpp","gen":true,"section":"Времена","title0":"Present Perfect","sub":"Настоящее совершённое время: I have done","order":901,"srcs":["? Present Perfect связывает прошлое с настоящим: действие произошло раньше, но его результат, актуальность или сам факт важен сейчас.\n@ I've lost my phone. — Я потеряла телефон (сейчас его нет).\n@ She's broken her glasses. — Она сломала очки (сейчас они сломаны).\n= HAVE / HAS + V3\n# Образование\n| Тип | Формула | Пример |\n| :-- | --- | --- |\n| + | S + have/has + V3 | I've finished. |\n| − | S + haven't/hasn't + V3 | She hasn't finished. |\n| ? | Have/Has + S + V3? | Have you finished? |\n~ HAVE: I, you, we, they\n~ HAS: he, she, it\n~ Сокращения: I've, you've, we've, they've, he's, she's, it's\n# V3: третья форма глагола\n- Правильные: work → worked → worked\n- Неправильные: see → saw → seen; do → did → done; go → went → gone; read → read → read\n* Read | В V2 и V3 глагол read произносится /red/.","# Когда используем?\n# ① Результат важен сейчас\n@ I've forgotten my keys. — Я забыла ключи.\n@ She has lost her bag. — Она потеряла сумку.\n# ② Недавнее событие, новая информация\n@ I've just finished my homework. — Я только что закончила домашнее задание.\n@ There's been an accident. — Произошла авария.\n# ③ Жизненный опыт, без точного времени\n@ I've been to Italy. — Я бывала в Италии.\n@ Have you ever tried sushi? — Ты когда-нибудь пробовала суши?\n@ I've never tried it. — Я никогда этого не пробовала.","# Слова-маркеры\n| Слово | Значение | Пример |\n| :-- | --- | --- |\n| just | только что | I've just come home. |\n| already | уже | She's already eaten. |\n| yet | уже / ещё | Have you eaten yet? / I haven't eaten yet. |\n| ever | когда-нибудь | Have you ever been to London? |\n| never | никогда | I've never been to London. |\n! Already может стоять и в конце утвердительного предложения. Yet обычно стоит в конце вопроса или отрицания. Never уже содержит отрицание, поэтому haven't never говорить нельзя.\n# BEEN TO / GONE TO / BEEN IN\n| Форма | Значение | Пример |\n| :-- | --- | --- |\n| has been to | побывал и вернулся | She's been to Paris. |\n| has gone to | уехал и ещё не вернулся | She's gone to Paris. |\n| has been in | находится или находился где-то в течение периода | She's been in Paris for a week. |","# Present Perfect и Past Simple\n| Present Perfect | Past Simple |\n| --- | --- |\n| Важен факт, опыт или связь с настоящим. Точное время не названо. | Завершённое прошлое. Часто указано, когда это было. |\n| I've seen this film. — Я смотрела этот фильм. | I watched this film yesterday. — Я посмотрела этот фильм вчера. |\n~ Маркеры Past Simple: yesterday, last week, last year, two days ago, in 2020\n+ I saw him yesterday. | I've seen him yesterday.\n! После last week / last year не нужен предлог in.\n# Полезные правила\n- После didn't — V1: I didn't cook.\n- После haven't / hasn't — V3: I haven't cooked.\n- После finish — V-ing: I've finished reading.\n- Come back пишется раздельно: She's come back.","# Частые ошибки\n+ She has gone home. | She has went home.\n+ My brother has gone to London. | My brother gone to London.\n+ I've never been to Italy. | I've never been in Italy.\n+ I haven't finished yet. | I haven't finished already.\n+ Have you ever been there? | Did you ever been there?\n* Главное запомнить | Present Perfect = have/has + V3.\\nPast Simple: говорим о завершённом прошлом, особенно когда указываем, когда произошло действие.\\nPresent Perfect: связываем прошлое с настоящим, говорим о результате, актуальном событии или жизненном опыте без точного времени.\\nJUST — только что. ALREADY — уже. YET — уже или ещё. EVER — когда-нибудь. NEVER — никогда."]},{"order":11,"section":"Времена","title":"11 · Past Simple — to be","pages":[[{"t":"head","n":"11","title":"PAST SIMPLE — TO BE","tag":"Grammar","sub":"WAS / WERE — был, была, были."},{"t":"table","head":["Местоимение","Форма"],"rows":[["I / He / She / It","WAS"],["You / We / They","WERE"]],"chip":false},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were","She was happy."],["−","S + wasn't/weren't","She wasn't happy."],["?","Was/Were + S?","Was she happy?"],["WH?","WH + was/were + S?","Where were you?"]],"chip":true}],[{"t":"chips","items":["yesterday","last week","last year","ago","in 2020"],"label":"Маркеры"},{"t":"warn","v":"С was/were не используем did."},{"t":"pair","ok":"Was she tired?","no":"Did she was tired?"}]],"key":"b11"},{"order":12,"section":"Времена","title":"12 · Past Simple — Units 45–46","pages":[[{"t":"head","n":"12","title":"PAST SIMPLE — UNITS 45–46","tag":"Grammar"},{"t":"use","v":"завершённые действия, события, привычки и ситуации в прошлом."},{"t":"h","v":"FORM"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + V2 / V-ed","She worked."],["−","S + didn't + V1","She didn't work."],["?","Did + S + V1?","Did she work?"],["WH?","WH + did + S + V1?","Where did she work?"]],"chip":true},{"t":"text","v":"Short answers: Yes, I did. / No, I didn't."},{"t":"h","v":"REGULAR & IRREGULAR VERBS"},{"t":"text","v":"Regular verbs — правильные глаголы, образуются с помощью -ed."},{"t":"table","head":["Правило","Пример"],"rows":[["+ ed","watch → watched"],["После -e → + d","live → lived"],["Удвоение согласной","stop → stopped"],["Согласная + y → ied","carry → carried"],["Гласная + y → ed","play → played"]],"chip":false},{"t":"text","v":"Irregular verbs — неправильные глаголы, форму запоминаем."},{"t":"chips","items":["go → went","buy → bought","do → did","have → had","make → made","see → saw","send → sent"]},{"t":"warn","v":"После did/didn't всегда V1."},{"t":"pair","ok":"Did she go?","no":"Did she went?"}],[{"t":"h","v":"WAS/WERE VS DID"},{"t":"table","head":["TO BE","ORDINARY VERBS"],"rows":[["I was tired.","I worked."],["She wasn't happy.","She didn't work."],["Was she at home?","Did she go home?"],["Where were you?","Where did you go?"]],"chip":false},{"t":"text","v":"Was/were — прошедшие формы глагола to be. Did/didn't — вспомогательные глаголы для вопросов и отрицаний с обычными глаголами."},{"t":"warn","v":"После wasn't/weren't не добавляем be."},{"t":"pair","ok":"They weren't happy.","no":"They weren't be happy."},{"t":"h","v":"USE"},{"t":"list","items":["I watched TV yesterday. — Завершённое действие.","I played tennis every day when I was young. — Привычка в прошлом.","I arrived home, cooked dinner and went to bed. — Последовательность действий.","I lived in London in 2020. — Ситуация в прошлом."]},{"t":"h","v":"TIME EXPRESSIONS"},{"t":"table","head":["Маркер","Перевод"],"rows":[["yesterday","вчера"],["last week/year","на прошлой неделе / в прошлом году"],["two days ago","два дня назад"],["then","затем, потом"],["from ... to","с ... до / с ... по"],["for two weeks","в течение двух недель"]],"chip":false},{"t":"sticky","title":"Главное","v":"утверждение → V2/V-ed; вопрос и отрицание → did/didn't + V1; глагол to be → was/were."}]],"key":"b12"},{"order":13,"section":"Времена","title":"13 · Past Continuous — Unit 47","pages":[[{"t":"head","n":"13","title":"PAST CONTINUOUS — UNIT 47","tag":"Grammar"},{"t":"use","v":"когда действие находилось в процессе в определённый момент в прошлом."},{"t":"h","v":"FORM — ОБРАЗОВАНИЕ"},{"t":"formula","v":"S + was/were + V-ing"},{"t":"table","head":["Тип","Формула","Пример"],"rows":[["+","S + was/were + V-ing","She was sleeping."],["−","S + wasn't/weren't + V-ing","She wasn't sleeping."],["?","Was/Were + S + V-ing?","Was she sleeping?"],["WH?","WH + was/were + S + V-ing?","What was she doing?"]],"chip":true},{"t":"table","head":["Форма","Местоимения"],"rows":[["Was","I / He / She / It"],["Were","You / We / They"]],"chip":false},{"t":"text","v":"Short answers: Yes, I was. / No, I wasn't."},{"t":"h","v":"USE — УПОТРЕБЛЕНИЕ"},{"t":"ex","en":"I was watching TV at 9 p.m. yesterday.","ru":"Вчера в 9 вечера я смотрела телевизор.","title":"1. Действие в конкретный момент прошлого"},{"t":"ex","en":"She was living in Paris when she had her first baby.","ru":"Она жила в Париже, когда у неё родился первый ребёнок.","title":"2. Временная ситуация в прошлом"},{"t":"ex","en":"The sun was shining when we arrived.","ru":"Когда мы приехали, светило солнце.","title":"3. Описание обстановки в прошлом"},{"t":"ex","en":"I was sleeping when the phone rang.","ru":"Я спала, когда зазвонил телефон.","title":"4. Действие, прерванное другим событием"}],[{"t":"h","v":"PAST SIMPLE VS PAST CONTINUOUS"},{"t":"table","head":["Past Simple","Past Continuous"],"rows":[["Факт или завершённое действие","Процесс в прошлом"],["I cooked dinner.","I was cooking dinner."],["She watched TV.","She was watching TV at 8."],["The phone rang.","I was sleeping when it rang."]],"chip":false},{"t":"h","v":"Past Continuous + when + Past Simple"},{"t":"text","v":"Длительное действие + событие, произошедшее во время него."},{"t":"ex","en":"I was studying when he called.","ru":"Я занималась, когда он позвонил."},{"t":"h","v":"STATIVE VERBS"},{"t":"text","v":"Глаголы состояния обычно не используются в Continuous:"},{"t":"chips","items":["know","like","love","hate","want","need","believe","understand","remember"]},{"t":"pair","ok":"I hated him. — Я его ненавидела.","no":"I was hating him."},{"t":"text","v":"Некоторые глаголы меняют значение:"},{"t":"list","items":["I thought he was right. — Я считала, что он прав.","I was thinking about him. — Я размышляла о нём."]},{"t":"h","v":"TIME MARKERS"},{"t":"list","items":["at 7 o'clock yesterday — вчера в 7 часов","at that moment — в тот момент","when — когда","while — пока, в то время как","all evening — весь вечер"]},{"t":"h","v":"⚠️ COMMON MISTAKES"},{"t":"pair","ok":"She was sleeping.","no":"She were sleeping."},{"t":"pair","ok":"I was watching TV.","no":"I was watch TV."},{"t":"pair","ok":"Were you watching TV?","no":"Did you watching TV?"},{"t":"sticky","title":"Главное запомнить","v":"Past Simple → что произошло?\nPast Continuous → что происходило в тот момент?\nPast Continuous = was/were + V-ing.\nВ Past Continuous не используем did/didn't."}]],"key":"b13"},{"order":5,"section":"Grammar","title":"05 · Have / have got","pages":[[{"t":"head","n":"05","title":"HAVE / HAVE GOT","tag":"Grammar","sub":"Обе конструкции могут означать «иметь», «у кого-то есть»."},{"t":"table","head":["Тип","HAVE GOT","HAVE"],"rows":[["+","I've got a car.","I have a car."],["−","I haven't got a car.","I don't have a car."],["?","Have you got a car?","Do you have a car?"],["He/She +","She's got a car.","She has a car."],["He/She −","She hasn't got a car.","She doesn't have a car."],["He/She ?","Has she got a car?","Does she have a car?"]],"chip":true},{"t":"use","v":"обладание, семья, внешность, некоторые состояния."}],[{"t":"h","v":"HAVE + действия"},{"t":"list","items":["have breakfast — завтракать","have lunch — обедать","have a shower — принимать душ","have a good time — хорошо проводить время"]},{"t":"h","v":"Формы HAVE по временам"},{"t":"table","head":["Время","Пример"],"rows":[["Present Simple","She has breakfast."],["Present Continuous","She's having breakfast."],["Past Simple","She had breakfast."]],"chip":false},{"t":"warn","v":"Have → had → had."}]],"key":"b5"},{"order":6,"section":"Grammar","title":"06 · Prepositions of place (1)","pages":[[{"t":"head","n":"06","title":"PREPOSITIONS OF PLACE (1)","tag":"Grammar"},{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["IN","внутри","in the room"],["ON","на поверхности","on the table"],["AT","в точке, месте","at home"],["UNDER","под","under the bed"],["ABOVE","над, выше","above the table"]],"chip":false}],[{"t":"table","head":["Предлог","Значение","Пример"],"rows":[["BELOW","ниже","below the window"],["NEAR","недалеко","near the station"],["NEXT TO","прямо рядом","next to the shop"],["BESIDE","рядом, сбоку","beside me"]],"chip":false},{"t":"sticky","title":"Запомнить целиком","v":"at home, at work, at school, in bed, on the bed."}]],"key":"b6"},{"order":7,"section":"Grammar","title":"07 · Prepositions of place (2)","pages":[[{"t":"head","n":"07","title":"PREPOSITIONS OF PLACE (2)","tag":"Grammar"},{"t":"table","head":["Предлог","Перевод"],"rows":[["IN FRONT OF","перед"],["BEHIND","за, позади"],["OPPOSITE","напротив"],["BETWEEN","между"],["OUTSIDE","снаружи"],["INSIDE","внутри"]],"chip":false}],[{"t":"h","v":"Для описания фотографий"},{"t":"list","items":["on the left/right — слева/справа","at the top/bottom — вверху/внизу","in the centre — в центре","at the front/back — впереди/сзади"]}]],"key":"b7"},{"order":8,"section":"Grammar","title":"08 · Prepositions of time","pages":[[{"t":"head","n":"08","title":"PREPOSITIONS OF TIME","tag":"Grammar"},{"t":"table","head":["Предлог","Использование","Пример"],"rows":[["AT","точное время","at 8 p.m."],["ON","день, дата","on Monday"],["IN","месяц, год, часть дня","in July, in 2026, in the morning"],["Без предлога","last, next, this, yesterday, tomorrow","last week, tomorrow morning"]],"chip":false}],[{"t":"list","items":["at night","in the morning/afternoon/evening","on Friday evening","last Monday","next year","yesterday evening"],"title":"Запомнить"},{"t":"pair","ok":"last week","no":"in the last week (когда имеем в виду просто «на прошлой неделе»)"}]],"key":"b8"},{"order":9,"section":"Grammar","title":"09 · Question words","pages":[[{"t":"head","n":"09","title":"QUESTION WORDS","tag":"Grammar"},{"t":"table","head":["Слово","Перевод"],"rows":[["WHAT","что, какой"],["WHERE","где, куда"],["WHEN","когда"],["WHY","почему"],["WHO","кто"],["WHOSE","чей"],["WHICH","который, какой из"],["HOW","как"],["HOW OLD","сколько лет"],["HOW MANY","сколько (исчисляемые)"],["HOW MUCH","сколько (неисчисляемые, цена)"],["HOW OFTEN","как часто"],["WHAT TIME","во сколько"]],"chip":false}],[{"t":"h","v":"Формула"},{"t":"formula","v":"WH + вспомогательный глагол + S + основной глагол?"},{"t":"list","items":["Where does she live?","Where were you yesterday?"]},{"t":"warn","v":"Если WHO — подлежащее, do/does обычно не нужен."},{"t":"list","items":["Who lives here?"]}]],"key":"b9"},{"order":10,"section":"Grammar","title":"10 · Question structure & short answers","pages":[[{"t":"head","n":"10","title":"QUESTION STRUCTURE & SHORT ANSWERS","tag":"Grammar"},{"t":"table","head":["Тип","Пример"],"rows":[["To be","Is she happy?"],["Present Simple","Does she work?"],["Present Continuous","Is she working?"],["Past Simple of be","Was she happy?"]],"chip":false}],[{"t":"list","items":["Are you tired? — Yes, I am.","Does she work? — Yes, she does.","Is he sleeping? — No, he isn't.","Were they ready? — No, they weren't."],"title":"Short answers"},{"t":"warn","v":"В коротком положительном ответе не сокращаем:"},{"t":"pair","ok":"Yes, she is.","no":"Yes, she's."}]],"key":"b10"},{"order":14,"section":"Vocabulary Notebook 🩷","title":"01 · Collocations, compounds & idioms","pages":[[{"t":"head","n":"01","title":"COLLOCATIONS, COMPOUNDS & IDIOMS","tag":"Vocabulary Notebook","sub":"English Collocations in Use Intermediate • Unit 1"},{"t":"table","head":["Тип","Определение","Пример"],"rows":[["Collocation","Привычное сочетание слов","heavy rain"],["Compound","Составное слово или единое название","teapot"],["Idiom","Устойчивое выражение с переносным смыслом","pull somebody's leg"]],"chip":false},{"t":"sticky","title":"Зачем учить коллокации?","v":"Чтобы говорить естественнее, точнее выражать мысли и улучшать письменный английский."}],[{"t":"h","v":"Collocations"},{"t":"text","v":"слова естественно употребляются вместе, значение обычно понятно."},{"t":"list","items":["make a mistake — совершить ошибку","heavy rain — сильный дождь","bitterly disappointed — глубоко разочарованный","strictly forbidden — строго запрещено"]},{"t":"h","v":"Compounds"},{"t":"text","v":"два или более слова образуют единое название. Могут писаться слитно, через дефис или раздельно."},{"t":"list","items":["teapot — чайник","narrow-minded — ограниченный во взглядах","car park — парковка"]},{"t":"h","v":"Idioms"},{"t":"text","v":"смысл часто невозможно понять дословным переводом."},{"t":"list","items":["pull somebody's leg — разыгрывать кого-то","a storm in a teacup — буря в стакане воды","pass the buck — перекладывать ответственность","be over the moon — быть на седьмом небе от счастья"]}]],"key":"b14"},{"order":15,"section":"Описание фотографии","title":"План описания: 6 пунктов","pages":[[{"t":"head","n":"01","tag":"Описание фотографии","title":"ОПИСАНИЕ ФОТОГРАФИИ","sub":"План из 6 пунктов: от общей информации до впечатления."},{"t":"h","v":"1. General information"},{"t":"text","v":"Общая информация о фотографии"},{"t":"list","items":["This is a photo of...","This is a family / a group of friends.","There are three people in the photo.","The photo is indoors / outdoors."]},{"t":"h","v":"2. Foreground"},{"t":"text","v":"Передний план: что находится ближе всего к нам?"},{"t":"list","items":["In the foreground, there is...","There are two people in the foreground.","I can see a table / a dog / a woman"]},{"t":"h","v":"3. Background"},{"t":"text","v":"Задний план: что находится позади людей?"},{"t":"list","items":["In the background, there is...","There are some trees.","There is a big window.","I can see a house / a park / a room."]}],[{"t":"h","v":"4. People: Appearance"},{"t":"text","v":"Внешность людей"},{"t":"list","items":["He is tall / short.","She is young / middle-aged.","He has got short dark hair.","She has got long blonde hair.","He has got blue eyes."]},{"t":"h","v":"5. Clothes"},{"t":"text","v":"Одежда"},{"t":"list","items":["He wears a T-shirt and jeans.","She wears a dress.","He is in a blue shirt.","She has got a black jacket.","They wear casual clothes."]},{"t":"h","v":"6. Final impression"},{"t":"text","v":"Общее впечатление"},{"t":"list","items":["They look happy / friendly / tired.","The family looks happy.","I like this photo because...","I think this is a nice photo."]}]],"key":"b15"}];
+/* ---------- блокнот: править страницы и добавлять новые ---------- */
+if(!Array.isArray(data.myTopics))data.myTopics=[];
+if(!data.nbOver||typeof data.nbOver!=='object')data.nbOver={};
+if(!data.nbTrack||typeof data.nbTrack!=='object')data.nbTrack={};
+let NE=null;
+const stripNum=s=>String(s||'').replace(/^\d+\s·\s/,'');
+const nbKey=t=>t.key||('b'+t.order);
+/* знаки в начале строки: # подзаголовок · = формула · ! внимание · * запомнить · + верно | неверно · @ пример — перевод
+   ~ подпись: слово, слово · ? «используем» · - список · | таблица | */
+function nbParse(src){
+  const out=[],L=String(src||'').replace(/\r/g,'').split('\n');
+  const isTbl=l=>/^\s*\|/.test(l),isLi=l=>/^\s*[-•]\s+/.test(l);
+  let i=0;
+  while(i<L.length){
+    const l=L[i].trim();
+    if(!l){i++;continue}
+    if(isTbl(l)){
+      const rows=[];let sep=null;
+      while(i<L.length&&isTbl(L[i])){
+        const cells=L[i].trim().replace(/^\||\|$/g,'').split('|').map(s=>s.trim());
+        if(cells.every(c=>/^:?-+:?$/.test(c)))sep=sep||cells;
+        else rows.push(cells);
+        i++;
+      }
+      if(rows.length){
+        const head=rows.shift(),w=head.length;
+        const body=rows.map(r=>{const x=r.slice(0,w);while(x.length<w)x.push('');return x});
+        /* строка «| :-- | --- |»: первый столбец становится ярлыком; без неё решается само */
+        const chip=sep?/^:/.test(sep[0]):(w<=4&&body.length>0&&body.every(r=>r[0].length<=9));
+        out.push({t:'table',head,rows:body,chip});
+      }
+      continue;
+    }
+    if(isLi(l)){
+      const items=[];
+      while(i<L.length&&isLi(L[i])){items.push(L[i].trim().replace(/^[-•]\s+/,''));i++}
+      out.push({t:'list',items});continue;
+    }
+    const m=l.match(/^([#=!*+@~?])\s*(.*)$/),k=m&&m[1],v=m?m[2]:l;
+    i++;
+    if(!m){out.push({t:'text',v:l});continue}
+    if(!v)continue;
+    if(k==='#')out.push({t:'h',v});
+    else if(k==='=')out.push({t:'formula',v});
+    else if(k==='!')out.push({t:'warn',v});
+    else if(k==='?')out.push({t:'use',v});
+    else if(k==='*'){const p=v.split('|'),u=s=>s.replace(/\\n/g,'\n');out.push(p.length>1?{t:'sticky',title:p[0].trim(),v:u(p.slice(1).join('|').trim())}:{t:'sticky',title:'Запомнить',v:u(v)})}
+    else if(k==='+'){const p=v.split('|');out.push({t:'pair',ok:p[0].trim(),no:(p[1]||'').trim()})}
+    else if(k==='@'){const p=v.split(' — ');out.push({t:'ex',en:p[0].trim(),ru:p.slice(1).join(' — ').trim()})}
+    else if(k==='~'){
+      const c=v.indexOf(':'),has=c>0&&c<30,label=has?v.slice(0,c).trim():'',rest=has?v.slice(c+1):v;
+      out.push({t:'chips',label,items:rest.split(',').map(s=>s.trim()).filter(Boolean)});
+    }
+  }
+  return out;
+}
+/* обратное: готовые страницы снова становятся текстом для правки */
+function nbSer(blocks){
+  const lines=[];let prev='';
+  (blocks||[]).forEach(b=>{
+    if(!b||b.t==='head'||b.t==='sep')return;
+    const nl=s=>String(s==null?'':s).replace(/\n/g,'\\n');
+    if((b.t==='list'||b.t==='table')&&(prev==='list'||prev==='table'))lines.push('');
+    if(b.t==='h')lines.push('# '+b.v);
+    else if(b.t==='text')lines.push(b.v);
+    else if(b.t==='formula')lines.push('= '+b.v);
+    else if(b.t==='warn')lines.push('! '+b.v);
+    else if(b.t==='use')lines.push('? '+b.v);
+    else if(b.t==='sticky')lines.push('* '+((b.title&&b.title!=='Запомнить')?b.title+' | ':'')+nl(b.v));
+    else if(b.t==='pair')lines.push('+ '+b.ok+' | '+b.no);
+    else if(b.t==='ex')lines.push('@ '+b.en+(b.ru?' — '+b.ru:''));
+    else if(b.t==='chips')lines.push('~ '+(b.label?b.label+': ':'')+(b.items||[]).join(', '));
+    else if(b.t==='list'){if(b.title)lines.push('# '+b.title);(b.items||[]).forEach(x=>lines.push('- '+x))}
+    else if(b.t==='table'){
+      lines.push('| '+b.head.join(' | ')+' |');
+      lines.push('| '+b.head.map((_,k)=>k===0&&b.chip?':--':'---').join(' | ')+' |');
+      b.rows.forEach(r=>lines.push('| '+r.join(' | ')+' |'));
+    }
+    prev=b.t;
+  });
+  return lines.join('\n');
+}
+function nbBuild(s,n){
+  const head={t:'head',n:n,title:(s.title0||'').toUpperCase(),tag:s.section||'',sub:s.sub||''};
+  const srcs=s.srcs&&s.srcs.length?s.srcs:[''];
+  return srcs.map((x,i)=>i===0?[head,...nbParse(x)]:nbParse(x));
+}
+/* итоговый список: готовые темы + правки готовых + свои, всё пронумеровано по порядку (трекер без номера) */
+function nbTopics(){
+  const base=(NB.pages.length?NB.pages:NOTES_BAKED).map(t=>Object.assign({},t,{key:nbKey(t),base:true}));
+  const list=base.map(t=>{
+    const o=data.nbOver[t.key];
+    return o?Object.assign({},t,{over:true,gen:true,title0:o.title0,section:o.section,sub:o.sub,srcs:o.srcs}):t;
+  });
+  data.myTopics.forEach(m=>{
+    const t=Object.assign({},m,{key:m.id,mine:true,gen:true,srcs:m.srcs||['']});
+    const i=m.after?list.findIndex(x=>x.key===m.after):-1;
+    if(i>=0)list.splice(i+1,0,t);else list.push(t);
+  });
+  if(!list.length)return [SAMPLE_TOPIC];
+  let k=0;
+  return list.map(t=>{
+    if(t.fixed)return t;
+    k++;
+    const n=String(k).padStart(2,'0');
+    if(t.gen){const t0=t.title0||'';return Object.assign({},t,{n,title:n+' · '+t0,pages:nbBuild({title0:t0,section:t.section,sub:t.sub,srcs:t.srcs},n)})}
+    const pages=t.pages.map((pg,j)=>j===0&&pg[0]&&pg[0].t==='head'?[Object.assign({},pg[0],{n}),...pg.slice(1)]:pg);
+    return Object.assign({},t,{n,title:n+' · '+stripNum(t.title),pages});
+  });
+}
+function nbCurTopic(){
+  const bk=nbBook();let pg=bk[NB.idx];
+  if(pg&&pg.type!=='topic'&&!nbSingle())pg=bk[NB.idx+1];
+  return pg&&pg.type==='topic'?pg.topic:null;
+}
+function nbPreviewHtml(){
+  const list=nbTopics();let pos;
+  if(NE.key)pos=Math.max(0,list.findIndex(t=>t.key===NE.key));
+  else if(NE.where==='after'&&NE.afterKey)pos=list.findIndex(t=>t.key===NE.afterKey)+1;
+  else pos=list.length;
+  const n=String(list.slice(0,pos).filter(t=>!t.fixed).length+1).padStart(2,'0');
+  const pages=nbBuild({title0:NE.title,section:NE.section,sub:NE.sub,srcs:NE.srcs},n);
+  const pg=(b,i)=>`<div><div class="small muted" style="margin:0 0 4px 6px">Страница ${i+1}</div><div class="np single"><div class="np-in">${b.map(nbBlock).join('')||'<p class="small muted">Здесь появится страница.</p>'}</div></div></div>`;
+  return `<div class="nepv">${pages.map(pg).join('')}</div>`;
+}
+function nbEditView(){
+  const ph='# Подзаголовок\n= формула или правило\n| Лицо | Окончание |\n| I | work |\n| he | works |\n- пункт списка\n@ I like coffee. — Я люблю кофе.';
+  const isNew=!NE.key,over=NE.key&&data.nbOver[NE.key];
+  const where=isNew?`<div class="stack" style="gap:6px"><span class="small muted">Куда вставить страницу</span>
+    <div class="seg"><button class="${NE.where==='after'?'on':''}" data-act="nbwhere" data-v="after" ${NE.afterKey?'':'disabled'}>После текущей</button><button class="${NE.where!=='after'?'on':''}" data-act="nbwhere" data-v="end">В конец блокнота</button></div>
+    ${NE.afterKey&&NE.where==='after'?`<span class="small muted">После: «${esc(NE.afterTitle)}»</span>`:''}</div>`:'';
+  const pages=NE.srcs.map((s,i)=>`<label class="small muted" for="ne-p${i}">Страница ${i+1} · ${i%2===0?'слева':'справа'}</label>
+    <textarea class="inp mono" id="ne-p${i}" rows="9" ${i===0?`placeholder="${esc(ph)}"`:''}>${esc(s)}</textarea>`).join('');
+  return `<div class="top">${back('notebook','Блокнотик')}</div>
+  <div class="stack"><h1>${isNew?'Новая страница':'Правка страницы'}</h1><div class="muted small">Пиши обычным текстом. Знаки в начале строки превращаются в красивые рамки, результат виден ниже.</div></div>
+  <div class="panel stack">
+    ${where}
+    <input class="inp" id="ne-title" placeholder="Название, например: Present Perfect" value="${esc(NE.title)}" maxlength="60">
+    <input class="inp" id="ne-section" placeholder="Раздел, например: Времена" value="${esc(NE.section)}" maxlength="30">
+    <input class="inp" id="ne-sub" placeholder="Короткое пояснение (необязательно)" value="${esc(NE.sub)}" maxlength="120">
+    ${pages}
+    <div class="row"><button class="btn sm" data-act="nbpgadd">＋ Добавить лист</button>${NE.srcs.length>1?'<button class="btn sm ghost" data-act="nbpgdel">− Убрать последний лист</button>':''}</div>
+    <details class="nehelp"><summary>Как оформлять</summary>
+      <div class="small"><table class="nt"><tbody>
+      <tr><td><code>обычная строка</code></td><td>обычный текст</td></tr>
+      <tr><td><code># Заголовок</code></td><td>зелёный рукописный подзаголовок</td></tr>
+      <tr><td><code>? текст</code></td><td>рамка «Используем:»</td></tr>
+      <tr><td><code>= правило</code></td><td>формула на цветной плашке</td></tr>
+      <tr><td><code>- пункт</code></td><td>список; <code>слово — перевод</code> выделяет слово жирным</td></tr>
+      <tr><td><code>| a | b |</code></td><td>таблица, первая строка становится шапкой</td></tr>
+      <tr><td><code>| :-- | --- |</code></td><td>вторая строка таблицы: «:--» делает первый столбец ярлыками</td></tr>
+      <tr><td><code>@ фраза — перевод</code></td><td>карточка с примером</td></tr>
+      <tr><td><code>! текст</code></td><td>предупреждение ⚠️</td></tr>
+      <tr><td><code>+ верно | неверно</code></td><td>пара ✅ и ❌</td></tr>
+      <tr><td><code>* текст</code> или <code>* Заголовок | текст</code></td><td>жёлтый стикер «Запомнить»</td></tr>
+      <tr><td><code>~ Подпись: слово, слово</code></td><td>ярлычки</td></tr>
+      </tbody></table></div></details>
+    <div class="row"><button class="btn primary" data-act="nbsave">Сохранить</button><button class="btn ghost" data-act="nbcancel">Отмена</button>${NE.key&&NE.mine?'<button class="btn ghost" data-act="nbdel">Удалить страницу</button>':''}${over?'<button class="btn ghost" data-act="nbrestore">Вернуть оригинал</button>':''}</div>
+  </div>
+  <h2>Предпросмотр</h2><div id="nepreview">${nbPreviewHtml()}</div>`;
+}
+function nbOpenEditor(t){
+  if(t){
+    let d;
+    if(t.mine||t.over||t.gen)d={title0:t.title0,section:t.section,sub:t.sub,srcs:t.srcs.slice()};
+    else{
+      const p0=t.pages[0]||[],h=p0[0]&&p0[0].t==='head'?p0[0]:null;
+      d={title0:stripNum(t.title),section:t.section||'',sub:(h&&h.sub)||'',srcs:t.pages.map((pg,i)=>nbSer(i===0&&h?pg.slice(1):pg))};
+    }
+    NE={key:t.key,mine:!!t.mine,title:d.title0,section:d.section,sub:d.sub,srcs:d.srcs.length?d.srcs:['']};
+  }else{
+    const cur=nbCurTopic();
+    NE={key:null,mine:false,title:'',section:(cur&&cur.section)||'Grammar',sub:'',srcs:['',''],
+      afterKey:cur&&cur.key||'',afterTitle:cur?cur.title:'',where:cur&&cur.key?'after':'end'};
+  }
+  go('nbedit');
+}
+/* трекер времён: отметки хранятся в data.nbTrack и синхронизируются */
+const NB_TENSES=[['Present',['Present Simple','Present Continuous','Present Perfect','Present Perfect Continuous']],['Past',['Past Simple','Past Continuous','Past Perfect','Past Perfect Continuous']],['Future',['Future Simple','Future Continuous','Future Perfect','Future Perfect Continuous']]];
+const NB_COLS=['Грамматика','Практика (говорение)','Отработка (упражнения)'];
+function nbTrackHtml(){
+  const T=data.nbTrack||{};let done=0,all=0;
+  const rows=NB_TENSES.map(([g,list])=>`<tr class="trg"><td colspan="4">${g} ♡</td></tr>`+list.map(n=>{
+    const r=(T[n]&&T[n].c)||[0,0,0];
+    return `<tr><td class="trn">${esc(n)}</td>${[0,1,2].map(c=>{all++;if(r[c])done++;return `<td><button class="trc ${r[c]?'on':''}" data-act="nbtr" data-t="${esc(n)}" data-c="${c}" aria-pressed="${!!r[c]}" aria-label="${esc(n)}: ${NB_COLS[c]}">${r[c]?'✓':''}</button></td>`}).join('')}</tr>`;
+  }).join('')).join('');
+  return `<div class="ntw"><table class="nbtr"><thead><tr><th>Время</th>${NB_COLS.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><div class="small muted" style="text-align:center">Отмечено ${done} из ${all}</div>`;
+}
+/* быстрые переходы по разделам */
+function nbSecBar(){
+  const bk=nbBook(),ts=nbTopics(),seen=new Set(),chips=[];
+  const cp=bk[NB.idx],cs=cp&&cp.topic?cp.topic.section:(bk[NB.idx+1]&&bk[NB.idx+1].topic?bk[NB.idx+1].topic.section:'');
+  ts.forEach((t,ti)=>{const s=t.section||'';if(!s||seen.has(s))return;seen.add(s);chips.push(`<button class="chipb ${s===cs?'on':''}" data-act="nbgo" data-i="${bk.first[ti]}">${esc(s)}</button>`)});
+  return `<div class="nbsecs"><button class="chipb" data-act="nbtoc">☰ Оглавление</button>${chips.join('')}</div>`;
+}
+Object.assign(A,{
+  nbadd:()=>nbOpenEditor(null),
+  nbeditcur:()=>{const t=nbCurTopic();if(t&&t.key&&!t.fixed)nbOpenEditor(t);else toast('Открой страницу, которую хочешь править')},
+  nbedit:(d)=>{const t=nbTopics().find(x=>x.key===d.id);if(t&&!t.fixed)nbOpenEditor(t)},
+  nbtoc:()=>{NB.idx=nbSingle()?1:0;render();window.scrollTo(0,0)},
+  nbtr:(d)=>{
+    data.nbTrack=data.nbTrack||{};
+    const r=data.nbTrack[d.t]||{c:[0,0,0]};r.c=(r.c||[0,0,0]).slice();
+    r.c[+d.c]=r.c[+d.c]?0:1;r.u=Date.now();data.nbTrack[d.t]=r;
+    saveLocal();const y=window.scrollY;render();window.scrollTo(0,y);
+  },
+  nbcancel:()=>{go('notebook')},
+  nbwhere:(d)=>{if(d.v==='after'&&!NE.afterKey)return;NE.where=d.v;render()},
+  nbpgadd:()=>{NE.srcs.push('');render();const el=document.getElementById('ne-p'+(NE.srcs.length-1));if(el)el.focus()},
+  nbpgdel:()=>{
+    const last=NE.srcs[NE.srcs.length-1];
+    if(last.trim()&&!confirm('Убрать последний лист вместе с текстом?'))return;
+    NE.srcs.pop();render();
+  },
+  nbsave:()=>{
+    if(!NE.title.trim()){toast('Напиши название');return}
+    let key=NE.key;
+    const rec={title0:NE.title.trim(),section:NE.section.trim(),sub:NE.sub.trim(),srcs:NE.srcs.slice(),u:Date.now()};
+    if(key&&NE.mine){const m=data.myTopics.find(x=>x.id===key);if(m)Object.assign(m,rec)}
+    else if(key)data.nbOver[key]=rec;
+    else{
+      key='u'+uid();
+      data.myTopics.push(Object.assign({id:key,after:NE.where==='after'?NE.afterKey:''},rec));
+    }
+    saveLocal();NE=null;
+    const all=nbTopics(),ti=all.findIndex(t=>t.key===key);
+    const bk=nbBook();NB.idx=ti>=0?bk.first[ti]:0;
+    go('notebook');toast('Страница сохранена');
+  },
+  nbrestore:()=>{
+    if(!NE||!NE.key||!confirm('Вернуть исходную версию этой страницы?'))return;
+    const key=NE.key;delete data.nbOver[key];ldel('o:'+key);saveLocal();NE=null;
+    const ti=nbTopics().findIndex(t=>t.key===key),bk=nbBook();NB.idx=ti>=0?bk.first[ti]:0;go('notebook');
+  },
+  nbdel:()=>{
+    if(!NE||!NE.key||!NE.mine||!confirm('Удалить эту страницу из блокнота?'))return;
+    const gone=data.myTopics.find(t=>t.id===NE.key);
+    data.myTopics=data.myTopics.filter(t=>t.id!==NE.key);ldel('n:'+NE.key);
+    data.myTopics.forEach(t=>{if(gone&&t.after===gone.id)t.after=gone.after||''});
+    saveLocal();NE=null;NB.idx=0;go('notebook');
+  }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;if(!NE||!t||!t.id||t.id.indexOf('ne-')!==0)return;
+  if(t.id==='ne-title')NE.title=t.value;
+  else if(t.id==='ne-section')NE.section=t.value;
+  else if(t.id==='ne-sub')NE.sub=t.value;
+  else if(/^ne-p\d+$/.test(t.id))NE.srcs[+t.id.slice(4)]=t.value;
+  else return;
+  const pv=document.getElementById('nepreview');if(pv)pv.innerHTML=nbPreviewHtml();
+});
+
 function nbBook(){
   const single=nbSingle(),bk=[{type:'cover'},{type:'toc'}],first=[];
   nbTopics().forEach((t,ti)=>{
@@ -2607,6 +2959,7 @@ function nbBlock(b){
     case 'head':return `<div class="hd">${b.tag?`<span class="ntag">${e(b.tag)}</span>`:''}<div class="hrow">${b.n?`<span class="nnum">${e(b.n)}</span>`:''}<h3 class="hand ntitle"><span>${e(b.title)}</span></h3></div>${b.sub?`<div class="nsub">${e(b.sub)}</div>`:''}</div>`;
     case 'ex':return `<div class="nexb">${b.title?`<b>${e(b.title)}</b>`:''}<i>${e(b.en)}</i><span>${e(b.ru)}</span></div>`;
     case 'sep':return `<div class="nsep" aria-hidden="true"></div>`;
+    case 'tracker':return nbTrackHtml();
     case 'use':return `<div class="nuse"><b>Используем:</b> ${e(b.v)}</div>`;
     case 'text':return `<p class="ntext">${e(b.v)}</p>`;
     case 'h':return `<div class="nsec">${e(b.v)}</div>`;
@@ -2629,7 +2982,7 @@ function nbPage(i){
     const ts=nbTopics();let last='';
     const rows=ts.map((t,ti)=>{
       const head=t.section&&t.section!==last?`<div class="tocsec">${esc(t.section)}</div>`:'';last=t.section||last;
-      return head+`<button class="tocrow" data-act="nbgo" data-i="${bk.first[ti]}"><span class="grow">${esc(t.title||'')}${t.sample?' <span class="small muted">(пример)</span>':''}</span><span class="muted">${bk.first[ti]+1}</span></button>`;
+      return head+`<div class="tocw"><button class="tocrow" data-act="nbgo" data-i="${bk.first[ti]}"><span class="grow">${esc(t.title||'')}${t.sample?' <span class="small muted">(пример)</span>':''}</span><span class="muted">${bk.first[ti]+1}</span></button>${t.key&&!t.fixed?`<button class="x" data-act="nbedit" data-id="${esc(t.key)}" aria-label="Править страницу">✎</button>`:''}</div>`;
     }).join('');
     h=`<div class="hand ntitle"><span>Оглавление</span></div><div class="toc">${rows}</div>
       ${!NB.pages.length&&!NOTES_BAKED.length?'<p class="small muted">Страницы твоих тем появятся здесь. Пока показан пример оформления.</p>':''}`;
@@ -2651,7 +3004,7 @@ function notebookView(){
   const last=NB.idx+(single?1:2)>=bk.length;
   const short=single?`${NB.idx+1} / ${bk.length}`:`${L+1}–${Math.min(R+1,bk.length)} / ${bk.length}`;
   return `<div class="nbwrap"><div class="nb ${single?'single':''}" id="nb" aria-label="Блокнот, ${label}">${inner}</div></div>
-    <div class="row nbnav"><button class="btn" data-act="nbprev" style="visibility:${NB.idx<=0?'hidden':'visible'}">‹ Назад</button><span class="small muted nbcnt">${short}</span><button class="btn" data-act="nbnext" style="visibility:${last?'hidden':'visible'}">Вперёд ›</button></div>
+    <div class="row nbnav"><button class="btn" data-act="nbprev" style="visibility:${NB.idx<=0?'hidden':'visible'}">‹ Назад</button><button class="btn ghost" data-act="nbtoc" aria-label="Оглавление">☰</button><span class="small muted nbcnt">${short}</span><button class="btn" data-act="nbnext" style="visibility:${last?'hidden':'visible'}">Вперёд ›</button></div>
     <p class="small muted nbhint" style="text-align:center;margin:0">Листай кнопками, стрелками на клавиатуре или свайпом</p>`;
 }
 /* листание без прыжков: сначала плавно к началу листа, высота замораживается на время переворота,
@@ -3558,6 +3911,17 @@ function mergeData(a,b){
     }
   }
   if(a.life||b.life)M.life=LM;
+  /* блокнот: свои страницы, правки готовых и отметки трекера времён; побеждает более поздняя правка */
+  const tm=new Map((B.myTopics||[]).map(t=>[t.id,t]));
+  (A.myTopics||[]).forEach(t=>{const o=tm.get(t.id);if(!o||later(t,o))tm.set(t.id,t)});
+  M.myTopics=[...tm.values()].filter(t=>!(del['n:'+t.id]>(t.u||0)));
+  const nbo=Object.assign({},B.nbOver||{});
+  Object.keys(A.nbOver||{}).forEach(k=>{const o=nbo[k];if(!o||later(A.nbOver[k],o))nbo[k]=A.nbOver[k]});
+  Object.keys(nbo).forEach(k=>{if(del['o:'+k]>(nbo[k].u||0))delete nbo[k]});
+  M.nbOver=nbo;
+  const ntr=Object.assign({},B.nbTrack||{});
+  Object.keys(A.nbTrack||{}).forEach(k=>{const o=ntr[k];if(!o||later(A.nbTrack[k],o))ntr[k]=A.nbTrack[k]});
+  M.nbTrack=ntr;
   /* настройки устройства и служебное остаются с этого устройства */
   ['theme','fs','mute','appVer','site','trackSeeded'].forEach(k=>{if(A[k]!==undefined)M[k]=A[k]});
   M.firstSeen=Math.min(A.firstSeen||Infinity,B.firstSeen||Infinity);if(!isFinite(M.firstSeen))delete M.firstSeen;
@@ -3579,8 +3943,8 @@ function hasContent(){
 }
 function syncLine(){
   if(syncState==='out')return `<div class="panel row" style="align-items:center;gap:12px"><span class="small muted" style="flex:1;min-width:0">☁️ Войди, чтобы прогресс сохранялся в облаке и был на всех устройствах</span><button class="btn sm primary" data-act="acc">Войти</button></div>`;
-  if(syncState==='cloud'&&fbUser)return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">☁️ Сохранено в облаке · ${esc(fbUser.email||'')}</span><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
-  if(syncState==='error')return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">Не получилось сохранить в облако. Прогресс сохранён на этом устройстве.</span><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
+  if(syncState==='cloud'&&fbUser)return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">☁️ Сохранено в облаке · ${esc(fbUser.email||'')}</span><button class="btn sm primary" data-act="syncnow">↻ Синхронизировать</button><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
+  if(syncState==='error')return `<div class="row" style="align-items:center;gap:10px"><span class="small muted" id="syncline" style="flex:1;min-width:0">Не получилось сохранить в облако. Прогресс сохранён на этом устройстве.</span><button class="btn sm primary" data-act="syncnow">↻ Ещё раз</button><button class="btn sm ghost" data-act="acc">Аккаунт</button></div>`;
   return '';
 }
 function setSync(s){if(syncState===s)return;syncState=s;if(V.view==='home')render()}
@@ -3593,29 +3957,39 @@ async function pushRemote(){
   if(!fbUser||!fbDb||pushBusy||!pushDirty)return;
   pushBusy=true;pushDirty=false;
   try{
-    await fbDb.collection('katrin').doc(fbUser.uid).set({data:JSON.stringify(stateOut()),savedAt:data.savedAt||Date.now(),email:fbUser.email||''});
+    const ref=fbDb.collection('katrin').doc(fbUser.uid);
+    let out=stateOut();
+    /* перед записью подмешиваем то, что уже лежит в облаке, чтобы не затереть правки с другого устройства */
+    try{
+      const sn=await ref.get();
+      if(sn.exists){
+        const o=JSON.parse(sn.data().data);
+        if(o&&Array.isArray(o.sets)){out=mergeData(data,o);SKIP_SYNC.forEach(k=>delete out[k])}
+      }
+    }catch(e){}
+    await ref.set({data:JSON.stringify(out),savedAt:out.savedAt||data.savedAt||Date.now(),email:fbUser.email||''});
     setSync('cloud');
   }catch(e){setSync('error')}
   pushBusy=false;
   if(pushDirty)scheduleRemote();
 }
-async function pullRemote(){
+async function pullRemote(manual){
   if(!fbUser||!fbDb)return;
   let snap;
   try{snap=await fbDb.collection('katrin').doc(fbUser.uid).get()}catch(e){setSync('error');return}
   if(!snap.exists){pushDirty=true;await pushRemote();return}
   const r=snap.data(),rt=r.savedAt||0,lt=data.savedAt||0;
   let o=null;try{o=JSON.parse(r.data)}catch(e){}
-  const sig=d=>JSON.stringify([d.sets,d.track,d.life,d.listen,d.del]);
+  const sig=d=>JSON.stringify([d.sets,d.track,d.life,d.listen,d.del,d.myTopics,d.nbOver,d.nbTrack]);
   let same=true,fresh=!hasContent();
-  if(o&&Array.isArray(o.sets)&&(rt>lt||lt>rt||(rt>0&&fresh))){
+  if(o&&Array.isArray(o.sets)&&(rt>lt||lt>rt||(rt>0&&fresh)||manual)){
     const m=fresh?o:mergeData(data,o);
     if(fresh){m.theme=data.theme;m.fs=data.fs;m.appVer=data.appVer;m.savedAt=rt}
     same=sig(m)===sig(data);
     const recent=Date.now()-(+sessionStorage.getItem('mr')||0)<20000;
-    if(!same&&!recent){
+    if(!same&&(!recent||manual)){
       try{localStorage.setItem(KEY+'.backup',localStorage.getItem(KEY)||'')}catch(e){}
-      try{sessionStorage.setItem('mr',String(Date.now()))}catch(e){}
+      try{sessionStorage.setItem('mr',String(Date.now()));if(manual)sessionStorage.setItem('syncok','1')}catch(e){}
       try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){setSync('error');return}
       location.reload();return;
     }
@@ -3687,16 +4061,87 @@ Object.assign(A,{
   accout:async()=>{try{await fbAuth.signOut()}catch(e){}go('home')},
   accsync:async()=>{
     accMsg('Синхронизирую…',true);
-    pushDirty=true;await pushRemote();await pullRemote();
-    if(V.view==='account')accMsg(syncState==='error'?'Не получается сохранить в облако.':'Всё сохранено в облаке ✓',syncState!=='error');
+    await pullRemote(true);
+    if(V.view==='account')accMsg(syncState==='error'?'Не получается сохранить в облако.':'Всё синхронизировано ✓',syncState!=='error');
+  },
+  syncnow:async()=>{
+    if(!fbUser){go('account');return}
+    toast('Синхронизирую…');
+    await pullRemote(true);
+    toast(syncState==='error'?'Не получилось. Проверь интернет.':'Всё синхронизировано ✓');
   }
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target&&e.target.id==='acc-pw'){e.preventDefault();A.accin()}
 });
-document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden&&fbUser&&V.view==='home'&&!pushT&&!pushBusy)pullRemote();
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t||t.getAttribute('data-act-change')!=='lwd')return;
+  const S=LFD().set,w=S.weekly.find(x=>x.id===t.getAttribute('data-id'));
+  if(w){w.dow=+t.value;S.u=Date.now();saveLocal()}
 });
+/* Мягкие напоминания: вода каждые 2 часа (до 5 раз в день) и приёмы пищи. Маленькая плашка в углу, не мешает */
+(function(){
+  const KR='slovarik.rem';
+  const fresh=()=>({d:isoToday(),w:0,wt:0,m:{}});
+  const ld=()=>{try{const o=JSON.parse(localStorage.getItem(KR)||'{}');return o.d===isoToday()?Object.assign(fresh(),o):fresh()}catch(e){return fresh()}};
+  const sv=o=>{try{localStorage.setItem(KR,JSON.stringify(o))}catch(e){}};
+  const hour=()=>{const t=new Date();return t.getHours()+t.getMinutes()/60};
+  const food=()=>data.life&&data.life.food;
+  function waterLeft(){
+    try{const F=food();if(!F)return true;const d=F.days&&F.days[isoToday()];return !(F.wg&&d&&(d.w||0)>=F.wg)}catch(e){return true}
+  }
+  function mealEmpty(k){
+    try{const F=food(),r=F&&F.days&&F.days[isoToday()];return !(r&&r.m&&(r.m[k]||[]).length)}catch(e){return true}
+  }
+  function show(o){
+    if(document.hidden||document.getElementById('watersticker'))return false;
+    const el=document.createElement('div');el.id='watersticker';el.className='wsticker';el.setAttribute('role','status');
+    el.innerHTML='<span class="wdrop">'+o.icon+'</span><span>'+o.text+'</span><button type="button" class="wyes">'+o.btn+'</button><button type="button" class="wno" aria-label="Закрыть">×</button>';
+    document.body.appendChild(el);
+    let closed=false;
+    const gone=()=>{if(closed)return;closed=true;el.classList.remove('on');el.style.pointerEvents='none';setTimeout(()=>{if(el.parentNode)el.parentNode.removeChild(el)},350)};
+    setTimeout(()=>el.classList.add('on'),40);
+    el.querySelector('.wno').addEventListener('click',e=>{e.stopPropagation();gone()});
+    el.querySelector('.wyes').addEventListener('click',e=>{e.stopPropagation();gone();try{o.yes()}catch(x){}});
+    setTimeout(gone,12000);
+    return true;
+  }
+  const WMSG=['Попей водички','Глоточек воды?','Водичка ждёт тебя','Не забудь про воду'];
+  const MEALS=[['z','Пора завтракать? Запиши в журнал',9,12],['o','Время обеда. Запиши в журнал',13,16],['u','Не забудь про ужин. Запиши в журнал',18.5,21.5]];
+  function tick(){
+    const S=data.life&&data.life.set;
+    if(document.hidden||(S&&S.waterRem===0))return;
+    const st=ld(),h=hour(),now=Date.now();
+    for(const m of MEALS){
+      if(h>=m[2]&&h<m[3]&&!st.m[m[0]]&&mealEmpty(m[0])){
+        if(show({icon:'🍽️',text:m[1],btn:'Открыть',yes:()=>{A.food()}})){st.m[m[0]]=1;sv(st)}
+        return;
+      }
+    }
+    if(h>=8&&h<22&&st.w<5&&now-st.wt>=2*3600*1000&&waterLeft()){
+      if(show({icon:'💧',text:WMSG[Math.floor(Math.random()*WMSG.length)],btn:'+250 мл',yes:()=>{
+        const r=fday(isoToday(),true);r.w=(r.w||0)+250;r.u=Date.now();ftouch();toast('Записала +250 мл воды 💧')
+      }})){st.w++;st.wt=now;sv(st)}
+    }
+  }
+  setTimeout(()=>{tick();setInterval(tick,60000)},20000);
+})();
+/* Автосохранение: при уходе с сайта сразу отправляем несохранённое, при возвращении и раз в минуту подтягиваем правки с другого устройства */
+function syncIdle(){
+  const a=document.activeElement,t=a&&a.tagName;
+  return !document.hidden&&fbUser&&(V.view==='home'||V.view==='notebook')&&t!=='INPUT'&&t!=='TEXTAREA'&&!pushT&&!pushBusy&&!pushDirty;
+}
+function flushRemote(){
+  if(!fbUser||!fbDb)return;
+  if(pushT){clearTimeout(pushT);pushT=0;pushDirty=true}
+  if(pushDirty)pushRemote();
+}
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)flushRemote();
+  else if(syncIdle())pullRemote();
+});
+window.addEventListener('pagehide',flushRemote);
+setInterval(()=>{if(syncIdle())pullRemote()},60000);
 const loadScript=src=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
 async function initSync(){
   try{if(typeof claude!=='undefined'&&claude.use)sampleFn=await claude.use('sample')}catch(e){}
