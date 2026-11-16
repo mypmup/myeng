@@ -2141,6 +2141,7 @@ function LFD(){
   L.set=L.set||{u:0,habits:[{id:'walk',e:'🚶‍♀️',n:'Прогулка'},{id:'pool',e:'🏊‍♀️',n:'Бассейн / сауна',opt:1}],sup:[],gym:{1:'up',3:'low'},mStart:'',quote:'',cycle:0,tpl:{up:[],low:[],mix:[]},notes:[]};
   const S=L.set;S.habits=S.habits||[];S.sup=S.sup||[];S.gym=S.gym||{};S.tpl=S.tpl||{up:[],low:[],mix:[]};S.notes=S.notes||[];
   if(!S.v5){S.v5=1;S.weekly=S.weekly||[{id:'sk',e:'🎓',n:'Skillbox',dow:4}];S.hw=S.hw||['h_legs','h_abs','h_arms','h_back'];if(S.waterRem===undefined)S.waterRem=1}
+  if(!S.v6){S.v6=1;S.weekly=S.weekly||[];[{id:'club_tue',e:'🗣️',n:'Разговорный клуб',dow:2,t:'19:00'},{id:'club_sat',e:'🗣️',n:'Разговорный клуб',dow:6,t:'12:00'}].forEach(c=>{if(!S.weekly.some(w=>w.id===c.id))S.weekly.push(c)})}
   S.weekly=S.weekly||[];S.hw=S.hw||[];
   if(!S.v2){S.v2=1;if(!S.habits.some(h=>h.id==='warm'))S.habits.unshift({id:'warm',e:'🤸‍♀️',n:'Утренняя зарядка'});const pl=S.habits.find(h=>h.id==='pool');if(pl)pl.opt=1}
   if(!S.v3){S.v3=1;if(!S.habits.some(h=>h.id==='br_am'))S.habits.push({id:'br_am',e:'🌬️',n:'Дыхательная практика: утро',opt:1});if(!S.habits.some(h=>h.id==='br_pm'))S.habits.push({id:'br_pm',e:'🌙',n:'Дыхательная практика: вечер',opt:1})}
@@ -2169,7 +2170,7 @@ function lItems(date){
   const g=S.gym&&S.gym[dowOf(date)];
   if(g)out.push({k:'g',e:'🏋️‍♀️',n:'Зал: '+(L_TYPES[g]||g).toLowerCase(),type:g});
   if(!g&&!(m&&m.label!=='Выходной')&&!(m&&m.label==='Выходной'))out.push({k:'w',e:'💪',n:'Тренировка сегодня',sub:'любая: зал, дом или бассейн'});
-  S.weekly.forEach(w=>{if(dowOf(date)===w.dow)out.push({k:'wk:'+w.id,e:w.e||'📌',n:w.n,sub:'по расписанию'})});
+  S.weekly.forEach(w=>{if(dowOf(date)===w.dow)out.push({k:'wk:'+w.id,e:w.e||'📌',n:w.n+(w.t?' · '+w.t:''),sub:w.t?'на английском, не пропускай':'по расписанию'})});
   out.push({k:'e',e:'🇬🇧',n:'Английский',sub:'трекер: от '+NORM+' навыков из 5, отмечается сам'});
   S.habits.forEach(h=>{if(h.id==='pool'&&cyc)return;out.push({k:'h:'+h.id,e:h.e||'✨',n:h.n,opt:h.opt?1:0})});
   if(S.flexOn!==false)out.push({k:'x',e:'🧘‍♀️',n:'МФР, пилатес или растяжка',sub:'между тренировками, что-то одно',opt:1,flex:1});
