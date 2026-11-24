@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Грамматика · Katrin Dictionary</title>
+<meta name="theme-color" content="#13806E">
+<link rel="icon" href="./icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<script>
+try {
+  const theme = JSON.parse(localStorage.getItem('slovarik.v1') || 'null')?.theme;
+  if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+} catch {}
+</script>
+<style>
+:root{--bg:#f6f3ec;--card:#fff;--ink:#1d2a24;--mut:#6b766f;--line:#e4dfd3;--acc:#1f7a5a;--acc2:#e8f3ee;--bad:#c2452f;--bad2:#fbecE8;--r:16px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:4px 0 4px}
+h1 span{color:var(--acc)}
+.sub{color:var(--mut);margin:0 0 20px;font-size:15px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:9px 16px;border-radius:999px;font:600 14px Manrope,system-ui,sans-serif;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.back{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:600 13px Manrope,system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin:16px 0 6px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.meta{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);font-weight:600}
+.scheme{font-size:13px;color:var(--acc);font-weight:700;margin:18px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.ru{font-size:26px;font-weight:800;margin:0 0 16px;letter-spacing:-.01em}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;font:600 17px Manrope,system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--ink)}
+.opt.ok{border-color:var(--acc);background:var(--acc2)}
+.opt.no{border-color:var(--bad);background:var(--bad2)}
+.slot{min-height:54px;border:1.5px dashed var(--line);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.pool{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.w{border:1.5px solid var(--ink);background:#fff;border-radius:10px;padding:8px 12px;font:600 16px Manrope,system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.slot .w{background:var(--ink);color:#fff}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:13px 18px;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.why{border-radius:12px;padding:12px 14px;margin:6px 0 14px;font-size:15px;line-height:1.45}
+.why.ok{background:var(--acc2)}.why.no{background:var(--bad2)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.list{display:grid;gap:8px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.item:hover{border-color:var(--ink)}
+.item b{font-size:15px}.item small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
+.pill{font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--line);white-space:nowrap}
+.pill.g{background:var(--acc2);color:var(--acc)}.pill.r{background:var(--bad2);color:var(--bad)}
+.pr{font-size:12px;color:var(--mut);font-weight:700;margin:18px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+.big{font-size:44px;font-weight:800;margin:4px 0}
+.note{font-size:12px;color:var(--mut);margin-top:22px;text-align:center}
+.stage{font-size:12px;color:var(--mut);font-weight:800;margin:20px 0 8px;text-transform:uppercase;letter-spacing:.05em}
+.item.lock{opacity:.45;cursor:not-allowed}
+.rule{background:var(--bg);border-radius:12px;padding:14px 16px;font-size:16px;line-height:1.5;margin:12px 0}
+.trap{border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;margin:0 0 16px;font-size:15px;line-height:1.6}
+.trap s{color:var(--bad)} .trap b{color:var(--acc)}
+.units{font-size:13px;color:var(--mut);font-weight:600}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--bg);color:var(--mut);margin-top:16px;text-transform:uppercase;letter-spacing:.04em}
+.tag.mx{background:#fff3d6;color:#8a5a00}.tag.rv{background:#e9ecff;color:#3946a8}
+.sw{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);margin:4px 0 0;cursor:pointer}
+.overall{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:700}
+.toprow{display:flex;justify-content:space-between;align-items:center}
+.help{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc2);color:var(--acc);font:800 16px Manrope,system-ui,sans-serif;cursor:pointer}
+.topic{font-size:13px;color:var(--acc);font-weight:700;margin-top:10px}
+.en{font-size:20px;font-weight:600;line-height:1.9;margin:4px 0 16px}
+.blank{display:inline-block;min-width:70px;border-bottom:2.5px solid var(--ink);text-align:center;padding:0 6px}
+.okb{background:var(--acc2);border-color:var(--acc);border-radius:6px}.nob{background:var(--bad2);border-color:var(--bad)!important;border-radius:6px}
+.ew{border:0;background:transparent;font:600 20px Manrope,system-ui,sans-serif;color:var(--ink);padding:2px 3px;border-radius:6px;cursor:pointer;border-bottom:2px dotted var(--line)}
+.ew.errw{background:var(--bad2);color:var(--bad);text-decoration:line-through}
+.inp{width:100%;font:600 18px Manrope,system-ui,sans-serif;padding:14px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:12px;background:#fff;color:var(--ink)}
+.inp:focus{outline:none;border-color:var(--ink)}
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.mt>div{display:grid;gap:8px;align-content:start}
+.mc{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px;font:600 14px Manrope,system-ui,sans-serif;color:var(--ink);text-align:left;cursor:pointer;min-height:48px}
+.mc.sel{border-color:var(--ink);background:var(--bg)}.mc.okm{border-color:var(--acc);background:var(--acc2);color:var(--acc)}.mc.nom{border-color:var(--bad);background:var(--bad2)}
+.linkb{border:0;background:none;color:var(--acc);font:700 14px Manrope,system-ui,sans-serif;padding:6px 0 0;cursor:pointer;text-decoration:underline}
+.ov{position:fixed;inset:0;background:rgba(20,30,25,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9;animation:fi .15s}
+.sh{background:#fff;width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:14px 20px 24px;animation:su .2s}
+.grab{width:40px;height:4px;background:var(--line);border-radius:4px;margin:0 auto 10px}
+.exl{display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.exl span{color:var(--mut)}
+@keyframes su{from{transform:translateY(40px);opacity:0}}@keyframes fi{from{opacity:0}}
+.ladder{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.ladder span{font-size:12px;font-weight:700;background:var(--bg);border-radius:8px;padding:5px 9px}
+.ladder .mxl{background:#fff3d6;color:#8a5a00}
+.item.chk{border-color:#e9c46a;background:#fffaf0}
+.aibadge{display:inline-block;margin-top:8px;font-size:11px;font-weight:800;color:#5b4bb7;background:#efecff;border-radius:6px;padding:3px 8px;text-transform:uppercase;letter-spacing:.04em}
+.aiout{margin-top:8px;font-size:15px;line-height:1.5;white-space:pre-wrap}
+.tabs{flex-wrap:wrap}
+.chat .msgs{max-height:52vh;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px 0 8px}
+.b{max-width:86%;padding:10px 14px;border-radius:16px;font-size:16px;line-height:1.45;position:relative}
+.b.ai{background:var(--bg);align-self:flex-start;border-bottom-left-radius:4px;padding-right:38px}
+.b.me{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.b .tr{color:var(--mut);font-size:14px;margin-top:4px}
+.spk{position:absolute;right:6px;top:6px;border:0;background:none;cursor:pointer;font-size:14px;opacity:.6}
+.typing{color:var(--mut);letter-spacing:3px}
+.corr{align-self:flex-end;max-width:86%;background:#fff3d6;border-radius:12px;padding:8px 12px;font-size:14px;line-height:1.45}
+.corr span{color:#6b5a2a}
+.inrow{display:flex;gap:8px;align-items:flex-end;margin-top:8px}
+.inrow textarea{flex:1;font:500 16px Manrope,system-ui,sans-serif;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;resize:none;color:var(--ink)}
+.inrow textarea:focus{outline:none;border-color:var(--ink)}
+.mic{width:48px;height:48px;border-radius:50%;border:0;background:var(--acc2);font-size:20px;cursor:pointer;flex:none}
+.mic.rec{background:var(--bad);color:#fff;animation:pl 1.2s infinite}
+@keyframes pl{50%{box-shadow:0 0 0 8px rgba(194,69,47,.15)}}
+.inrow .btn{height:48px;flex:none}
+.mini{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font:700 12px Manrope,system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.mini.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hintrow{font-size:14px;min-height:22px}#hintout{color:var(--acc);font-weight:600}
+.tutors{display:flex;gap:10px}.tut{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:8px 4px;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tut.on{border-color:var(--acc);background:var(--acc2)}.tut small{font-size:11px;color:var(--mut)}
+.avwrap.sm{width:64px;height:70px}.avwrap svg{width:100%;height:100%;display:block}
+.avwrap.big{width:210px;height:230px;margin:6px auto 0;border-radius:50%;transition:filter .3s}
+.avwrap.big.speaking{filter:drop-shadow(0 0 22px rgba(120,220,170,.55))}
+.av .mouth{transform-box:fill-box;transform-origin:center}.speaking .av .mouth{animation:tm .18s infinite alternate}
+@keyframes tm{from{transform:scaleY(.35)}to{transform:scaleY(1.7)}}
+.av .eye{transform-box:fill-box;transform-origin:center;animation:bl 4.5s infinite}@keyframes bl{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.call{background:radial-gradient(120% 80% at 50% 20%,#2f5546,#16211c);color:#fff;border-radius:22px;padding:14px 16px 16px;display:flex;flex-direction:column;min-height:78vh}
+.ctop{display:flex;align-items:center;justify-content:space-between}.cname{text-align:center;font-weight:800}.cname small{display:block;font-weight:600;opacity:.65;font-size:12px}
+.cbtn{width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font:700 14px Manrope,system-ui,sans-serif;cursor:pointer}
+.cbtn.on{background:#fff;color:#16211c}.cbtn.dark{background:var(--bg);color:var(--ink);width:52px;height:52px;font-size:20px}
+.goals{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}.goals span{font-size:12px;background:rgba(255,255,255,.1);border-radius:999px;padding:4px 10px}.goals .ok{background:#cfeedd;color:#1f7a5a;font-weight:700}
+.cap{background:rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;font-size:18px;line-height:1.45;margin-top:8px;min-height:52px;text-align:center}.cap .tr{font-size:14px;opacity:.7;margin-top:6px}
+.ctoast{background:#fff3d6;color:#3a2e10;border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.45;margin-top:10px}.ctoast span{color:#6b5a2a}.ctoast.err{background:var(--bad2);color:var(--bad)}
+.live{margin-top:10px;text-align:right;font-size:16px;opacity:.85;font-style:italic}
+.hintline{font-size:14px;color:#bfe9d3;text-align:center;margin-top:8px;min-height:18px}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:auto;padding-top:12px}
+.micbig{width:72px;height:72px;border-radius:50%;border:0;background:#fff;font-size:28px;cursor:pointer;color:#16211c}
+.micbig.rec{background:var(--bad);color:#fff;animation:pl 1.2s infinite}.micbig:disabled{opacity:.5}
+.clbl{text-align:center;font-size:13px;opacity:.7;margin:8px 0 0}
+.call .inrow textarea{background:rgba(255,255,255,.95)}
+.cend{margin-top:12px;border:0;background:#c2452f;color:#fff;border-radius:999px;padding:12px;font:700 14px Manrope,system-ui,sans-serif;cursor:pointer}
+.done{background:#cfeedd;color:#1f4d3a;border-radius:14px;padding:12px;text-align:center;font-weight:800;margin-top:8px}.done .btn{margin-top:8px}
+.pw{padding:0 2px;border-radius:4px}.pw.ok{color:var(--acc)}.pw.no{color:var(--bad);background:var(--bad2)}
+.pring{--p:0;width:110px;height:110px;border-radius:50%;margin:8px auto;background:conic-gradient(var(--acc) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.pring span{width:86px;height:86px;border-radius:50%;background:#fff;display:grid;place-items:center;font:800 24px Manrope,system-ui,sans-serif}
+.stats{display:flex;gap:8px;margin:10px 0}.stats div{flex:1;background:var(--bg);border-radius:12px;padding:10px;text-align:center}.stats b{font-size:22px;display:block}.stats small{color:var(--mut);font-size:12px}
+.expl{margin-top:6px;font-size:15px;line-height:1.45}
+/* Katrin Dictionary */
+:root {
+  --bg:#FFC6D2; --bg-a:#FFD6DE; --bg-b:#FDB3C3; --card:#FFF2F5;
+  --ink:#0B3D34; --mut:#2F5F54; --line:#F5A3B6; --acc:#13806E;
+  --acc-ink:#FFF2F5; --acc2:#FFDDE5; --pink:#FD7B96;
+  --ok:#156C4B; --ok-bg:#D6F0E4; --bad:#A51A34; --bad2:#FFD9E0;
+  --r:18px; --display:'Unbounded','Manrope',system-ui,sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme:dark;
+  --bg:#072A24; --bg-a:#0B3830; --bg-b:#051F1A; --card:#0F4A3F;
+  --ink:#FFC4D1; --mut:#D79AAB; --line:#1F6657; --acc:#FD7B96;
+  --acc-ink:#07241F; --acc2:#14574B; --ok:#8FE0B5; --ok-bg:#0E3F33;
+  --bad:#FFAA98; --bad2:#4F2A2A;
+}
+@media (prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme:dark;
+    --bg:#072A24; --bg-a:#0B3830; --bg-b:#051F1A; --card:#0F4A3F;
+    --ink:#FFC4D1; --mut:#D79AAB; --line:#1F6657; --acc:#FD7B96;
+    --acc-ink:#07241F; --acc2:#14574B; --ok:#8FE0B5; --ok-bg:#0E3F33;
+    --bad:#FFAA98; --bad2:#4F2A2A;
+  }
+}
+body {min-height:100vh;background:linear-gradient(150deg,var(--bg-a),var(--bg-b));accent-color:var(--acc)}
+.wrap {max-width:720px}
+.dictionary-link {display:inline-flex;align-items:center;min-height:44px;margin-bottom:16px;text-decoration:none}
+h1 {font-family:var(--display);font-size:clamp(22px,5vw,32px);margin-bottom:10px}
+.tabs {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tab {border:1px solid var(--line);border-radius:12px;background:var(--card);min-height:44px;padding:8px 4px}
+.tab:hover:not(.on),.dictionary-link:hover {border-color:var(--acc)}
+.tab.on,.btn,.mini.on,.slot .w {background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.back,.opt,.w,.item,.inp,.mc,.sh,.mini,.tut,.inrow textarea {background:var(--card)}
+.item.chk,.ladder .mxl {background:var(--acc2);border-color:var(--pink);color:var(--ink)}
+.opt.ok,.why.ok,.mc.okm {background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+.why.no {color:var(--bad)}
+.inrow textarea {min-width:0}
+.lock:disabled {cursor:default}
+:focus-visible {outline:3px solid var(--acc);outline-offset:2px}
+@media (max-width:380px) {.tabs {grid-template-columns:repeat(2,minmax(0,1fr))}.card {padding:14px}}
+@media (prefers-reduced-motion:reduce) {*,*::before,*::after {animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back dictionary-link" href="./index.html">← Katrin Dictionary</a>
+  <h1>Грамматика <span>без кальки</span></h1>
+  <p class="sub">Вся грамматика A1–B1 умным миксом: темы вперемешку, от простого к сложному, с повторением по вашим ошибкам.</p>
+  <div class="tabs" role="group" aria-label="Режим тренировки">
+    <button class="tab on" data-m="path" aria-pressed="true">Путь</button>
+    <button class="tab" data-m="mix" aria-pressed="false">Микс</button>
+    <button class="tab" data-m="talk" aria-pressed="false">Говорение</button>
+    <button class="tab" data-m="diag" aria-pressed="false">Тест</button>
+  </div>
+  <div id="app"></div>
+  <p class="note">40 тем · 5 уровней · по MyGrammarLab A1/A2 и дополнительным темам. Прогресс хранится в этом браузере.</p>
+</main>
+<script>
+const STAGES=["Скелет фразы","Существительное и его «упаковка»","Место и время","Прошлое","Описание и сравнение","Будущее и «если»","Модальные глаголы","Глагол + глагол","Сложная фраза","Живой английский"];
+const PATH=[
+{st:0,n:"am / is / are и пустое It",u:"35, 36, 76",
+ r:"У каждого английского предложения есть глагол. Где по-русски его нет («Он врач», «Мы дома»), ставим am/is/are. Где нет и подлежащего («Холодно», «Поздно»), ставим It.",
+ tr:["Он врач","He doctor","He is a doctor"],
+ nw:[["Я устала","I'm tired","I tired"],["Она учитель","She's a teacher","She teacher","She is teacher"],["Сейчас восемь часов","It's eight o'clock","Is eight o'clock","Now eight o'clock"],["Ты готов?","=Are you ready?"],["Они не дома","They aren't at home","They not at home"],["Это далеко?","Is it far?","It far?","Is far?"]],
+ mx:[]},
+{st:0,n:"Present simple: глагол сам себе сказуемое",u:"37, 38",
+ r:"Обычный глагол работает сам: I work, she works. am/is/are рядом с ним не нужен. Для вопроса и отрицания зовём помощника do/does, и -s переходит к нему: Does she work? She doesn't work.",
+ tr:["Это зависит","It's depend","It depends"],
+ nw:[["Я согласна","I agree","I'm agree"],["Он не пьёт кофе","He doesn't drink coffee","He doesn't drinks coffee","He not drink coffee"],["Ты живёшь здесь?","Do you live here?","Are you live here?","You live here?"],["Она работает в банке","=She works in a bank"],["Это стоит десять долларов","It costs ten dollars","It's cost ten dollars"]],
+ mx:[["Он врач, и он любит свою работу","He is a doctor and he loves his job","He doctor and he loves his job","He is a doctor and he is love his job"],["Холодно, а я не люблю зиму","=It's cold and I don't like winter"]]},
+{st:0,n:"Порядок слов и вопросы",u:"72, 73, 77, 78",
+ r:"Порядок жёсткий: кто → что делает → что → где → когда. Вопрос делаем перестановкой: помощник (do, is, can, will) встаёт перед подлежащим. Одной интонацией вопрос не задаём.",
+ tr:["Ты придёшь?","You will come?","Will you come?"],
+ nw:[["Мальчик ударил мяч","The boy hit the ball","The ball hit the boy"],["Где ты работаешь?","Where do you work?","Where you work?","Where are you work?"],["Каждое утро я пью чай","=I drink tea every morning"],["Она говорит по-английски?","Does she speak English?","She speaks English?"],["Садись, пожалуйста","Sit down, please","You sit down, please"]],
+ mx:[["Ты врач?","Are you a doctor?","Do you a doctor?","You are doctor?"],["Почему он не отвечает?","=Why doesn't he answer?"]]},
+{st:0,n:"have и there is",u:"42, 43, 75",
+ r:"«У меня есть» по-английски звучит как «я имею»: I have / I've got. «Где-то есть что-то» — There is / There are, а место уходит в конец. В выражениях have a shower, have lunch глагол have — это действие.",
+ tr:["У меня есть идея","At me is an idea","I have an idea"],
+ nw:[["У меня двое детей","I have two children","At me two children"],["В городе новый ресторан","There's a new restaurant in town","In town is a new restaurant"],["У тебя есть машина?","Do you have a car?","Are you have a car?"],["В холодильнике нет молока","=There's no milk in the fridge"],["Он сейчас в душе","He's having a shower","He has a shower now"]],
+ mx:[["Рядом есть кафе?","Is there a café nearby?","There is a café nearby?","Is a café nearby?"],["У неё нет времени по понедельникам","=She doesn't have time on Mondays"]]},
+{st:0,n:"Местоимения и «свой»",u:"11, 12, 13, 14",
+ r:"Подлежащее — I, he, she, we, they; после глагола и предлога — me, him, her, us, them. «Мне нравится», «мне нужно» переворачиваем: I like, I need. Русское «свой» переводим по владельцу: my, his, her, their. this/these — близко, that/those — далеко.",
+ tr:["Мне нравится этот фильм","To me likes this film","I like this film"],
+ nw:[["Мне нравится эта песня","I like this song","To me likes this song"],["Она любит своего брата","She loves her brother","She loves his brother","She loves own brother"],["Позвони мне вечером","=Call me in the evening"],["Это машина моих родителей","It's my parents' car","It's car of my parents","It's my parent's car"],["Те туфли мои","Those shoes are mine","That shoes are my","Those shoes are my"]],
+ mx:[["Ему нужна помощь?","Does he need help?","Is he need help?","To him need help?"],["У нас есть их адрес","=We have their address"]]},
+{st:0,n:"Present continuous: прямо сейчас",u:"39, 40, 41",
+ r:"Русское настоящее время одно, английских два. Привычка, факт, расписание — present simple: I work. Происходит прямо сейчас или временно — am/is/are + -ing: I'm working. Глаголы знания и чувства (know, like, want) обычно в -ing не ставим.",
+ tr:["Я сейчас работаю","I work now","I'm working now"],
+ nw:[["Подожди, я разговариваю по телефону","Wait, I'm talking on the phone","Wait, I talk on the phone"],["Что ты делаешь?","What are you doing?","What do you do now?","What you doing?"],["Обычно она ходит пешком, но сегодня едет на такси","=She usually walks, but today she's taking a taxi"],["Я знаю ответ","I know the answer","I'm knowing the answer"],["Они не смотрят, выключи телевизор","They aren't watching, turn off the TV","They don't watching, turn off the TV"]],
+ mx:[["Мне сейчас нужна твоя помощь","I need your help now","I'm needing your help now","To me needs your help now"],["Где ты сейчас живёшь?","=Where are you living now?"]]},
+
+{st:1,n:"Исчисляемые и неисчисляемые",u:"1, 2, 3",
+ r:"Одни существительные считаются (an apple, two apples), другие нет (bread, money, information, advice, news). У неисчисляемых нет a и множественного числа, глагол — в единственном. «Деньги» по-русски во множественном, а money — в единственном.",
+ tr:["Эти деньги мои","These money are mine","This money is mine"],
+ nw:[["Мне нужен совет","I need some advice","I need an advice","I need advices"],["Новости хорошие","The news is good","The news are good"],["У меня две сумки и много багажа","=I have two bags and a lot of luggage"],["Где мои деньги?","Where is my money?","Where are my moneys?","Where are my money?"],["Дети играют","The children are playing","The childs are playing"]],
+ mx:[["У тебя есть информация?","Do you have any information?","Are you have informations?","Do you have an information?"],["В сумке два яблока и хлеб","=There are two apples and some bread in the bag"]]},
+{st:1,n:"Артикли a / the",u:"4, 5, 6",
+ r:"Русскому артикль не нужен, английскому — почти всегда. a/an — «один из, какой-то, упомянут впервые». the — «тот самый, понятно какой, единственный». С профессией — a: She's a doctor. Без артикля — обобщение во множественном и неисчисляемые: I like cats. Music helps.",
+ tr:["Я купила платье. Платье красное","I bought dress. Dress is red","I bought a dress. The dress is red"],
+ nw:[["Я посмотрела фильм. Фильм был скучный","I saw a film. The film was boring","I saw the film. A film was boring","I saw film. Film was boring"],["Солнце горячее","The sun is hot","A sun is hot","Sun is hot"],["Он архитектор","He's an architect","He's architect","He's a architect"],["Я люблю кошек","I like cats","I like cat","I like a cats"],["По вечерам я играю на пианино","=I play the piano in the evening"]],
+ mx:[["На нашей улице есть аптека","There's a pharmacy in our street","There's pharmacy in our street","In our street is the pharmacy"],["У неё есть собака, собака огромная","=She has a dog. The dog is huge."]]},
+{st:1,n:"Много, мало, some / any",u:"7, 8, 9, 10",
+ r:"«Много»: many — для исчисляемых, much — для неисчисляемых (чаще в вопросах и отрицаниях), a lot of — для всего. «Немного»: a few — исчисляемые, a little — неисчисляемые. some — в утверждении, any — в вопросе и отрицании.",
+ tr:["У меня нет никаких вопросов","I don't have no questions","I don't have any questions"],
+ nw:[["У меня не много времени","I don't have much time","I don't have many time"],["У нас осталось только несколько яиц","We have only a few eggs left","We have only a little eggs left"],["Сахар есть?","Is there any sugar?","Is there some sugars?","Is there many sugar?"],["Слишком много людей","=There are too many people"],["Все мои друзья женаты","All my friends are married","My all friends are married","All of friends my are married"]],
+ mx:[["Мне нужно немного молока","I need a little milk","I need a few milk","To me needs a little milk"],["Сколько у тебя детей?","=How many children do you have?"]]},
+{st:1,n:"Никто, ничего, себя, one",u:"15, 16, 17",
+ r:"Отрицание в английском одно на фразу: Nobody came. I don't know anything. «Себя / сам» — myself, herself, yourself; «друг друга» — each other. Чтобы не повторять существительное: the red one, the black ones.",
+ tr:["Никто не пришёл","Nobody didn't come","Nobody came"],
+ nw:[["Я ничего не знаю","I don't know anything","I don't know nothing"],["Они любят друг друга","They love each other","They love themselves"],["Береги себя","=Take care of yourself"],["Мне нравится синяя, а не красная","I like the blue one, not the red one","I like blue one, not red one"],["Где-то здесь есть кафе","There's a café somewhere here","There's a café anywhere here"]],
+ mx:[["Мне никто не нужен","I don't need anybody","I don't need nobody","To me nobody needs"],["У кого-нибудь есть ручка?","=Does anybody have a pen?"]]},
+
+{st:2,n:"Где: in / on / at",u:"18, 19, 20",
+ r:"Русские «в» и «на» распадаются на три: in — внутри (in the box, in Moscow), on — на поверхности (on the table, on the wall), at — в точке или на мероприятии (at the station, at work, at a party). Движение: into, across, along, past, over.",
+ tr:["Я на работе","I'm on work","I'm at work"],
+ nw:[["Ключи на столе","The keys are on the table","The keys are at the table","The keys are in the table"],["Она в Лондоне","She's in London","She's at London","She's on London"],["Встретимся на вокзале","=Let's meet at the station"],["Перейди через дорогу","Walk across the road","Walk through over the road"],["Картина на стене","The picture is on the wall","The picture is in the wall","The picture is at the wall"]],
+ mx:[["В нашем офисе нет кухни","There isn't a kitchen in our office","There isn't a kitchen on our office","In our office isn't kitchen"],["Мои родители сейчас на вечеринке","=My parents are at a party now"]]},
+{st:2,n:"Когда: at / on / in, for / during",u:"21, 22",
+ r:"at — время по часам (at 7, at night), on — дни и даты (on Monday, on 5 May), in — месяцы, годы, части дня (in June, in the morning). «Через час» — in an hour. «В течение»: for — сколько длится, during — во время чего.",
+ tr:["В понедельник","In Monday","On Monday"],
+ nw:[["Я работаю по понедельникам","I work on Mondays","I work in Mondays","I work at Mondays"],["Фильм начинается в восемь","The film starts at eight","The film starts in eight","The film starts on eight"],["Я вернусь через час","I'll be back in an hour","I'll be back through an hour"],["По воскресеньям я сплю днём","=I sleep in the afternoon on Sundays"],["Он спал во время фильма","He slept during the film","He slept for the film"]],
+ mx:[["В июне у меня нет отпуска","I don't have a holiday in June","I don't have holiday on June","At June I haven't holiday"],["Утром я пью кофе, а вечером чай","=I drink coffee in the morning and tea in the evening"]]},
+{st:2,n:"Глагол + свой предлог",u:"23, 24, 100, 101",
+ r:"Многие глаголы держат свой предлог, и он не совпадает с русским: depend on, listen to, wait for, look at, agree with. Устойчивые фразы учим целиком: at home, in bed, on holiday, by bus. В вопросе предлог уходит в конец: Who are you waiting for?",
+ tr:["Слушать музыку","listen music","listen to music"],
+ nw:[["Я жду автобус","I'm waiting for the bus","I'm waiting the bus"],["Это зависит от погоды","It depends on the weather","It's depend from the weather","It depends from the weather"],["Посмотри на меня","=Look at me"],["Мы едем на автобусе","We're going by bus","We're going with bus"],["Кого ты ждёшь?","Who are you waiting for?","Whom you wait?","Who are you waiting?"]],
+ mx:[["Он сейчас слушает музыку в своей комнате","He's listening to music in his room","He listens music in his room","He's listening music in her room"],["Я согласна с тобой","=I agree with you"]]},
+
+{st:3,n:"Past simple: was, went, did",u:"44, 45, 46",
+ r:"«Был» — was/were. Действие в прошлом — глагол + -ed или вторая форма (went, saw). В вопросе и отрицании помощник did забирает прошлое на себя, глагол возвращается в начальную форму: Did you go? I didn't see.",
+ tr:["Ты ходил?","Did you went?","Did you go?"],
+ nw:[["Вчера я была занята","I was busy yesterday","I were busy yesterday","I busy yesterday"],["Ты её видел?","Did you see her?","Did you saw her?","You saw her?"],["Мы не закончили","We didn't finish","We didn't finished","We not finished"],["Где ты была в субботу?","=Where were you on Saturday?"],["Он поехал в Рим в 2020 году","He went to Rome in 2020","He goed to Rome in 2020","He went in Rome on 2020"]],
+ mx:[["Вчера было холодно, и никто не пришёл","It was cold yesterday and nobody came","Was cold yesterday and nobody didn't come"],["Что ты купила? — Платье и сумку","=What did you buy? A dress and a bag."]]},
+{st:3,n:"Past continuous и used to",u:"47, 48, 49",
+ r:"Был в процессе — was/were + -ing: I was cooking. Короткое событие, которое его прервало, — past simple: I was cooking when you called. Привычка в прошлом, которой больше нет, — used to: I used to smoke.",
+ tr:["Раньше я жила в Москве","I lived before in Moscow","I used to live in Moscow"],
+ nw:[["Я готовила, когда ты позвонил","I was cooking when you called","I cooked when you were calling"],["Что ты делал в восемь вечера?","What were you doing at 8 pm?","What you were doing at 8 pm?"],["Раньше у меня были длинные волосы","I used to have long hair","I use to have long hair","Before I had long hairs"],["Шёл дождь, поэтому мы остались дома","=It was raining, so we stayed at home"],["Раньше он не курил","He didn't use to smoke","He usedn't smoke"]],
+ mx:[["Когда я вошла, все смотрели на меня","When I came in, everybody was looking at me","When I was coming in, everybody looked on me"],["Раньше в нашем городе было кино","=There used to be a cinema in our town"]]},
+{st:3,n:"Present perfect: опыт и результат",u:"50, 51, 52",
+ r:"Русское прошедшее одно, английских два. Важен результат сейчас или опыт за жизнь без даты — have/has + третья форма: He's broken his leg. I've been to Paris. Слова just, already, yet и ever/never обычно живут в perfect.",
+ tr:["Ты когда-нибудь был в Лондоне?","Were you ever in London?","Have you ever been to London?"],
+ nw:[["Ты когда-нибудь был в Лондоне?","Have you ever been to London?","Were you ever in London?"],["Я никогда не пробовала суши","I've never tried sushi","I haven't never tried sushi","I've never try sushi"],["Он сломал ногу","He has broken his leg","He has broke his leg","He has broken the leg of him"],["Она только что ушла","=She has just left"],["Ты уже сделал домашку?","Have you done your homework yet?","Have you did your homework yet?","Did you done your homework already?"]],
+ mx:[["Я ещё не видела этот фильм","I haven't seen this film yet","I haven't saw this film yet","I didn't see this film still"],["Кто-то взял мою ручку","=Somebody has taken my pen"]]},
+{st:3,n:"Perfect с for / since или past?",u:"53, 54",
+ r:"Ситуация началась в прошлом и длится сейчас: по-русски говорим в настоящем («живу пять лет»), по-английски — perfect: I've lived here for five years. for — сколько, since — с какого момента. Есть точное «когда» (yesterday, in 2019) — past simple.",
+ tr:["Я живу здесь пять лет","I live here five years","I've lived here for five years"],
+ nw:[["Я знаю его три месяца","I've known him for three months","I know him three months","I've known him since three months"],["Мы здесь с апреля","We've been here since April","We are here since April","We've been here for April"],["Я была в Риме в прошлом году","I went to Rome last year","I've been to Rome last year"],["Сколько ты здесь работаешь?","=How long have you worked here?"],["Она замужем с 2018 года","She has been married since 2018","She is married since 2018"]],
+ mx:[["У меня эта машина уже десять лет","I've had this car for ten years","I have this car ten years","At me is this car for ten years"],["Мы не виделись с лета","=We haven't seen each other since the summer"]]},
+{st:3,n:"Present perfect continuous",u:"55, 56",
+ r:"Действие идёт до сих пор (или только что закончилось), и важна длительность — have been + -ing: I've been waiting for an hour. Важен результат или количество — обычный perfect: I've read three books.",
+ tr:["Я жду тебя час","I wait you an hour","I've been waiting for you for an hour"],
+ nw:[["Я учу английский пять лет","I've been learning English for five years","I learn English five years"],["Ты плакала? Глаза красные","Have you been crying?","Are you crying since?"],["Я написала три письма","I've written three letters","I've been writing three letters"],["Как долго идёт дождь?","=How long has it been raining?"]],
+ mx:[["Она весь день работает в саду","She's been working in the garden all day","She works in the garden all the day"],["Мы ждём автобус двадцать минут","=We've been waiting for the bus for twenty minutes"]]},
+
+{st:4,n:"Прилагательные: bored или boring",u:"25, 26",
+ r:"Прилагательное стоит перед существительным и не меняется: a long blue skirt, long skirts. -ed — что чувствует человек (I'm bored), -ing — какой предмет или ситуация (the film is boring). «Мне скучно» — I'm bored.",
+ tr:["Мне скучно","I'm boring","I'm bored"],
+ nw:[["Мне интересно","I'm interested","I'm interesting","To me is interesting"],["Фильм был скучный","The film was boring","The film was bored"],["У неё длинная синяя юбка","She has a long blue skirt","She has a blue long skirt","She has a skirt long blue"],["Я в восторге от поездки","=I'm excited about the trip"]],
+ mx:[["Мы устали, это был утомительный день","We're tired. It was a tiring day","We're tiring. It was a tired day"],["Я никогда не была так удивлена","=I've never been so surprised"]]},
+{st:4,n:"Наречия и их место",u:"27, 28, 34",
+ r:"Как делает — после глагола и объекта: He speaks English well. Как часто — перед обычным глаголом, но после be: She always reads. She's always late. «Очень» перед глаголом не ставим: I really like it или I like it very much.",
+ tr:["Я очень люблю зиму","I very like winter","I really like winter"],
+ nw:[["Он хорошо говорит по-английски","He speaks English well","He speaks well English","He well speaks English"],["Она всегда опаздывает","She's always late","She always is late","Always she late"],["Я очень хочу поехать","I really want to go","I very want to go"],["Я редко ем мясо","=I rarely eat meat"]],
+ mx:[["Мне очень понравился фильм","I really liked the film","I very liked the film","To me very liked the film"],["Обычно я не работаю по пятницам","=I don't usually work on Fridays"]]},
+{st:4,n:"Сравнение, too и enough",u:"29, 30, 31, 32, 33",
+ r:"Короткие слова — -er/-est (older, the oldest), длинные — more/the most (more expensive). Не удваиваем: better, а не more better. not as … as — «не такой … как». too — «слишком» (перед словом), enough — «достаточно» (после прилагательного): big enough.",
+ tr:["Это лучше","This is more better","This is better"],
+ nw:[["Это лучше","This is better","This is more better","This is more good"],["Париж не такой большой, как Лондон","Paris isn't as big as London","Paris isn't so big like London","Paris not as big as London"],["Это самый дорогой отель","It's the most expensive hotel","It's the expensivest hotel","It's most expensive hotel"],["Куртка недостаточно большая","=The jacket isn't big enough"],["Слишком жарко, чтобы гулять","It's too hot to go for a walk","Is too hot to walk"]],
+ mx:[["Мой брат старше меня на два года","My brother is two years older than me","My brother is older me on two years"],["Это лучший день в моей жизни","=It's the best day of my life"]]},
+
+{st:5,n:"going to или will",u:"57, 58",
+ r:"Решил заранее, есть план — be going to: I'm going to call her. Решил прямо сейчас, обещаешь, предсказываешь — will: I'll call you later. По-русски одно «позвоню», по-английски выбираем по моменту решения.",
+ tr:["Я помогу!","I help!","I'll help!"],
+ nw:[["Телефон звонит. — Я отвечу!","I'll answer it!","I answer it!","I'm going answer!"],["Я собираюсь купить машину","I'm going to buy a car","I go to buy a car","I'm going buy a car"],["Завтра будет дождь","It's going to rain tomorrow","Tomorrow will rain","It will raining tomorrow"],["Я позвоню тебе позже","=I'll call you later"]],
+ mx:[["В июне мы собираемся переехать в Лондон","We're going to move to London in June","We go to move in London on June"],["Я никому не скажу, обещаю","=I won't tell anybody, I promise"]]},
+{st:5,n:"Настоящее про будущее",u:"59, 60",
+ r:"Договорился, есть время и место — present continuous: I'm meeting Anna on Friday. Расписание (поезд, сеанс) — present simple: The train leaves at 6. План — going to, решение сейчас — will.",
+ tr:["Что ты делаешь в субботу?","What do you do on Saturday?","What are you doing on Saturday?"],
+ nw:[["Я встречаюсь с Анной в пятницу","I'm meeting Anna on Friday","I meet Anna in Friday"],["Поезд отправляется в 6:15","The train leaves at 6:15","The train is leave at 6:15"],["Что ты делаешь в субботу?","What are you doing on Saturday?","What do you do in Saturday?"],["Самолёт прилетает в полночь","=The plane arrives at midnight"]],
+ mx:[["Мы уезжаем завтра, билеты уже купили","We're leaving tomorrow. We've already bought the tickets","We leave tomorrow. We already have bought tickets"],["Во сколько начинается урок?","=What time does the lesson start?"]]},
+{st:5,n:"Если и когда: будущее один раз",u:"69, 70, 94",
+ r:"После if, when, before, after, until, as soon as будущее не ставим — там present: If it rains, we'll stay home. When I come, I'll call. Будущее показываем один раз, в главной части. Если результат всегда одинаковый, present в обеих частях: If you press this, it opens.",
+ tr:["Когда приду, позвоню","When I will come, I'll call","When I come, I'll call"],
+ nw:[["Если будет дождь, мы останемся дома","If it rains, we'll stay at home","If it will rain, we'll stay at home"],["Позвони, как только приедешь","Call me as soon as you arrive","Call me as soon as you will arrive"],["Если нажать кнопку, свет включается","If you press the button, the light comes on","If you will press the button, the light will come on"],["Я подожду, пока ты не закончишь","=I'll wait until you finish"],["Перед тем как уйти, выключи свет","Before you leave, turn off the light","Before you will leave, turn off the light"]],
+ mx:[["Если ты опоздаешь, они уйдут без тебя","If you're late, they'll leave without you","If you will late, they leave without you"],["Когда закончу проект, поеду в отпуск","=When I finish the project, I'm going on holiday"]]},
+{st:5,n:"Если бы…",u:"71",
+ r:"Нереальное или маловероятное «если бы» — if + прошедшая форма, а в главной части would + глагол: If I was rich, I'd travel. Прошедшая форма здесь не про прошлое, а про «не по-настоящему». would после if не ставим.",
+ tr:["Если бы у меня было время…","If I would have time…","If I had time…"],
+ nw:[["Если бы я была богатой, я бы путешествовала","If I was rich, I'd travel","If I would be rich, I'd travel","If I am rich, I would traveled"],["Что бы ты сделал на моём месте?","What would you do if you were me?","What you would do on my place?"],["Если бы я знала, я бы сказала","If I knew, I'd tell you","If I would know, I'd tell you"],["Если бы у меня была машина, я бы тебя подвезла","=If I had a car, I'd give you a lift"]],
+ mx:[["Если бы она жила рядом, мы бы виделись чаще","If she lived nearby, we'd see each other more often","If she would live nearby, we'd see each other more often"],["Будет время — помогу. Было бы время — помогла бы","If I have time, I'll help. If I had time, I'd help","If I will have time, I'll help. If I would have time, I'd help"]]},
+
+{st:6,n:"can, could, be able to",u:"61, 62, 63",
+ r:"can — могу, умею, можно: I can swim. Can I come in? could — умел в прошлом или вежливая просьба: Could you help me? В будущем — will be able to. После модальных глагол без to и без -s: She can drive.",
+ tr:["Можно я открою окно?","Can I to open the window?","Can I open the window?"],
+ nw:[["Она умеет водить","She can drive","She cans drive","She can to drive"],["Не могли бы вы мне помочь?","Could you help me?","Can you to help me?","You could help me?"],["Мой дедушка хорошо танцевал (умел)","My grandfather could dance well","My grandfather can danced well"],["Здесь нельзя парковаться","=You can't park here"],["Скоро ты сможешь говорить свободно","You'll be able to speak fluently soon","You will can speak fluently soon"]],
+ mx:[["Можно мне ещё немного кофе?","Can I have a little more coffee?","Can I to have some more coffees?"],["Вчера я не смогла найти ключи","=I couldn't find my keys yesterday"]]},
+{st:6,n:"Надо, нельзя, не обязательно",u:"64, 65, 66",
+ r:"«Надо, приходится» — have to (правила, обстоятельства), must — я сам считаю нужным. mustn't — нельзя, а don't have to — не обязательно. Прошлое — had to, будущее — will have to. «Мне надо» — I have to / I need to.",
+ tr:["Мне надо идти","To me need go","I have to go"],
+ nw:[["Мне надо идти","I have to go","To me need to go","I must to go"],["Тебе не обязательно приходить","You don't have to come","You mustn't come"],["Здесь нельзя курить","You mustn't smoke here","You don't have to smoke here"],["Вчера мне пришлось работать допоздна","=I had to work late yesterday"],["Ей нужно к врачу","She needs to see a doctor","She need see a doctor","To her needs a doctor"]],
+ mx:[["Завтра нам придётся встать в шесть","We'll have to get up at six tomorrow","We will must get up at six tomorrow"],["Тебе не нужно ничего покупать","=You don't need to buy anything"]]},
+{st:6,n:"Совет и догадка",u:"67, 68",
+ r:"Совет — should: You should rest. Возможно — might/may: It might rain. Уверен, что да, — must be: You must be tired. Уверен, что нет, — can't be: It can't be true.",
+ tr:["Тебе стоит отдохнуть","You should to rest","You should rest"],
+ nw:[["Тебе стоит отдохнуть","You should rest","You should to rest","You should resting"],["Возможно, позже пойдёт дождь","It might rain later","It might rains later","Maybe will rain later"],["Ты, должно быть, устал","You must be tired","You must are tired"],["Это не может быть правдой","=That can't be true"]],
+ mx:[["Тебе не стоит пить так много кофе","You shouldn't drink so much coffee","You shouldn't drink so many coffee"],["Она не отвечает, возможно, она на работе","=She isn't answering. She might be at work."]]},
+
+{st:7,n:"-ing или to",u:"83, 84",
+ r:"После одних глаголов — -ing (enjoy, like, finish, mind, stop): I enjoy cooking. После других — to (want, decide, hope, agree, would like): I want to go. После предлога — всегда -ing: I'm good at drawing.",
+ tr:["Мне нравится готовить","I enjoy to cook","I enjoy cooking"],
+ nw:[["Мне нравится здесь работать","I like working here","I like work here"],["Я решила остаться","I decided to stay","I decided staying"],["Ты не против подождать?","Do you mind waiting?","Do you mind to wait?"],["Я бы хотела поехать в Японию","=I'd like to go to Japan"],["Он хорошо рисует","He's good at drawing","He's good at draw","He's good in drawing"]],
+ mx:[["Я бросила курить два года назад","I stopped smoking two years ago","I stopped to smoke two years ago"],["Надеемся увидеть вас в следующем году","=We hope to see you next year"]]},
+{st:7,n:"«Хочу, чтобы ты…», make, let",u:"74, 85",
+ r:"«Хочу, чтобы ты…» — want + кто + to: I want you to stay. Разрешить — let + кто + глагол без to, заставить — make + кто + глагол без to. Два дополнения: send her flowers или send flowers to her. explain и say — только с to: Explain it to me.",
+ tr:["Я хочу, чтобы ты остался","I want that you stay","I want you to stay"],
+ nw:[["Я хочу, чтобы ты остался","I want you to stay","I want that you stay","I want you stay"],["Объясни мне это","Explain it to me","Explain me it"],["Родители не разрешают мне гулять допоздна","My parents don't let me stay out late","My parents don't let me to stay out late"],["Она попросила меня позвонить ей","=She asked me to call her"],["Он меня рассмешил","He made me laugh","He made me to laugh"]],
+ mx:[["Можешь отправить мне фото?","Can you send me the photos?","Can you send to me the photos?"],["Врач посоветовал мне больше спать","=The doctor advised me to sleep more"]]},
+
+{st:8,n:"Кто звонил? Кому звонил?",u:"79, 80, 81, 82",
+ r:"Спрашиваем о подлежащем (кто сделал?) — помощник не нужен: Who called you? Спрашиваем о дополнении (кого? что?) — нужен: Who did you call? which — выбор из известного, what — вообще. whose — чей. how long / old / far — «насколько».",
+ tr:["Кто тебе звонил?","Who did call you?","Who called you?"],
+ nw:[["Кто тебе звонил?","Who called you?","Who did call you?"],["Кому ты звонил?","Who did you call?","Who you called?"],["Чья это сумка?","Whose bag is this?","Who's bag is this?","Whose is bag this?"],["Какой автобус идёт в центр?","=Which bus goes to the centre?"],["Что случилось?","What happened?","What did happen?","What is happened?"]],
+ mx:[["Как долго ты здесь живёшь?","How long have you lived here?","How long do you live here?","How much time you live here?"],["Кто тебе об этом сказал?","=Who told you about it?"]]},
+{st:8,n:"Связки: because, so, then",u:"92, 93, 95",
+ r:"and — и, but — но, or — или, because — потому что, so — поэтому, so that — чтобы. В рассказе — first, then, after that, finally. because и so в одной фразе вместе не ставим.",
+ tr:["Потому что я устала, поэтому легла спать","Because I was tired, so I went to bed","I was tired, so I went to bed"],
+ nw:[["Я учу английский, потому что хочу сдать экзамен","I'm studying English because I want to pass my exam","I'm studying English because of I want to pass my exam"],["Шёл дождь, поэтому мы взяли такси","It was raining, so we took a taxi","Because it was raining, so we took a taxi"],["Тебе чай или кофе?","Would you like tea or coffee?","Do you want tea and coffee or?"],["Говори громче, чтобы все слышали","=Speak louder so that everybody can hear"]],
+ mx:[["Сначала я позавтракала, потом пошла на работу","First I had breakfast, then I went to work","First I had a breakfast, then I go to work"],["Она устала, но не пошла спать","=She was tired, but she didn't go to bed"]]},
+{st:8,n:"«Который»",u:"89, 90, 91",
+ r:"«Который» — who для людей, which для вещей, that для обоих. Если «который» — дополнение, его можно опустить: the film (that) I saw. Предлог уходит в конец: the beach (that) we went to.",
+ tr:["Пляж, на который мы ходили","the beach on which we went","the beach we went to"],
+ nw:[["Это мой брат, который живёт в Японии","This is my brother who lives in Japan","This is my brother which lives in Japan"],["Фильм, который я посмотрела, был скучный","The film I watched was boring","The film which I watched it was boring"],["Это дом, о котором я тебе говорила","=This is the house I told you about"],["Человек, который мне помог, был врачом","The man who helped me was a doctor","The man which helped me was doctor"]],
+ mx:[["Ресторан, в который мы ходили вчера, закрылся","The restaurant we went to yesterday has closed","The restaurant in which we went yesterday closed it"],["Это песня, которую я слушаю всё лето","=This is the song I've been listening to all summer"]]},
+{st:8,n:"Пересказ и вопрос внутри фразы",u:"86, 87, 88",
+ r:"В пересказе время сдвигается назад: «Я голодна» → She said she was hungry. say — сказал (что), tell — сказал кому: She told me. Вопрос внутри фразы теряет вопросительный порядок: Do you know where he lives?",
+ tr:["Скажи, где он живёт","Tell me where does he live","Tell me where he lives"],
+ nw:[["Она сказала, что голодна","She said she was hungry","She said me she is hungry","She told she was hungry"],["Он сказал мне сесть","He told me to sit down","He said me to sit down"],["Ты знаешь, сколько времени?","Do you know what time it is?","Do you know what time is it?"],["Я не знаю, где она работает","=I don't know where she works"],["Он спросил, была ли я в Москве","He asked if I had been to Moscow","He asked was I in Moscow"]],
+ mx:[["Можешь сказать, во сколько начинается фильм?","Can you tell me what time the film starts?","Can you say me what time does the film start?"],["Она сказала, что никогда не была в Лондоне","=She said she had never been to London"]]},
+{st:8,n:"Пассив: «здесь говорят», «мне сказали»",u:"96, 97, 98",
+ r:"Неважно, кто сделал, или это очевидно, — be + третья форма: English is spoken here. The bridge was built in 1900. Русские «здесь говорят», «мне сказали» часто переводятся пассивом. Сделали для меня по заказу — have something done: I had my hair cut.",
+ tr:["Здесь говорят по-английски","Here speak English","English is spoken here"],
+ nw:[["Здесь говорят по-английски","English is spoken here","Here speak English","English speaks here"],["Мост построили в 1900 году","The bridge was built in 1900","The bridge built in 1900"],["Машину уже помыли","The car has been washed","The car has washed","The car was been washed"],["Завтра я иду стричься","=I'm going to have my hair cut tomorrow"],["Мне сказали подождать","I was told to wait","Me was told to wait","I was said to wait"]],
+ mx:[["Мой телефон украли, пока я спала","My phone was stolen while I was sleeping","My phone stole while I slept"],["Этот отель открыли в прошлом году","=This hotel was opened last year"]]},
+
+{st:9,n:"Слова-пары и фразовые глаголы",u:"99, 102, 103, 104",
+ r:"Слова живут парами, которые не переводятся дословно: heavy rain, make a mistake, do homework, take a photo. Фразовые глаголы: take off, turn on, look after. Объект может стоять внутри (take your shoes off), а местоимение — только внутри (take them off).",
+ tr:["Сделать фото","make a photo","take a photo"],
+ nw:[["Я сделала ошибку","I made a mistake","I did a mistake"],["Сфотографируй!","Take a photo!","Make a photo!","Do a photo!"],["Сними обувь, пожалуйста","Take your shoes off, please","Take off them, please"],["Я делаю домашку","=I'm doing my homework"],["Принеси мне воды","Bring me some water","Take me some water"]],
+ mx:[["Вчера шёл сильный дождь","There was heavy rain yesterday","There was strong rain yesterday"],["Включи свет, я ничего не вижу","=Turn on the light. I can't see anything."]]},
+{st:9,n:"Как собираются слова",u:"105, 106, 107",
+ r:"Из одного корня строим слова суффиксами: teach → teacher, move → movement, care → careful, centre → central. Существительные склеиваются, и первое работает как прилагательное, в единственном числе: a clothes shop, a ten-minute walk.",
+ tr:["Прогулка на десять минут","a ten minutes walk","a ten-minute walk"],
+ nw:[["Пять минут пешком","a five-minute walk","a five minutes walk"],["Будь осторожна!","Be careful!","Be carefull!"],["Она хороший учитель","=She's a good teacher"],["Я из Китая, я китаянка","I'm from China. I'm Chinese","I'm from Chinese. I'm China"]],
+ mx:[["Это самая полезная книга, которую я читала","It's the most useful book I've ever read","It's the most usefull book which I read it"],["Мне нужна новая зубная щётка","=I need a new toothbrush"]]},
+{st:9,n:"Живые ответы: So do I, isn't it?",u:"108, 109, 110, 111, 112",
+ r:"Короткие ответы строим тем же помощником: «я тоже» — So do I / So am I, «я тоже нет» — Neither do I / Neither am I. Хвостик-переспрос: It's cold, isn't it? Реакции: How awful! That's wonderful!",
+ tr:["Я тоже не голодна","I too not hungry","Neither am I"],
+ nw:[["— Я люблю кофе. — Я тоже","So do I","So am I","I too"],["— Я не голодна. — Я тоже","Neither am I","Neither do I","Me too not"],["Холодно, правда?","It's cold, isn't it?","It's cold, doesn't it?"],["Какой ужас!","=How awful!"],["Ты её знаешь, да?","You know her, don't you?","You know her, isn't it?"]],
+ mx:[["— Я никогда не была в Париже. — Я тоже","Neither have I","Neither was I","Me too never"],["Ты уже закончил, да?","=You've already finished, haven't you?"]]},
+{st:7,n:"Герундий: -ing как существительное",u:"83 + сверх учебника",
+ r:"Когда действие работает как существительное, берём -ing: Swimming is good for you. После предлога глагол всегда с -ing: before leaving, thanks for helping, interested in learning. Устойчивые: go shopping, look forward to seeing, be used to working.",
+ tr:["Спасибо, что помог","Thanks that you helped","Thanks for helping"],
+ nw:[["Плавать полезно","Swimming is good for you","Swim is good for you"],["Спасибо, что пришла","Thanks for coming","Thanks for come","Thanks that you came"],["Я устала ждать","I'm tired of waiting","I'm tired of wait"],["Она интересуется изучением языков","She's interested in learning languages","She's interested in learn languages","She's interested to learning languages"],["В субботу мы идём по магазинам","=We're going shopping on Saturday"],["Жду не дождусь встречи с тобой","I'm looking forward to seeing you","I'm looking forward to see you"]],
+ mx:[["Я привыкла рано вставать","I'm used to getting up early","I'm used to get up early","I used to getting up early"],["Курить в этом здании нельзя","=Smoking isn't allowed in this building"]]},
+{st:5,n:"Условные: 0, 1, 2 и 3 тип",u:"69, 70, 71 + 3-й тип сверх учебника",
+ r:"0 — всегда так: If you heat ice, it melts. 1 — реально в будущем: If it rains, I'll stay at home. 2 — нереально сейчас: If I had time, I'd help. 3 — нереально в прошлом, уже не изменить: if + had + третья форма, would have + третья форма: If I had known, I would have come.",
+ tr:["Если бы я знала (тогда), я бы пришла","If I knew, I would come","If I had known, I would have come"],
+ nw:[["Если бы я знала (тогда), я бы пришла","If I had known, I would have come","If I knew, I would come","If I would have known, I would have come"],["Если бы мы вышли раньше, мы бы не опоздали (вчера)","If we had left earlier, we wouldn't have been late","If we would leave earlier, we wouldn't have been late"],["Если нагреть лёд, он тает","If you heat ice, it melts","If you will heat ice, it melts"],["Если завтра будет солнечно, мы пойдём на пляж","If it's sunny tomorrow, we'll go to the beach","If it will be sunny tomorrow, we'll go to the beach"],["Если бы у меня было больше денег, я бы переехала","If I had more money, I'd move","If I have more money, I'd move"],["Она бы сдала экзамен, если бы готовилась","=She would have passed the exam if she had studied"]],
+ mx:[["Если бы ты мне сказал, я бы помогла","If you had told me, I would have helped","If you told me, I would have helped","If you had told me, I would helped"],["Что бы ты сделал, если бы выиграл миллион?","=What would you do if you won a million?"]]}
+];
+
+const RULES=[
+"У каждого английского предложения есть глагол. Где по-русски его нет («Он врач», «Мы дома»), ставим am / is / are (быть, являться): He is a doctor (он врач), We are at home (мы дома). Где нет и подлежащего («Холодно», «Поздно»), ставим пустое It (оно): It's cold (холодно), It's late (поздно).",
+"Обычный глагол работает сам: I work (я работаю), she works (она работает). am / is / are рядом с ним не нужен. Для вопроса и отрицания зовём помощника do / does (без перевода, просто «рабочая» частица), и -s переходит к нему: Does she work? (она работает?) She doesn't work (она не работает).",
+"Порядок жёсткий: кто → что делает → что → где → когда. Вопрос делаем перестановкой: помощник (do, is, can — могу, will — буду) встаёт перед подлежащим: Can you help? (можешь помочь?). Одной интонацией вопрос не задаём.",
+"«У меня есть» по-английски звучит как «я имею»: I have / I've got (у меня есть). «Где-то есть что-то» — There is / There are (есть, имеется), а место уходит в конец: There is a café here (здесь есть кафе). В выражениях have a shower (принимать душ), have lunch (обедать) глагол have — это действие.",
+"Подлежащее — I (я), he (он), she (она), we (мы), they (они); после глагола и предлога — me (меня/мне), him (его/ему), her (её/ей), us (нас/нам), them (их/им). «Мне нравится», «мне нужно» переворачиваем: I like (мне нравится), I need (мне нужно). «Свой» переводим по владельцу: my (мой), his (его), her (её), their (их). this / these (этот / эти) — близко, that / those (тот / те) — далеко. Без существительного: mine (мой), hers (её), ours (наш).",
+"Русское настоящее время одно, английских два. Привычка, факт, расписание — present simple: I work (я работаю вообще). Прямо сейчас или временно — am / is / are + -ing: I'm working (я сейчас работаю). Глаголы знания и чувства — know (знать), like (нравиться), want (хотеть), need (нуждаться) — обычно в -ing не ставим.",
+"Одни существительные считаются: an apple (яблоко), two apples (два яблока). Другие нет: bread (хлеб), money (деньги), information (информация), advice (совет), news (новости), furniture (мебель), luggage (багаж). У неисчисляемых нет a и множественного числа, глагол — в единственном: The money is here (деньги здесь).",
+"Русскому артикль не нужен, английскому — почти всегда. a / an («один, какой-то», упомянут впервые): a dress (какое-то платье). the («тот самый, понятно какой, единственный»): the dress (то самое платье), the sun (солнце). С профессией — a: She's a doctor (она врач). Без артикля — обобщение во множественном и неисчисляемые: I like cats (я люблю кошек вообще).",
+"«Много»: many — для исчисляемых (many eggs — много яиц), much — для неисчисляемых (much time — много времени, чаще в вопросах и отрицаниях), a lot of — для всего. «Немного, несколько»: a few — исчисляемые (a few friends — несколько друзей), a little — неисчисляемые (a little milk — немного молока). some (немного, какие-то) — в утверждении, any (какой-нибудь, никакой) — в вопросе и отрицании. too many / too much — слишком много, all — все.",
+"Отрицание в английском одно на фразу: Nobody came (никто не пришёл), I don't know anything (я ничего не знаю). nobody / nothing — никто / ничего; anybody / anything — кто-нибудь / что-нибудь (с not = никто / ничего); somebody / somewhere — кто-то / где-то. «Себя, сам» — myself (себя/сам), yourself (себя/сам — ты), herself (сама). «Друг друга» — each other. Чтобы не повторять слово: the red one (красный), the black ones (чёрные).",
+"Русские «в» и «на» распадаются на три: in (в, внутри): in the box (в коробке), in Moscow (в Москве); on (на поверхности): on the table (на столе), on the wall (на стене); at (у, в точке, на мероприятии): at the station (на вокзале), at work (на работе), at a party (на вечеринке). Движение: into (в, внутрь — войти в), across (через, поперёк — с одной стороны на другую), along (вдоль, по), past (мимо), over (над, через — поверх).",
+"at — время по часам: at 7 (в семь), at night (ночью). on — дни и даты: on Monday (в понедельник), on 5 May (5 мая). in — месяцы, годы, части дня: in June (в июне), in 2020 (в 2020 году), in the morning (утром). «Через час» — in an hour. «В течение»: for (на протяжении, сколько длится) — for three years (три года), during (во время чего) — during the film (во время фильма).",
+"Многие глаголы держат свой предлог, и он не совпадает с русским: depend on (зависеть от), listen to (слушать), wait for (ждать), look at (смотреть на), agree with (соглашаться с), think about (думать о), arrive in / at (прибыть в). Устойчивые фразы учим целиком: at home (дома), in bed (в постели), on holiday (в отпуске), by bus (на автобусе). В вопросе предлог уходит в конец: Who are you waiting for? (кого ты ждёшь?)",
+"«Был» — was / were (был / были). Действие в прошлом — глагол + -ed (worked — работал) или вторая форма неправильного глагола: go → went (пошёл), see → saw (увидел), buy → bought (купил). В вопросе и отрицании помощник did забирает прошлое на себя, глагол возвращается в начальную форму: Did you go? (ты ходил?) I didn't see (я не видел).",
+"Был в процессе — was / were + -ing: I was cooking (я готовила, была в процессе). Короткое событие, которое его прервало, — past simple: I was cooking when you called (я готовила, когда ты позвонил). Привычка в прошлом, которой больше нет, — used to (раньше, бывало): I used to smoke (раньше я курил). Отрицание: didn't use to (раньше не…).",
+"Русское прошедшее одно, английских два. Важен результат сейчас или опыт за жизнь без даты — have / has + третья форма: He's broken his leg (он сломал ногу — и она сейчас сломана), I've been to Paris (я была в Париже — такой опыт). Слова just (только что), already (уже), yet (ещё / уже — в вопросах и отрицаниях), ever (когда-нибудь), never (никогда) обычно живут в perfect.",
+"Ситуация началась в прошлом и длится сейчас: по-русски говорим в настоящем («живу пять лет»), по-английски — perfect: I've lived here for five years (я живу здесь пять лет). for (в течение) — сколько: for two years (два года); since (с, начиная с) — с какого момента: since April (с апреля). Есть точное «когда» — yesterday (вчера), last year (в прошлом году), in 2019 — ставим past simple.",
+"Действие идёт до сих пор (или только что закончилось), и важна длительность — have been + -ing: I've been waiting for an hour (я жду уже час). Важен результат или количество — обычный perfect: I've read three books (я прочитала три книги). How long (как долго, сколько уже) часто требует have been + -ing.",
+"Прилагательное стоит перед существительным и не меняется: a long blue skirt (длинная синяя юбка), long skirts (длинные юбки). Сначала размер, потом цвет: big brown eyes (большие карие глаза). -ed — что чувствует человек: bored (скучающий — «мне скучно»), tired (уставший), interested (заинтересованный). -ing — какой предмет или ситуация: boring (скучный), tiring (утомительный), interesting (интересный), amazing (удивительный).",
+"Как делает — после глагола и объекта: He speaks English well (он хорошо говорит по-английски), She drives fast (она быстро водит). Как часто — always (всегда), usually (обычно), often (часто), rarely (редко), never (никогда) — перед обычным глаголом, но после be: She always reads (она всегда читает), She's always late (она всегда опаздывает). «Очень» перед глаголом не ставим: I really like it (мне очень нравится) или I like it very much.",
+"Короткие слова — -er / -est: old → older (старше) → the oldest (самый старый). Длинные — more / the most: more expensive (дороже), the most expensive (самый дорогой). Неправильные: good → better (лучше) → the best (лучший). Не удваиваем: better, а не more better. «Чем» — than. not as … as — «не такой … как». too (слишком) — перед словом: too hot (слишком жарко); enough (достаточно) — после прилагательного: big enough (достаточно большой).",
+"Решил заранее, есть план — be going to (собираюсь): I'm going to call her (я собираюсь ей позвонить). Решил прямо сейчас, обещаешь, предсказываешь — will (буду / сделаю): I'll call you later (я позвоню тебе позже). won't = will not (не буду). По-русски одно «позвоню», по-английски выбираем по моменту решения.",
+"Договорился, есть время и место — present continuous: I'm meeting Anna on Friday (я встречаюсь с Анной в пятницу). Расписание (поезд, сеанс, урок) — present simple: The train leaves at 6 (поезд отправляется в 6). План — going to, решение прямо сейчас — will.",
+"После if (если), when (когда), before (перед тем как), after (после того как), until (пока не), as soon as (как только) будущее не ставим — там настоящее: If it rains, we'll stay home (если пойдёт дождь, мы останемся дома). When I come, I'll call (когда приду, позвоню). Будущее показываем один раз — в главной части. Если результат всегда одинаковый, настоящее в обеих частях: If you press this, it opens (если нажать это, оно открывается).",
+"Нереальное или маловероятное «если бы» — if + прошедшая форма, а в главной части would (бы) + глагол: If I was rich, I'd travel (если бы я была богата, я бы путешествовала). Прошедшая форма здесь не про прошлое, а про «не по-настоящему». would после if не ставим. Совет «на твоём месте я бы…» — If I were you, I'd…",
+"can (могу, умею, можно): I can swim (я умею плавать), Can I come in? (можно войти?). could (мог, умел в прошлом; или вежливое «не могли бы»): Could you help me? (не могли бы вы помочь?). В будущем — will be able to (смогу). can't (не могу, нельзя), couldn't (не смог). После этих слов глагол без to и без -s: She can drive (она умеет водить).",
+"«Надо, приходится» — have to (правила, обстоятельства): I have to go (мне надо идти); must (должен — сам считаю нужным). mustn't (нельзя!) и don't have to (не обязательно) — разные вещи. need to (нужно). Прошлое — had to (пришлось), будущее — will have to (придётся).",
+"Совет — should (стоит, следует): You should rest (тебе стоит отдохнуть); shouldn't (не стоит). Возможно — might / may (может быть): It might rain (может пойти дождь). Уверен, что да, — must be (должно быть): You must be tired (ты, должно быть, устал). Уверен, что нет, — can't be (не может быть): It can't be true (это не может быть правдой).",
+"После одних глаголов — -ing: enjoy (наслаждаться, любить делать), like (нравиться), love (обожать), finish (заканчивать), mind (возражать), stop (прекращать): I enjoy cooking (я люблю готовить). После других — to: want (хотеть), decide (решать), hope (надеяться), promise (обещать), would like (хотел бы): I want to go (я хочу пойти). После предлога — всегда -ing: I'm good at drawing (я хорошо рисую).",
+"«Хочу, чтобы ты…» — want + кто + to: I want you to stay (я хочу, чтобы ты остался). let (разрешать) + кто + глагол без to: let me go (отпусти меня). make (заставлять) + кто + глагол без to: He made me laugh (он меня рассмешил). ask / advise (просить / советовать) + кто + to. Два дополнения: send her flowers = send flowers to her (отправить ей цветы). explain (объяснять) и say (говорить) — только с to перед человеком: Explain it to me (объясни мне это); tell (сказать кому-то) — без to: Tell me (скажи мне).",
+"Спрашиваем о подлежащем (кто сделал?) — помощник не нужен: Who called you? (кто тебе звонил?). Спрашиваем о дополнении (кого? что?) — нужен: Who did you call? (кому ты звонил?). which (который, какой из) — выбор из известного, what (что, какой) — вообще. whose (чей). how long (как долго) / how old (сколько лет) / how far (как далеко) — «насколько».",
+"and (и), but (но), or (или), because (потому что), so (поэтому), so that (чтобы). because of (из-за) — только перед существительным. В рассказе — first (сначала), then (потом), after that (после этого), finally (наконец). because и so в одной фразе вместе не ставим.",
+"«Который»: who — для людей, which — для вещей, that — для обоих. where (где) — для места. Если «который» — дополнение, его можно опустить: the film (that) I saw (фильм, который я посмотрела). Предлог уходит в конец: the beach (that) we went to (пляж, на который мы ходили).",
+"В пересказе время сдвигается назад: «Я голодна» → She said she was hungry (она сказала, что голодна). say (сказать) — без «кому», tell (сказать кому-то) — с человеком: She told me (она сказала мне). ask (спросить) + if (ли) для вопросов «да/нет». Вопрос внутри фразы теряет вопросительный порядок: Do you know where he lives? (ты знаешь, где он живёт?)",
+"Неважно, кто сделал, или это очевидно, — be + третья форма (пассив): English is spoken here (здесь говорят по-английски), The bridge was built in 1900 (мост построили в 1900 году). Русские «здесь говорят», «мне сказали» (I was told) часто переводятся пассивом. Сделали для меня по заказу — have something done: I had my hair cut (я подстриглась — в парикмахерской).",
+"Слова живут парами, которые не переводятся дословно: heavy rain (сильный дождь), make a mistake (сделать ошибку), make a decision (принять решение), do homework (делать домашку), do a favour (сделать одолжение), take a photo (сфотографировать). bring (принести сюда) и take (отнести туда). Фразовые глаголы: take off (снимать), turn on (включать), look after (присматривать). Объект может стоять внутри (take your shoes off), а местоимение — только внутри (take them off).",
+"Из одного корня строим слова суффиксами: teach (учить) → teacher (учитель), move (двигать) → movement (движение), care (забота) → careful (осторожный), use (польза) → useful (полезный), centre (центр) → central (центральный). Существительные склеиваются, и первое работает как прилагательное, в единственном числе: a clothes shop (магазин одежды), a ten-minute walk (десятиминутная прогулка).",
+"Короткие ответы строим тем же помощником: «я тоже» — So do I / So am I; «я тоже нет» — Neither do I / Neither am I. Хвостик-переспрос («да? правда?»): It's cold, isn't it? (холодно, правда?). Реакции: How awful! (какой ужас!), That's wonderful! (это чудесно!), Really? (правда?).",
+"Когда действие работает как существительное, берём -ing: Swimming is good for you (плавание полезно). После предлога глагол всегда с -ing: before leaving (перед уходом), thanks for helping (спасибо, что помог), interested in learning (интересуется изучением), without saying (не сказав). Устойчивые: go shopping (ходить по магазинам), look forward to seeing (с нетерпением ждать встречи), be used to working (привыкнуть работать), How about going…? (как насчёт того, чтобы пойти…?).",
+"0 тип — всегда так: If you heat ice, it melts (если нагреть лёд, он тает). 1 тип — реально в будущем: If it rains, I'll stay at home (если пойдёт дождь, останусь дома). 2 тип — нереально сейчас: If I had time, I'd help (если бы было время, я бы помогла). 3 тип — нереально в прошлом, уже не изменить: if + had + третья форма, would have + третья форма: If I had known, I would have come (если бы я знала тогда, я бы пришла)."
+];
+const EXPL={
+"I'm tired":"«Устала» — состояние, глагола в русской фразе нет. В английском он обязателен: I am → I'm.",
+"She's a teacher":"Нужен глагол is (she's), а перед профессией — артикль a.",
+"It's eight o'clock":"О времени говорим через пустое подлежащее it: It's… Без it предложение неполное.",
+"Are you ready?":"Вопрос с be: am/is/are встаёт перед подлежащим — Are you…?",
+"They aren't at home":"Отрицание с be: are + not = aren't. Глагол be нужен даже в «Они не дома».",
+"Is it far?":"«Далеко» без подлежащего → ставим it. В вопросе is выходит вперёд: Is it far?",
+"My brother is at home":"«Брат дома» — по-русски без глагола, по-английски обязательно is.",
+"It's hot today":"Погода: подлежащее it обязательно — It's hot. Без it нельзя.",
+"Where are the keys?":"Keys — много ключей, значит are, а не is.",
+"I agree":"Agree — уже глагол («соглашаться»), второй глагол am не нужен.",
+"He doesn't drink coffee":"-s забирает помощник does, поэтому drink остаётся без -s.",
+"Do you live here?":"Live — обычный глагол, вопрос делаем через do, а не are.",
+"She works in a bank":"She — третье лицо, поэтому глагол получает -s: works.",
+"It costs ten dollars":"Cost — глагол, ему не нужен is; для it добавляем -s: costs.",
+"He is a doctor and he loves his job":"В первой части глагола нет — ставим is; во второй loves уже глагол.",
+"It's cold and I don't like winter":"It's — пустое it для погоды; don't like — отрицание через do.",
+"She doesn't speak French":"Для she помощник does, не do: She doesn't…",
+"My dad works at home":"My dad = he, поэтому works с -s.",
+"What do you usually eat for breakfast?":"Вопрос с обычным глаголом: do после вопросительного слова.",
+"The boy hit the ball":"Кто делает — первым. Переставишь слова — мяч ударит мальчика.",
+"Where do you work?":"Вопрос: Where + помощник do + you + глагол.",
+"I drink tea every morning":"Порядок: кто → что делает → что → когда.",
+"Does she speak English?":"Вопрос задаём порядком слов: does вперёд, а не интонацией.",
+"Sit down, please":"Просьба (повелительное наклонение) начинается сразу с глагола, без you.",
+"Are you a doctor?":"Глагола-действия нет, поэтому вопрос через are, а не do.",
+"Why doesn't he answer?":"Why + doesn't + he + answer: помощник перед подлежащим.",
+"Can you help me?":"Вопрос: can встаёт перед you. Интонацией вопрос не делаем.",
+"I see her every day":"«Каждый день» стоит в конце, а не между I и see.",
+"When does the lesson start?":"The lesson = it, поэтому помощник does, а start — без -s.",
+"I have two children":"«У меня есть» = I have, а не «у меня».",
+"There's a new restaurant in town":"«Где-то есть что-то» → There is…, место — в конце.",
+"Do you have a car?":"Have — обычный глагол, вопрос через do.",
+"There's no milk in the fridge":"Нет чего-то где-то → There's no…",
+"He's having a shower":"Have a shower — действие «принимать душ», а сейчас — значит -ing.",
+"Is there a café nearby?":"Вопрос: is перед there.",
+"She doesn't have time on Mondays":"Отрицание с have: doesn't have.",
+"There are two cups on the table":"Чашек две — множественное число, значит there are.",
+"She has blue eyes":"«У неё голубые глаза» = она имеет: she has.",
+"We have lunch at one":"Have lunch — «обедать», это действие, не is/are.",
+"I like this song":"«Мне нравится» переворачиваем: я люблю — I like.",
+"She loves her brother":"«Свой» → по владельцу: брат её, значит her.",
+"Call me in the evening":"После глагола — me, а не I.",
+"It's my parents' car":"Принадлежность: parents' (апостроф после s у множественного).",
+"Those shoes are mine":"Shoes — много, значит those; «мои» без существительного — mine.",
+"Does he need help?":"«Ему нужна» → he needs; вопрос через does.",
+"We have their address":"«Их» перед существительным — their.",
+"Tell him":"После глагола — him, а не he.",
+"This is our house":"«Наш» перед существительным — our.",
+"It's not my bag, it's hers":"«Её» без существительного — hers.",
+"Wait, I'm talking on the phone":"Прямо сейчас — present continuous: am + -ing.",
+"What are you doing?":"«Что делаешь сейчас?» — are + doing.",
+"She usually walks, but today she's taking a taxi":"Обычно — present simple, сегодня/временно — continuous.",
+"I know the answer":"Know — глагол знания, в -ing его не ставим.",
+"They aren't watching, turn off the TV":"Continuous в отрицании: aren't + -ing.",
+"I need your help now":"Need — глагол состояния, даже «сейчас» без -ing.",
+"Where are you living now?":"Временное «сейчас живёшь» — continuous.",
+"Be quiet, the baby is sleeping":"Спит прямо сейчас — is sleeping.",
+"Are you listening to me?":"Вопрос в continuous — через are, не do.",
+"I want a coffee":"Want — глагол желания, без -ing.",
+"I need some advice":"Advice неисчисляемое: без an и без -s.",
+"The news is good":"News — неисчисляемое, глагол в ед. числе: is.",
+"I have two bags and a lot of luggage":"Bags считаются, luggage — нет (без -s).",
+"Where is my money?":"Money — неисчисляемое, глагол is, без -s.",
+"The children are playing":"Child → children (неправильное мн. число).",
+"Do you have any information?":"Information — неисчисляемое, без an и без -s.",
+"There are two apples and some bread in the bag":"Apples считаются, bread — нет: some bread.",
+"I need some information":"Information нельзя с an — только some.",
+"The furniture is new":"Furniture — «мебель» как масса, ед. число: is.",
+"I have three ideas":"Идей три — нужно мн. число: ideas.",
+"I saw a film. The film was boring":"Впервые — a film, второй раз уже «тот самый» — the film.",
+"The sun is hot":"Солнце одно-единственное — the.",
+"He's an architect":"Профессия — с артиклем; architect начинается с гласного звука → an.",
+"I like cats":"Говорим о кошках вообще — мн. число без артикля.",
+"I play the piano in the evening":"Музыкальные инструменты — с the: play the piano.",
+"There's a pharmacy in our street":"Впервые упоминаем, «какая-то» аптека — a.",
+"She has a dog. The dog is huge.":"Сначала a dog, потом уже понятно какая — the dog.",
+"Close the door, please":"Понятно какая дверь — эта, в комнате: the.",
+"I'm a student":"Профессия/роль — с a.",
+"He lives in an old house":"Old начинается с гласного звука → an.",
+"I don't have much time":"Time неисчисляемое → much, а не many.",
+"We have only a few eggs left":"Яйца считаются → a few (не a little).",
+"Is there any sugar?":"В вопросе — any; sugar неисчисляемый, без -s.",
+"There are too many people":"People считаются → too many.",
+"All my friends are married":"All стоит перед my: all my friends.",
+"I need a little milk":"Milk не считается → a little.",
+"How many children do you have?":"Children считаются → how many.",
+"How much is it?":"Цена — how much (деньги не считаем штуками).",
+"I have a few friends in London":"Друзей можно посчитать → a few.",
+"Would you like some tea?":"В предложении-угощении — some; tea без -s.",
+"I don't know anything":"Одно отрицание на фразу: don't + anything.",
+"They love each other":"«Друг друга» — each other; themselves — «самих себя».",
+"Take care of yourself":"«Себя» для you — yourself.",
+"I like the blue one, not the red one":"Чтобы не повторять слово, ставим the … one.",
+"There's a café somewhere here":"В утверждении — somewhere; anywhere — для вопросов и отрицаний.",
+"I don't need anybody":"Одно отрицание: don't + anybody.",
+"Does anybody have a pen?":"В вопросе — anybody; глагол как для he: does … have.",
+"I don't know anybody":"Не двойное отрицание: don't + anybody.",
+"Nothing happened":"Nothing уже отрицание — didn't не нужен.",
+"She made the cake herself":"«Сама» для she — herself.",
+"The keys are on the table":"На поверхности — on.",
+"She's in London":"Внутри города — in.",
+"Let's meet at the station":"Точка встречи — at.",
+"Walk across the road":"Через дорогу с одной стороны на другую — across.",
+"The picture is on the wall":"На вертикальной поверхности — тоже on.",
+"There isn't a kitchen in our office":"Внутри помещения — in.",
+"My parents are at a party now":"На мероприятии — at.",
+"I'm at work now":"«На работе» — устойчиво at work.",
+"He's in the car":"В легковой машине — in.",
+"See you at the party":"Мероприятие — at.",
+"I work on Mondays":"Дни недели — с on.",
+"The film starts at eight":"Время по часам — at.",
+"I'll be back in an hour":"«Через час» — in an hour.",
+"I sleep in the afternoon on Sundays":"Часть дня — in the afternoon, день — on Sundays.",
+"He slept during the film":"«Во время чего» — during.",
+"I don't have a holiday in June":"Месяцы — с in.",
+"I drink coffee in the morning and tea in the evening":"Части дня — in the morning / in the evening.",
+"I was born in 1995":"Годы — с in.",
+"Let's meet on Friday evening":"День + часть дня → on Friday evening.",
+"I lived there for three years":"Сколько длилось — for.",
+"I'm waiting for the bus":"Wait всегда с for: wait for.",
+"It depends on the weather":"Depend on — «зависеть от»; глагол depends без is.",
+"Look at me":"«Смотреть на» — look at.",
+"We're going by bus":"Транспорт — by: by bus, by car.",
+"Who are you waiting for?":"Предлог for уходит в конец вопроса.",
+"He's listening to music in his room":"Listen всегда с to.",
+"I agree with you":"Соглашаться с кем-то — agree with.",
+"I'm thinking about you":"Думать о — think about.",
+"I need to call my mum":"Call кого-то — без предлога.",
+"We arrived in London yesterday":"Arrive в город — in (в здание — at), не to.",
+"I was busy yesterday":"Для I — was, не were.",
+"Did you see her?":"Did уже показал прошлое — see в начальной форме.",
+"We didn't finish":"После didn't — начальная форма без -ed.",
+"Where were you on Saturday?":"Для you — were.",
+"He went to Rome in 2020":"Go — неправильный глагол: went.",
+"It was cold yesterday and nobody came":"It нужно для погоды; nobody уже отрицание.",
+"What did you buy? A dress and a bag.":"Вопрос в прошлом: did + начальная форма buy.",
+"I didn't go to work yesterday":"После didn't — go, не went.",
+"We were in Paris in May":"Для we — were.",
+"When did you arrive?":"Вопрос в прошлом через did.",
+"I was cooking when you called":"Процесс — was cooking, короткое событие — called.",
+"What were you doing at 8 pm?":"В процессе в момент прошлого — were doing; were перед you.",
+"I used to have long hair":"Было раньше, теперь нет — used to.",
+"It was raining, so we stayed at home":"Фон — was raining, событие — stayed.",
+"He didn't use to smoke":"После didn't — use to (без -d).",
+"When I came in, everybody was looking at me":"Вошла — короткое событие, смотрели — процесс.",
+"There used to be a cinema in our town":"Раньше было, сейчас нет — there used to be.",
+"What were you doing when I called?":"Процесс в прошлом — were doing; звонок — called.",
+"I used to play the guitar":"Прошлая привычка — used to + глагол.",
+"When I woke up, it was snowing":"Снег шёл (фон) — was snowing.",
+"Have you ever been to London?":"Опыт за жизнь без даты — present perfect.",
+"I've never tried sushi":"Never уже отрицание — haven't не нужен.",
+"He has broken his leg":"После has — третья форма: broken.",
+"She has just left":"Just («только что») живёт в perfect.",
+"Have you done your homework yet?":"Третья форма do — done.",
+"I haven't seen this film yet":"Третья форма see — seen.",
+"Somebody has taken my pen":"Результат сейчас (ручки нет) — has taken.",
+"I've lost my phone":"Третья форма lose — lost.",
+"Have you eaten yet?":"Третья форма eat — eaten.",
+"She has never flown":"Третья форма fly — flown.",
+"I've known him for three months":"Длится до сих пор — perfect: have known.",
+"We've been here since April":"С какого момента — since, и perfect.",
+"I went to Rome last year":"Есть точное время (last year) — past simple.",
+"How long have you worked here?":"«Сколько уже работаешь» — perfect.",
+"She has been married since 2018":"Замужем до сих пор — has been.",
+"I've had this car for ten years":"Длится до сейчас — have had.",
+"We haven't seen each other since the summer":"С лета до сейчас — perfect + since.",
+"I've worked here since 2020":"Начальная точка (2020) — since.",
+"We've been married for ten years":"Длительность (десять лет) — for.",
+"When did you move here?":"When спрашивает о моменте в прошлом — past simple.",
+"I've been learning English for five years":"Длится до сих пор, важна длительность — have been + -ing.",
+"Have you been crying?":"Только что закончилось, видно по глазам — have been + -ing.",
+"I've written three letters":"Важен результат (три письма) — обычный perfect.",
+"How long has it been raining?":"Сколько уже идёт — has been + -ing.",
+"She's been working in the garden all day":"Весь день и до сих пор — has been working.",
+"We've been waiting for the bus for twenty minutes":"Ждём до сих пор — have been waiting.",
+"What have you been doing all day?":"Have been + -ing: doing, не do.",
+"He's been watching TV for three hours":"Длится до сих пор — has been watching.",
+"She's been learning Spanish since January":"С января до сих пор — has been learning.",
+"I'm interested":"Что чувствую я — -ed: interested.",
+"The film was boring":"Какой фильм — -ing: boring.",
+"She has a long blue skirt":"Порядок: размер/длина → цвет → предмет.",
+"I'm excited about the trip":"Мои чувства — excited.",
+"We're tired. It was a tiring day":"Мы устали (-ed), день утомительный (-ing).",
+"I've never been so surprised":"Мои чувства — surprised.",
+"I'm so tired":"Чувство — tired; tiring — «утомительный».",
+"It was an amazing story":"Какая история — -ing: amazing.",
+"He has big brown eyes":"Сначала размер, потом цвет: big brown.",
+"He speaks English well":"Как говорит — well после глагола и объекта.",
+"She's always late":"Always после be: is always.",
+"I really want to go":"«Очень хочу» — really want, не very.",
+"I rarely eat meat":"Rarely — перед обычным глаголом.",
+"I really liked the film":"Very с глаголом не ставим — really liked.",
+"I don't usually work on Fridays":"Usually — между don't и глаголом.",
+"She drives fast":"Как водит — fast после глагола.",
+"He's never late":"Never после be: is never.",
+"I really love this song":"«Очень люблю» — really love.",
+"This is better":"Better уже значит «более хороший» — more не нужно.",
+"Paris isn't as big as London":"«Не такой… как» — not as … as.",
+"It's the most expensive hotel":"Длинное слово — the most expensive.",
+"The jacket isn't big enough":"Enough — после прилагательного: big enough.",
+"It's too hot to go for a walk":"Too + прилагательное + to + глагол.",
+"My brother is two years older than me":"«На два года» — two years перед older; «чем» — than.",
+"It's the best day of my life":"Превосходная от good — the best.",
+"This phone is cheaper":"Короткое слово — -er: cheaper.",
+"She's the tallest in the class":"Короткое слово — the -est: tallest.",
+"It's warmer today than yesterday":"«Чем» — than, не that.",
+"I'll answer it!":"Решение прямо сейчас — will.",
+"I'm going to buy a car":"План заранее — be going to + глагол.",
+"It's going to rain tomorrow":"Прогноз по признакам — going to; it обязательно.",
+"I'll call you later":"Обещание — will.",
+"We're going to move to London in June":"План — going to; move to London; месяцы — in.",
+"I won't tell anybody, I promise":"Обещание в отрицании — won't (will not).",
+"I'll make you some tea":"Решение в момент речи — will.",
+"We're going to get married":"После going to — начальная форма: get.",
+"Don't worry, I won't be late":"Отрицание будущего — won't, не don't will.",
+"I'm meeting Anna on Friday":"Договорились, есть время — present continuous.",
+"The train leaves at 6:15":"Расписание — present simple: leaves.",
+"What are you doing on Saturday?":"Планы-договорённости — continuous.",
+"The plane arrives at midnight":"Расписание — present simple.",
+"We're leaving tomorrow. We've already bought the tickets":"Договорённость — continuous; результат — perfect.",
+"What time does the lesson start?":"Расписание: does … start.",
+"We're going to the cinema on Saturday":"Договорённость — continuous; дни — on.",
+"The shop opens at nine":"Расписание; the shop = it → opens.",
+"What time does your flight arrive?":"Расписание; вопрос через does.",
+"If it rains, we'll stay at home":"После if будущее не ставим: rains, а will — в главной части.",
+"Call me as soon as you arrive":"После as soon as — настоящее: arrive.",
+"If you press the button, the light comes on":"Всегда так — present в обеих частях.",
+"I'll wait until you finish":"После until — настоящее: finish.",
+"Before you leave, turn off the light":"После before — настоящее: leave.",
+"If you're late, they'll leave without you":"После if — настоящее: you're late.",
+"When I finish the project, I'm going on holiday":"После when — настоящее: finish.",
+"If you're tired, have a rest":"После if — present: you're.",
+"I'll call when I arrive":"Будущее один раз: will call; после when — arrive.",
+"If you see Anna, say hello":"После if — see, не will see.",
+"If I was rich, I'd travel":"Нереально сейчас: if + прошедшая форма, would в главной части.",
+"What would you do if you were me?":"«На моём месте» — if you were me.",
+"If I knew, I'd tell you":"После if — knew, would — только в главной части.",
+"If I had a car, I'd give you a lift":"Нереально: if I had …, I'd …",
+"If she lived nearby, we'd see each other more often":"После if — lived, не would live.",
+"If I have time, I'll help. If I had time, I'd help":"Реально — have/will; нереально — had/would.",
+"If I were you, I'd agree":"Совет: If I were you…",
+"I'd buy this house if I had the money":"После if — had, не would have.",
+"Where would you go if you could?":"Нереально — would в главной части.",
+"She can drive":"После can — глагол без -s и без to; can не меняется.",
+"Could you help me?":"Вежливая просьба — could; после него без to.",
+"My grandfather could dance well":"Умел в прошлом — could + начальная форма.",
+"You can't park here":"Запрет — can't.",
+"You'll be able to speak fluently soon":"В будущем can → will be able to.",
+"Can I have a little more coffee?":"Can I + глагол без to; coffee без -s.",
+"I couldn't find my keys yesterday":"Не смогла в прошлом — couldn't.",
+"I can't swim":"Не умею — can't, без don't.",
+"Can you speak louder?":"После can — без to.",
+"When I was a child, I could run for hours":"Умела в прошлом — could.",
+"I have to go":"«Мне надо» — I have to.",
+"You don't have to come":"Не обязательно — don't have to (mustn't = нельзя).",
+"You mustn't smoke here":"Нельзя — mustn't.",
+"I had to work late yesterday":"Пришлось в прошлом — had to.",
+"She needs to see a doctor":"She → needs; после need — to.",
+"We'll have to get up at six tomorrow":"Must нет в будущем — will have to.",
+"You don't need to buy anything":"Не нужно — don't need to; одно отрицание + anything.",
+"Do you have to hurry?":"Вопрос с have to — через do.",
+"She has to work at weekends":"She → has to.",
+"We didn't have to pay":"После didn't — have, не had.",
+"You should rest":"После should — без to.",
+"It might rain later":"После might — начальная форма без -s.",
+"You must be tired":"Уверенная догадка — must be.",
+"That can't be true":"Уверен, что нет, — can't be.",
+"You shouldn't drink so much coffee":"Coffee неисчисляемый — so much.",
+"She isn't answering. She might be at work.":"Возможно — might be.",
+"I might be late":"После might — be, не am.",
+"You should call her":"После should — начальная форма: call.",
+"He must be at home":"После must — be, не is.",
+"I like working here":"После like — -ing: working.",
+"I decided to stay":"После decide — to.",
+"Do you mind waiting?":"После mind — -ing.",
+"I'd like to go to Japan":"После would like — to.",
+"He's good at drawing":"После предлога at — -ing.",
+"I stopped smoking two years ago":"Бросить делать — stop + -ing.",
+"We hope to see you next year":"После hope — to.",
+"I love travelling":"После love — -ing (или to): travelling.",
+"He promised to call":"После promise — to.",
+"Finish eating and let's go":"После finish — -ing.",
+"I want you to stay":"«Хочу, чтобы ты» — want + you + to.",
+"Explain it to me":"Explain всегда с to перед человеком.",
+"My parents don't let me stay out late":"После let — глагол без to.",
+"She asked me to call her":"Ask + кого + to.",
+"He made me laugh":"После make (заставить) — без to.",
+"Can you send me the photos?":"Send me something — без to, если «кому» стоит сразу после глагола.",
+"The doctor advised me to sleep more":"Advise + кого + to.",
+"Help me find my keys":"После help me — глагол без to (или с to), но не -ing.",
+"My mum wants me to be a doctor":"Want + me + to be, без that.",
+"Tell me the truth":"«Скажи мне» — tell me; say без to не берёт человека.",
+"Who called you?":"Спрашиваем о том, кто сделал, — без did.",
+"Who did you call?":"Спрашиваем «кому» — нужен did.",
+"Whose bag is this?":"«Чей» — whose; who's = who is.",
+"Which bus goes to the centre?":"Which bus — подлежащее, поэтому без does; goes с -s.",
+"What happened?":"Что — подлежащее, без did.",
+"How long have you lived here?":"«Сколько уже живёшь» — perfect.",
+"Who told you about it?":"Кто — подлежащее, без did.",
+"Who lives in this house?":"Кто — подлежащее, без does.",
+"What did you say?":"Что — дополнение, нужен did.",
+"How old are you?":"Возраст — How old are you?",
+"I'm studying English because I want to pass my exam":"Перед целой фразой — because; because of — перед существительным.",
+"It was raining, so we took a taxi":"Because и so вместе не ставим — достаточно so.",
+"Would you like tea or coffee?":"Выбор — or.",
+"Speak louder so that everybody can hear":"«Чтобы» с целью — so that.",
+"First I had breakfast, then I went to work":"Have breakfast без a; обе части в прошлом.",
+"She was tired, but she didn't go to bed":"Противопоставление — but.",
+"I went home because it was late":"Перед фразой — because, без of.",
+"He's rich but unhappy":"Противопоставление — but, не so.",
+"First read, then answer":"Последовательность — first … then.",
+"This is my brother who lives in Japan":"Для людей — who.",
+"The film I watched was boring":"«Который» можно опустить; it в конце лишнее.",
+"This is the house I told you about":"Предлог about уходит в конец.",
+"The man who helped me was a doctor":"Для людей — who; профессия — с a.",
+"The restaurant we went to yesterday has closed":"Предлог to в конце, «который» опускаем.",
+"This is the song I've been listening to all summer":"Предлог to в конце; слушаю до сих пор — perfect continuous.",
+"The girl who called me is my sister":"Для людей — who.",
+"Where's the book I gave you?":"It в конце лишнее — книга уже названа.",
+"This is the town where I was born":"«Где» про место — where.",
+"She said she was hungry":"В пересказе время сдвигается назад: is → was; said без me.",
+"He told me to sit down":"Tell + кому + to.",
+"Do you know what time it is?":"Внутри фразы прямой порядок: it is.",
+"I don't know where she works":"Внутри фразы — без does: she works.",
+"He asked if I had been to Moscow":"Пересказ вопроса — if + прямой порядок.",
+"Can you tell me what time the film starts?":"Tell me (не say me) и прямой порядок: the film starts.",
+"She said she had never been to London":"Сдвиг времени: has been → had been.",
+"He said he was tired":"Say — без «кому»; сказать кому — tell.",
+"She asked where I lived":"Внутри фразы — без did: where I lived.",
+"Tell her to call me":"Tell + кому + to.",
+"English is spoken here":"Неважно, кто говорит, — пассив: is + spoken.",
+"The bridge was built in 1900":"Мост построили (не он сам) — was built.",
+"The car has been washed":"Пассив в perfect — has been + третья форма.",
+"I'm going to have my hair cut tomorrow":"Делают по моей просьбе — have something done.",
+"I was told to wait":"«Мне сказали» — I was told.",
+"My phone was stolen while I was sleeping":"Телефон украли — пассив was stolen.",
+"This hotel was opened last year":"Отель открыли — was opened.",
+"This book was written in 1950":"Третья форма write — written.",
+"Lunch is served at one":"Обед подают — is served.",
+"I've been invited to a wedding":"Меня пригласили — have been invited.",
+"I made a mistake":"Ошибку «делаем» через make.",
+"Take a photo!":"Фото «берём»: take a photo.",
+"Take your shoes off, please":"Местоимение — внутри: take them off; существительное — можно внутри.",
+"I'm doing my homework":"Домашку «делаем» через do.",
+"Bring me some water":"Принести сюда, ко мне — bring.",
+"There was heavy rain yesterday":"Сильный дождь — heavy rain.",
+"Turn on the light. I can't see anything.":"Включить — turn on; одно отрицание + anything.",
+"I need to make a decision":"Решение — make a decision.",
+"Do me a favour":"Одолжение — do a favour.",
+"I'm having a shower":"Принимать душ — have a shower.",
+"a five-minute walk":"Составное прилагательное — в ед. числе: five-minute.",
+"Be careful!":"Care + -ful (одна l).",
+"She's a good teacher":"Teach + -er = teacher.",
+"I'm from China. I'm Chinese":"Страна — China, национальность — Chinese.",
+"It's the most useful book I've ever read":"Useful — одна l; ever read — perfect.",
+"I need a new toothbrush":"Составное слово: tooth + brush.",
+"It's very useful advice":"Useful — одна l; advice без a.",
+"It was a three-hour film":"Перед существительным — three-hour, без -s.",
+"Be careful on the road":"После be — прилагательное careful, не наречие.",
+"So do I":"«Я тоже» повторяет помощник: like → do.",
+"Neither am I":"«Я тоже не» с be: Neither am I.",
+"It's cold, isn't it?":"Хвостик повторяет be: is → isn't it?",
+"How awful!":"Реакция: How + прилагательное!",
+"You know her, don't you?":"Know → помощник do: don't you?",
+"Neither have I":"Have been → помощник have: Neither have I.",
+"You've already finished, haven't you?":"Have finished → haven't you?",
+"So am I":"«Я тоже» с be: tired → So am I.",
+"Neither did I":"Прошлое → did: Neither did I.",
+"You aren't hungry, are you?":"Отрицание в фразе → утвердительный хвостик: are you?",
+"Swimming is good for you":"Действие в роли подлежащего — -ing.",
+"Thanks for coming":"После for — -ing.",
+"I'm tired of waiting":"После of — -ing.",
+"She's interested in learning languages":"После in — -ing.",
+"We're going shopping on Saturday":"Go + -ing для занятий: go shopping.",
+"I'm looking forward to seeing you":"Look forward to — to здесь предлог, после него -ing.",
+"I'm used to getting up early":"Be used to + -ing — «привыкла».",
+"Smoking isn't allowed in this building":"Действие как подлежащее — smoking.",
+"Reading before bed is my habit":"Действие как подлежащее — -ing.",
+"How about going to the cinema?":"После how about — -ing.",
+"He left without saying goodbye":"После without — -ing.",
+"If I had known, I would have come":"Нереально в прошлом — had + третья форма, would have + третья форма.",
+"If we had left earlier, we wouldn't have been late":"Третий тип: had left, would have been.",
+"If you heat ice, it melts":"Всегда так — 0 тип, present в обеих частях.",
+"If it's sunny tomorrow, we'll go to the beach":"Реально в будущем — 1 тип; после if — present.",
+"If I had more money, I'd move":"Нереально сейчас — 2 тип: had, would.",
+"She would have passed the exam if she had studied":"Прошлое не изменить — 3 тип.",
+"If you had told me, I would have helped":"3 тип: had told, would have helped.",
+"What would you do if you won a million?":"Маловероятно — 2 тип: won, would.",
+"If I hadn't missed the train, I would have been on time":"3 тип: hadn't missed.",
+"He wouldn't have fallen if he had been more careful":"Третья форма fall — fallen.",
+"If you mix blue and yellow, you get green":"Всегда так — 0 тип."
+};
+Object.assign(EXPL,{"He went into the room":"Движение внутрь — into (в, внутрь).","We walked along the river":"Вдоль чего-то — along (вдоль).","The bus went past us":"Мимо — past.","The plane flew over the city":"Над чем-то — over (над).","The cat jumped over the fence":"Через препятствие сверху — over."});
+PATH.forEach((p,i)=>{if(RULES[i])p.r=RULES[i]});
+const EX=[
+[["Мой брат дома","My brother is at home","My brother at home"],["Сегодня жарко","It's hot today","Is hot today"],["Где ключи?","Where are the keys?","Where is the keys?"]],
+[["Она не говорит по-французски","She doesn't speak French","She don't speak French"],["Мой папа работает дома","My dad works at home","My dad work at home"],["Что ты обычно ешь на завтрак?","What do you usually eat for breakfast?","What you usually eat for breakfast?"]],
+[["Ты можешь мне помочь?","Can you help me?","You can help me?"],["Я вижу её каждый день","I see her every day","I every day see her"],["Когда начинается урок?","When does the lesson start?","When the lesson starts?"]],
+[["На столе две чашки","There are two cups on the table","There is two cups on the table"],["У неё голубые глаза","She has blue eyes","She is blue eyes"],["Мы обедаем в час","We have lunch at one","We are lunch at one"]],
+[["Скажи ему","Tell him","Tell he"],["Это наш дом","This is our house","This is us house"],["Это не моя сумка, а её","It's not my bag, it's hers","It's not my bag, it's her"]],
+[["Тише, ребёнок спит","Be quiet, the baby is sleeping","Be quiet, the baby sleeps"],["Ты меня слушаешь?","Are you listening to me?","Do you listening to me?"],["Я хочу кофе","I want a coffee","I'm wanting a coffee"]],
+[["Мне нужна информация","I need some information","I need an information"],["Мебель новая","The furniture is new","The furnitures are new"],["У меня три идеи","I have three ideas","I have three idea"]],
+[["Закрой дверь, пожалуйста","Close the door, please","Close a door, please"],["Я студентка","I'm a student","I'm student"],["Он живёт в старом доме","He lives in an old house","He lives in a old house"]],
+[["Сколько это стоит?","How much is it?","How many is it?"],["У меня есть несколько друзей в Лондоне","I have a few friends in London","I have a little friends in London"],["Хочешь чаю?","Would you like some tea?","Would you like any teas?"]],
+[["Я никого не знаю","I don't know anybody","I don't know nobody"],["Ничего не случилось","Nothing happened","Nothing didn't happen"],["Она сама испекла торт","She made the cake herself","She made the cake himself"]],
+[["Он вошёл в комнату","He went into the room","He went in the room"],["Мы гуляли вдоль реки","We walked along the river","We walked across the river"],["Автобус проехал мимо нас","The bus went past us","The bus went over us"],["Самолёт пролетел над городом","The plane flew over the city","The plane flew on the city"],["Кошка перепрыгнула через забор","The cat jumped over the fence","The cat jumped through the fence"],["Я сейчас на работе","I'm at work now","I'm on work now"],["Он в машине","He's in the car","He's on the car"],["Увидимся на вечеринке","See you at the party","See you on the party"]],
+[["Я родилась в 1995 году","I was born in 1995","I was born on 1995"],["Встретимся в пятницу вечером","Let's meet on Friday evening","Let's meet in Friday evening"],["Я жила там три года","I lived there for three years","I lived there during three years"]],
+[["Я думаю о тебе","I'm thinking about you","I'm thinking on you"],["Мне нужно позвонить маме","I need to call my mum","I need to call to my mum"],["Мы приехали в Лондон вчера","We arrived in London yesterday","We arrived to London yesterday"]],
+[["Вчера я не ходила на работу","I didn't go to work yesterday","I didn't went to work yesterday"],["Мы были в Париже в мае","We were in Paris in May","We was in Paris in May"],["Когда ты приехал?","When did you arrive?","When you arrived?"]],
+[["Что ты делала, когда я позвонил?","What were you doing when I called?","What did you do when I was calling?"],["Раньше я играла на гитаре","I used to play the guitar","I use to play the guitar"],["Когда я проснулась, шёл снег","When I woke up, it was snowing","When I woke up, it snowing"]],
+[["Я потеряла телефон","I've lost my phone","I've lose my phone"],["Ты уже поел?","Have you eaten yet?","Have you ate yet?"],["Она никогда не летала на самолёте","She has never flown","She has never flew"]],
+[["Я работаю здесь с 2020 года","I've worked here since 2020","I've worked here for 2020"],["Мы женаты десять лет","We've been married for ten years","We've been married since ten years"],["Когда ты переехала сюда?","When did you move here?","When have you moved here?"]],
+[["Чем ты занималась весь день?","What have you been doing all day?","What have you been do all day?"],["Он смотрит телевизор уже три часа","He's been watching TV for three hours","He's watching TV for three hours"],["Она учит испанский с января","She's been learning Spanish since January","She learns Spanish since January"]],
+[["Я так устала","I'm so tired","I'm so tiring"],["Это была удивительная история","It was an amazing story","It was an amazed story"],["У него большие карие глаза","He has big brown eyes","He has brown big eyes"]],
+[["Она быстро водит машину","She drives fast","She fast drives"],["Он никогда не опаздывает","He's never late","He never is late"],["Я очень люблю эту песню","I really love this song","I very love this song"]],
+[["Этот телефон дешевле","This phone is cheaper","This phone is more cheap"],["Она самая высокая в классе","She's the tallest in the class","She's the most tall in the class"],["Сегодня теплее, чем вчера","It's warmer today than yesterday","It's warmer today that yesterday"]],
+[["— Я устала. — Я сделаю тебе чай","I'll make you some tea","I make you some tea"],["Мы собираемся пожениться","We're going to get married","We're going to getting married"],["Не волнуйся, я не опоздаю","Don't worry, I won't be late","Don't worry, I don't will be late"]],
+[["В субботу мы идём в кино","We're going to the cinema on Saturday","We go to the cinema in Saturday"],["Магазин открывается в девять","The shop opens at nine","The shop open at nine"],["Во сколько прилетает твой рейс?","What time does your flight arrive?","What time your flight arrives?"]],
+[["Если ты устал, отдохни","If you're tired, have a rest","If you will be tired, have a rest"],["Я позвоню, когда приеду","I'll call when I arrive","I'll call when I will arrive"],["Если увидишь Анну, передай привет","If you see Anna, say hello","If you will see Anna, say hello"]],
+[["Если бы я была тобой, я бы согласилась","If I were you, I'd agree","If I am you, I'd agree"],["Я бы купила этот дом, если бы у меня были деньги","I'd buy this house if I had the money","I'd buy this house if I would have the money"],["Куда бы ты поехал, если бы мог?","Where would you go if you could?","Where will you go if you could?"]],
+[["Я не умею плавать","I can't swim","I don't can swim"],["Ты можешь говорить громче?","Can you speak louder?","Can you to speak louder?"],["В детстве я могла бегать часами","When I was a child, I could run for hours","When I was a child, I can run for hours"]],
+[["Тебе нужно спешить?","Do you have to hurry?","Have you to hurry?"],["Ей приходится работать по выходным","She has to work at weekends","She have to work at weekends"],["Нам не надо было платить","We didn't have to pay","We didn't had to pay"]],
+[["Может, я опоздаю","I might be late","I might am late"],["Тебе стоит позвонить ей","You should call her","You should calling her"],["Он, должно быть, дома","He must be at home","He must is at home"]],
+[["Я обожаю путешествовать","I love travelling","I love travel"],["Он пообещал позвонить","He promised to call","He promised calling"],["Доешь, и пойдём","Finish eating and let's go","Finish to eat and let's go"]],
+[["Помоги мне найти ключи","Help me find my keys","Help me finding my keys"],["Мама хочет, чтобы я стала врачом","My mum wants me to be a doctor","My mum wants that I be a doctor"],["Скажи мне правду","Tell me the truth","Say me the truth"]],
+[["Кто живёт в этом доме?","Who lives in this house?","Who does live in this house?"],["Что ты сказал?","What did you say?","What you said?"],["Сколько тебе лет?","How old are you?","How many years you have?"]],
+[["Я пошла домой, потому что было поздно","I went home because it was late","I went home because of it was late"],["Он богат, но несчастлив","He's rich but unhappy","He's rich so unhappy"],["Сначала прочитай, потом ответь","First read, then answer","First read, after answer"]],
+[["Девушка, которая мне звонила, — моя сестра","The girl who called me is my sister","The girl which called me is my sister"],["Где книга, которую я тебе дала?","Where's the book I gave you?","Where's the book I gave you it?"],["Это город, где я родилась","This is the town where I was born","This is the town which I was born"]],
+[["Он сказал, что устал","He said he was tired","He said me he was tired"],["Она спросила, где я живу","She asked where I lived","She asked where did I live"],["Скажи ей позвонить мне","Tell her to call me","Say her to call me"]],
+[["Эту книгу написали в 1950 году","This book was written in 1950","This book was wrote in 1950"],["Обед подают в час","Lunch is served at one","Lunch serves at one"],["Меня пригласили на свадьбу","I've been invited to a wedding","I've invited to a wedding"]],
+[["Мне нужно принять решение","I need to make a decision","I need to do a decision"],["Сделай мне одолжение","Do me a favour","Make me a favour"],["Я принимаю душ","I'm having a shower","I'm doing a shower"]],
+[["Это очень полезный совет","It's very useful advice","It's very usefull advice"],["Это был трёхчасовой фильм","It was a three-hour film","It was a three-hours film"],["Будь осторожен на дороге","Be careful on the road","Be carefully on the road"]],
+[["— Я устала. — Я тоже","So am I","So do I"],["— Я этого не видела. — Я тоже","Neither did I","Neither saw I"],["Ты не голоден, да?","You aren't hungry, are you?","You aren't hungry, aren't you?"]],
+[["Читать перед сном — моя привычка","Reading before bed is my habit","Read before bed is my habit"],["Как насчёт того, чтобы пойти в кино?","How about going to the cinema?","How about go to the cinema?"],["Он ушёл, не попрощавшись","He left without saying goodbye","He left without say goodbye"]],
+[["Если бы я не опоздала на поезд, я бы пришла вовремя","If I hadn't missed the train, I would have been on time","If I didn't miss the train, I would have been on time"],["Он бы не упал, если бы был осторожнее","He wouldn't have fallen if he had been more careful","He wouldn't have fell if he had been more careful"],["Если смешать синий и жёлтый, получится зелёный","If you mix blue and yellow, you get green","If you will mix blue and yellow, you get green"]]
+];
+const LEVELS=[
+{n:"База: скелет фразы",t:[0,7,1,10,3,4,2]},
+{n:"Расширяем фразу",t:[5,6,11,8,18,13,25]},
+{n:"Прошлое, планы, правила",t:[19,21,20,12,26,9,14,30]},
+{n:"Связная речь",t:[15,23,28,38,31,22,27,35]},
+{n:"Уверенный B1",t:[16,29,32,24,39,34,17,33,36,37]}
+];
+
+/* ===== данные → банк заданий ===== */
+const shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const TT={choice:"Выбери верный вариант",gap:"Вставь пропущенное",match:"Соедини пары",build:"Собери фразу",error:"Найди ошибку",type:"Напиши по-английски"};
+const LV={choice:1,gap:2,match:2,build:3,error:4,type:5};
+
+function items(t){const p=PATH[t];return [...p.nw,...p.mx,...EX[t]].map(a=>{const b=a[1][0]==="=";return{ru:a[0],right:b?a[1].slice(1):a[1],wrong:b?[]:a.slice(2)}})}
+function diff(R,W){const r=R.split(" "),w=W.split(" ");let p=0;while(p<r.length&&p<w.length&&r[p]===w[p])p++;let s=0;while(s<r.length-p&&s<w.length-p&&r[r.length-1-s]===w[w.length-1-s])s++;
+  return{r,w,p,s,mr:r.slice(p,r.length-s),mw:w.slice(p,w.length-s)}}
+const BANK=PATH.map((_,t)=>{
+  const out={choice:[],gap:[],build:[],error:[],type:[],match:[]};
+  const its=items(t);
+  its.forEach(it=>{
+    if(it.wrong.length) out.choice.push({ty:"choice",t,full:it.right,ru:it.ru,opts:[it.right,...it.wrong],ans:it.right});
+    const n=it.right.split(" ").length;
+    if(n>=2&&n<=11) out.build.push({ty:"build",t,full:it.right,ru:it.ru,ans:it.right});
+    if(n<=9) out.type.push({ty:"type",t,full:it.right,ru:it.ru,ans:it.right});
+    const gaps=[];let gb=null;
+    it.wrong.forEach(W=>{const d=diff(it.right,W);
+      if(d.mr.length>=1&&d.mr.length<=3&&d.mw.length>=1&&d.mw.length<=3&&d.p+d.s>=1){
+        if(!gb)gb={before:d.r.slice(0,d.p).join(" "),after:d.r.slice(d.r.length-d.s).join(" "),ans:d.mr.join(" ")};
+        if(gb.before===d.r.slice(0,d.p).join(" ")&&gb.after===d.r.slice(d.r.length-d.s).join(" "))gaps.push(d.mw.join(" "))}
+      if(d.mw.length>=1&&d.mw.length<=2&&d.mr.length>=1&&d.p+d.s>=1&&!out.error.some(e=>e.ru===it.ru))
+        out.error.push({ty:"error",t,full:it.right,ru:it.ru,words:d.w,bad:d.mw.map((_,k)=>d.p+k),ans:it.right})});
+    if(gb&&gaps.length) out.gap.push({ty:"gap",t,full:it.right,ru:it.ru,before:gb.before,after:gb.after,opts:[gb.ans,...new Set(gaps)].filter((v,i,a)=>a.indexOf(v)===i),ans:gb.ans});
+  });
+  const short=shuf(its.slice().sort((a,b)=>a.right.length-b.right.length).slice(0,Math.max(4,its.filter(i=>i.right.split(" ").length<=6).length)));
+  for(let k=0;k+4<=short.length&&k<8;k+=4) out.match.push({ty:"match",t,pairs:short.slice(k,k+4).map(i=>[i.ru,i.right])});
+  return out});
+
+/* ===== состояние ===== */
+let st={tp:{},les:{},open:false};try{const x=JSON.parse(localStorage.getItem("bk4")||"null");if(x)st=Object.assign(st,x)}catch(e){}
+function save(){try{localStorage.setItem("bk4",JSON.stringify(st))}catch(e){}}
+const TOPIC_LV={};LEVELS.forEach((l,i)=>l.t.forEach(t=>TOPIC_LV[t]=i));
+const LESSONS=[];LEVELS.forEach((l,li)=>{l.t.forEach(t=>LESSONS.push({kind:"topic",t,lv:li}));LESSONS.push({kind:"check",lv:li})});
+const lpass=i=>st.les[i]&&st.les[i].pass;
+const lopen=i=>st.open||i===0||lpass(i-1);
+const learned=()=>{const s=new Set();LESSONS.forEach((l,i)=>{if(l.kind==="topic"&&(lpass(i)||st.open))s.add(l.t)});return[...s]};
+function stat(t){return st.tp[t]||(st.tp[t]={ok:0,bad:0,last:0})}
+function weight(t){const s=stat(t),days=(Date.now()-(s.last||0))/864e5;return 1+4*s.bad/(s.ok+s.bad+1)+Math.min(3,days*.5)}
+function pickTopics(pool,n){const out=[];const w=pool.map(t=>[t,weight(t)]);for(let i=0;i<n&&w.length;i++){let tot=w.reduce((a,b)=>a+b[1],0),r=Math.random()*tot,k=0;while(r>w[k][1]){r-=w[k][1];k++}out.push(w[k][0]);if(pool.length>n)w.splice(k,1)}return out}
+function take(t,ty,used){const b=BANK[t];let order=[ty,...{choice:["gap","build"],gap:["choice","build"],match:["gap","choice"],build:["gap","type"],error:["build","type"],type:["build","error"]}[ty]];
+  for(const y of order){const c=shuf(b[y].filter(x=>!used.has(x)));if(c.length){used.add(c[0]);return c[0]}}return null}
+
+/* ===== сборка уроков ===== */
+function buildTopic(i){const L=LESSONS[i],t=L.t,used=new Set(),q=[];
+  ["choice","choice","gap","gap","match","build","build","error","error","type","type"].forEach(y=>{const x=take(t,y,used);if(x)q.push(Object.assign({},x,{tag:"Новая тема"}))});
+  const prev=[];for(let j=0;j<i;j++)if(LESSONS[j].kind==="topic")prev.push(LESSONS[j].t);
+  if(prev.length){const tys=L.lv<1?["choice","gap","build","build"]:L.lv<3?["gap","build","error","type"]:["build","error","type","type"];
+    const tops=pickTopics(prev,4);mixOrder(tops.map((tt,k)=>take(tt,tys[k%tys.length],used)).filter(Boolean).map(x=>Object.assign({},x,{tag:"Микс",cls:"mx"}))).forEach(x=>q.push(x))}
+  return q}
+function buildMix(pool,n,label){const used=new Set(),tops=pickTopics(pool,n),plan=["choice","choice","gap","gap","match","build","build","build","error","error","error","type","type","type","type"];
+  const q=tops.map((t,k)=>take(t,plan[Math.floor(k*plan.length/n)],used)).filter(Boolean).map(x=>Object.assign({},x,{tag:label,cls:"mx"}));
+  return mixOrder(q)}
+function mixOrder(q){q.sort((a,b)=>LV[a.ty]-LV[b.ty]);for(let k=1;k<q.length;k++)if(q[k].t===q[k-1].t){const j=q.findIndex((x,m)=>m>k&&x.t!==q[k].t&&LV[x.ty]===LV[q[k].ty]);if(j>0)[q[k],q[j]]=[q[j],q[k]]}return q}
+
+/* ===== ИИ ===== */
+/* Куда отправлять проверку на вашем сайте: адрес файла ai-check.php (DeepSeek). Пусто — ИИ выключен. */
+const AI_ENDPOINT="";
+let AI=null;
+function endpointAI(url){const call=async(prompt,json)=>{const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,json})});
+    if(r.status===429)throw{code:"rate_limited"};if(!r.ok)throw{code:"error"};return (await r.json()).text||""};
+  const f=async(p,o)=>{const text=await call(p,false);if(o&&o.onText)o.onText({text});return{text}};
+  f.json=async p=>{const t=await call(p,true);return JSON.parse(t.replace(/^```json|```$/g,"").trim())};return f}
+if(AI_ENDPOINT)AI=endpointAI(AI_ENDPOINT);
+try{if(!AI&&window.claude&&claude.use)claude.use("sample").then(x=>{if(x){AI=x;if(run&&run.q[run.i]&&run.q[run.i].ty==="type")render()}}).catch(()=>{})}catch(e){}
+function aiPrompt(t,student){const p=PATH[t.t];return `You check a translation exercise for a Russian-speaking learner of English (level A2-B1).
+Grammar topic being practised: ${p.n}. Rule: ${p.r}
+Russian sentence: "${t.ru}"
+Reference answer: "${t.ans}"
+Student answer: "${student}"
+
+Decide whether the student's answer is a correct, natural English translation of the Russian sentence.
+ACCEPT: synonyms and other natural wording, other correct word order, contractions or full forms, British or American usage, numbers as digits, missing final punctuation, wrong capitalisation, and small spelling typos in words that do not carry the grammar point (set typo=true).
+REJECT: any grammar mistake, especially one on the practised topic (verb form, tense, article, preposition, word order, auxiliary); Russian-style calques; a changed meaning; an answer in Russian.
+A typo that changes a grammar form (e.g. work/works, a/the, in/on) is a grammar mistake, not a typo.
+
+Reply with JSON only, no other text:
+{"ok": true or false, "typo": true or false, "fixed": "the student's answer with the minimum corrections needed (same as student answer if nothing to fix)", "comment": "one or two short sentences in Russian for the learner: if ok, say briefly whether their variant differs from the reference and that it is fine; if not ok, name the exact mistake and the rule behind it. Address the learner informally (на ты)."}`}
+async function aiCheck(t,student){const r=await AI.json(aiPrompt(t,student),{modelTier:"quick"});
+  if(!r||typeof r.ok!=="boolean")throw new Error("bad");return r}
+async function aiExplain(t,el){const p=PATH[t.t];el.textContent="Думаю…";
+  try{await AI(`A Russian-speaking learner of English (A2-B1) made a mistake in a grammar exercise.
+Topic: ${p.n}. Rule: ${p.r}
+Task type: ${TT[t.ty]}. Russian sentence: "${t.ru||""}". Correct answer: "${t.ans}". Learner's answer: "${run.given||""}".
+In Russian, informally (на ты), in 2-3 short sentences: say exactly what is wrong in the learner's answer, why (link it to the rule or to the Russian habit behind the mistake), and give one more short example sentence with the correct pattern (English + Russian translation). No greetings, no markdown.`,
+   {modelTier:"quick",onText:({text})=>{el.textContent=text}})}catch(e){el.textContent=e&&e.code==="rate_limited"?"Слишком много запросов, попробуй чуть позже.":"Не получилось получить разбор."}}
+
+/* ===== UI ===== */
+const app=document.getElementById("app");let mode="path",run=null,view=null;
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+function setMode(m){
+  mode=m;run=null;view=null;
+  document.querySelectorAll(".tab").forEach(tab=>{
+    const active=tab.dataset.m===m;
+    tab.classList.toggle("on",active);
+    tab.setAttribute("aria-pressed",String(active));
+  });
+  render();
+}
+function render(){if(run){if(run.i>=run.q.length)return finish();return task()}
+  if(mode==="path")return view==null?pathList():lessonIntro(view);
+  if(mode==="mix")return mixIntro();
+  if(mode==="talk")return !talk?talkList():talk.done?talkSummary():talkCall();diagIntro()}
+
+function sheet(t){const p=PATH[t];const ex=items(t).slice(0,3);
+  const d=document.createElement("div");d.className="ov";d.innerHTML=`<div class="sh"><div class="grab"></div>
+  <div class="scheme">Правило · юниты учебника ${p.u}</div><p class="ru" style="font-size:22px;margin-bottom:8px">${esc(p.n)}</p>
+  <div class="rule">${esc(p.r)}</div>
+  <div class="trap"><b style="color:var(--ink)">Русская ловушка</b><br>${esc(p.tr[0])}<br><s>✗ ${esc(p.tr[1])}</s><br><b>✓ ${esc(p.tr[2])}</b></div>
+  <div class="units" style="margin-bottom:6px">Примеры</div>${ex.map(e=>`<div class="exl"><span>${esc(e.ru)}</span><b>${esc(e.right)}</b></div>`).join("")}
+  <button class="btn" style="width:100%;margin-top:14px" id="shx">Понятно</button></div>`;
+  document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector("#shx").onclick=close}
+
+function pathList(){const done=LESSONS.filter((_,i)=>lpass(i)).length;
+  let h=`<div class="card"><div class="overall"><span>Пройдено ${done} из ${LESSONS.length} уроков</span></div>
+  <div class="bar" style="margin-top:6px"><i style="width:${done/LESSONS.length*100}%"></i></div>
+  <label class="sw"><input type="checkbox" id="op" ${st.open?"checked":""}> Часть тем я уже прошла — открыть все уроки</label></div><div class="list">`;
+  let cur=false;
+  LESSONS.forEach((L,i)=>{if(i===0||LESSONS[i-1].lv!==L.lv)h+=`<div class="stage">Уровень ${L.lv+1} · ${LEVELS[L.lv].n}</div>`;
+    const r=st.les[i],lk=!lopen(i);let pill=lk?`<span class="pill">🔒</span>`:`<span class="pill">начать</span>`;
+    if(r)pill=r.pass?`<span class="pill g">${r.best}%</span>`:`<span class="pill r">${r.best}% · ещё раз</span>`;
+    if(!lk&&!lpass(i)&&!cur){cur=true;if(!r)pill=`<span class="pill g">следующий</span>`}
+    const title=L.kind==="topic"?esc(PATH[L.t].n):"Контрольный микс уровня "+(L.lv+1);
+    const sub=L.kind==="topic"?`Тема + микс повторения · юниты ${PATH[L.t].u}`:`15 заданий по всем темам уровня ${L.lv+1} и прошлых`;
+    h+=`<button class="item ${lk?"lock":""} ${L.kind==="check"?"chk":""}" data-i="${i}" ${lk?"disabled":""}><div><b>${L.kind==="check"?"★ ":""}${title}</b><small>${sub}</small></div>${pill}</button>`});
+  app.innerHTML=h+`</div>`;
+  op.onchange=()=>{st.open=op.checked;save();render()};
+  app.querySelectorAll(".item:not(.lock)").forEach(b=>b.onclick=()=>{view=+b.dataset.i;render()})}
+
+function lessonIntro(i){const L=LESSONS[i];
+  if(L.kind==="check"){const pool=[];for(let j=0;j<i;j++)if(LESSONS[j].kind==="topic")pool.push(LESSONS[j].t);
+    app.innerHTML=`<div class="card"><button class="back" id="bk">← Все уроки</button><div class="scheme" style="margin-top:16px">Уровень ${L.lv+1} · контроль</div>
+    <p class="ru" style="font-size:24px">Контрольный микс</p><p style="color:var(--mut)">15 заданий вперемешку из ${pool.length} тем. Сначала узнавание, потом сборка фраз, поиск ошибок и перевод. Чаще попадаются темы, где у вас были ошибки.</p>
+    <button class="btn" id="go">Начать</button></div>`;
+    bk.onclick=()=>{view=null;render()};go.onclick=()=>{run={i:0,ok:0,first:0,q:buildMix(pool,15,"Контроль"),lesson:i};run.first=run.q.length;render()};return}
+  const p=PATH[L.t];
+  app.innerHTML=`<div class="card"><button class="back" id="bk">← Все уроки</button>
+  <div class="scheme" style="margin-top:16px">Уровень ${L.lv+1} · новая тема</div><p class="ru" style="font-size:24px">${esc(p.n)}</p>
+  <div class="units">Учебник: юниты ${p.u}</div>
+  <div class="rule"><b>Правило.</b> ${esc(p.r)}</div>
+  <div class="trap"><b style="color:var(--ink)">Русская ловушка</b><br>${esc(p.tr[0])}<br><s>✗ ${esc(p.tr[1])}</s><br><b>✓ ${esc(p.tr[2])}</b></div>
+  <div class="ladder">${["choice","gap","match","build","error","type"].map((y,k)=>`<span>${k+1}. ${TT[y]}</span>`).join("")}<span class="mxl">+ микс прошлых тем</span></div>
+  <p class="units" style="margin:0 0 14px">Правило можно открыть в любой момент кнопкой «?». Следующий урок открывается при 80% верных с первого раза.</p>
+  <button class="btn" id="go">Начать урок</button></div>`;
+  bk.onclick=()=>{view=null;render()};go.onclick=()=>{run={i:0,ok:0,q:buildTopic(i),lesson:i};run.first=run.q.length;render()}}
+
+function mixIntro(){const pool=learned();const use=pool.length?pool:LEVELS[0].t;
+  app.innerHTML=`<div class="card"><div class="scheme">Умный микс</div><p class="ru" style="font-size:22px">15 заданий из ${use.length} тем</p>
+  <p style="color:var(--mut)">Темы перемешаны, сложность растёт: выбор → пропуск → пары → сборка → ошибка → перевод. Тренажёр запоминает ваши ошибки и чаще даёт слабые темы и те, что давно не повторяли.</p>
+  ${pool.length?"":`<p class="units">Пока нет пройденных уроков — микс из уровня 1. Если часть тем уже знаете, включите «открыть все уроки» в разделе «Путь».</p>`}
+  <button class="btn" id="go">Поехали</button></div>`;
+  go.onclick=()=>{run={i:0,ok:0,q:buildMix(use,15,"Микс"),lesson:null};run.first=run.q.length;render()}}
+
+function diagIntro(){app.innerHTML=`<div class="card"><div class="scheme">Диагностика · 5 минут</div><p class="ru" style="font-size:22px">По одной фразе из каждой из ${PATH.length} тем</p>
+  <p style="color:var(--mut)">В конце увидите, какие темы уже в порядке, а какие стоит пройти. Темы без ошибок можно отметить как пройденные.</p><button class="btn" id="go">Начать</button></div>`;
+  go.onclick=()=>{const used=new Set();run={i:0,ok:0,diag:true,q:shuf(PATH.map((_,t)=>take(t,"choice",used))).map(x=>Object.assign({},x,{tag:"Диагностика"})),lesson:null,miss:[]};run.first=run.q.length;render()}}
+
+function head(t){const n=run.q.length;return `<div class="card"><div class="toprow"><button class="back" id="bk">← Выйти</button><button class="help" id="hp" title="Правило">?</button></div>
+  <div class="bar"><i style="width:${run.i/n*100}%"></i></div><div class="meta"><span>${run.i+1} из ${n}</span><span>верно ${run.ok}</span></div>
+  <span class="tag ${t.cls||""}">${esc(t.tag)}${t.retry?" · ещё раз":""}</span> <span class="tag">${TT[t.ty]}</span>
+  <div class="topic">${esc(PATH[t.t].n)}</div>`}
+function feedback(t){if(run.checking)return `<div class="why"><b>Проверяю ответ…</b><br><span style="color:var(--mut)">ИИ смотрит, не подходит ли твой вариант тоже.</span></div>`;
+  if(run.res==null)return"";const a=run.ai;let body="";
+  if(a){body=run.res?`${a.typo?`<br>Засчитано, но есть опечатка: <b>${esc(a.fixed)}</b>`:""}${norm(run.given)!==norm(t.ans)?`<br>Вариант из урока: <b>${esc(t.ans)}</b>`:""}<br>${esc(a.comment||"")}`
+                    :`<br>Исправлено: <b>${esc(a.fixed)}</b><br>${esc(a.comment||"")}<br><span style="color:var(--mut)">Вариант из урока: ${esc(t.ans)}</span>`}
+  else{const why=t.ty==="match"?"":(EXPL[t.full]||"");
+    body=(run.res||t.ty==="match"?"":`<br>Правильно: <b>${esc(t.full||t.ans)}</b>`)+(why?`<div class="expl">Почему: ${esc(why)}</div>`:"")}
+  const ex=!run.res&&AI&&!a&&t.ty!=="match"?`<button class="linkb" id="aix">Разобрать мою ошибку (ИИ)</button><div class="aiout" id="aio"></div>`:"";
+  return `<div class="why ${run.res?"ok":"no"}"><b>${run.res?"Верно!":"Не совсем."}</b>${body}${a?`<div class="aibadge">проверено ИИ</div>`:""}
+  ${run.res?"":`<br><button class="linkb" id="why">Открыть правило</button> ${ex}`}</div><button class="btn" id="nx">Дальше →</button>`}
+
+function task(){const t=run.q[run.i];let h=head(t),done=run.res!=null;
+  if(t.ty!=="match")h+=`<p class="ru" style="margin-top:6px">${esc(t.ru)}</p>`;
+  if(t.ty==="choice"){if(!t._o)t._o=shuf(t.opts.slice());
+    t._o.forEach((o,k)=>{let c="";if(done){if(o===t.ans)c="ok";else if(k===run.pick)c="no"}h+=`<button class="opt ${c}" data-k="${k}" ${done?"disabled":""}>${esc(o)}</button>`})}
+  if(t.ty==="gap"){if(!t._o)t._o=shuf(t.opts.slice());
+    const fill=done?`<span class="blank ${run.res?"okb":"nob"}">${esc(t._o[run.pick])}</span>`:`<span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+    h+=`<p class="en">${esc(t.before)} ${fill} ${esc(t.after)}</p><div class="pool">${t._o.map((o,k)=>`<button class="w gp" data-k="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`}
+  if(t.ty==="build"){if(!run.pool){run.pool=shuf(t.ans.split(" ").map((w,k)=>({w,k})));run.sel=[]}
+    h+=`<div class="slot" id="slot">${run.sel.map((p,j)=>`<button class="w" data-j="${j}" ${done?"disabled":""}>${esc(p.w)}</button>`).join("")||'<span style="color:var(--mut);padding:8px">Нажимайте на слова по порядку</span>'}</div>
+    <div class="pool">${run.pool.filter(p=>!run.sel.includes(p)).map(p=>`<button class="w" data-k="${p.k}">${esc(p.w)}</button>`).join("")}</div>
+    ${done?"":`<button class="btn" id="chk" ${run.sel.length?"":"disabled"}>Проверить</button>`}`}
+  if(t.ty==="error"){h+=`<p class="units" style="margin:-6px 0 10px">Нажмите на слово с ошибкой</p><p class="en">${t.words.map((w,k)=>{let c="";if(done){if(t.bad.includes(k))c="errw";else if(k===run.pick)c="nob"}return `<button class="ew ${c}" data-k="${k}" ${done?"disabled":""}>${esc(w)}</button>`}).join(" ")}</p>`}
+  if(t.ty==="type"){h+=`<input id="inp" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${AI?"Пиши своими словами — проверит ИИ":"Напишите перевод"}" value="${esc(run.typed||"")}" ${done?"disabled":""}>${done?"":`<button class="btn" id="chk">Проверить</button>`}`}
+  if(t.ty==="match"){if(!run.m){run.m={ru:shuf(t.pairs.map((p,k)=>k)),en:shuf(t.pairs.map((p,k)=>k)),sel:null,ok:new Set(),err:0,flash:null}}const m=run.m;
+    h+=`<p class="units" style="margin:6px 0 10px">Нажмите русскую фразу, затем её перевод</p><div class="mt"><div>${m.ru.map(k=>`<button class="mc ${m.ok.has(k)?"okm":""} ${m.sel===k?"sel":""}" data-r="${k}" ${m.ok.has(k)||done?"disabled":""}>${esc(t.pairs[k][0])}</button>`).join("")}</div>
+    <div>${m.en.map(k=>`<button class="mc ${m.ok.has(k)?"okm":""} ${m.flash===k?"nom":""}" data-e="${k}" ${m.ok.has(k)||done?"disabled":""}>${esc(t.pairs[k][1])}</button>`).join("")}</div></div>`}
+  h+=feedback(t);app.innerHTML=h+`</div>`;
+  bk.onclick=()=>{run=null;render()};hp.onclick=()=>sheet(t.t);
+  const g=id=>document.getElementById(id);if(g("why"))g("why").onclick=()=>sheet(t.t);
+  if(g("nx"))g("nx").onclick=next;
+  if(g("aix"))g("aix").onclick=()=>{g("aix").remove();aiExplain(t,g("aio"))};
+  if(done||run.checking)return;
+  if(t.ty==="choice")app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{run.pick=+b.dataset.k;run.given=t._o[run.pick];answer(t._o[run.pick]===t.ans)});
+  if(t.ty==="gap")app.querySelectorAll(".gp").forEach(b=>b.onclick=()=>{run.pick=+b.dataset.k;run.given=(t.before+" "+t._o[run.pick]+" "+t.after).trim();answer(t._o[run.pick]===t.ans)});
+  if(t.ty==="build"){app.querySelectorAll(".pool .w").forEach(b=>b.onclick=()=>{run.sel.push(run.pool.find(p=>p.k==b.dataset.k));render()});
+    app.querySelectorAll("#slot .w").forEach(b=>b.onclick=()=>{run.sel.splice(+b.dataset.j,1);render()});
+    if(g("chk"))g("chk").onclick=()=>{run.given=run.sel.map(p=>p.w).join(" ");answer(run.given===t.ans)}}
+  if(t.ty==="error")app.querySelectorAll(".ew").forEach(b=>b.onclick=()=>{run.pick=+b.dataset.k;run.given="считаю ошибкой слово «"+t.words[run.pick]+"» в предложении «"+t.words.join(" ")+"»";answer(t.bad.includes(run.pick))});
+  if(t.ty==="type"){const i=g("inp");i.oninput=()=>run.typed=i.value;i.onkeydown=e=>{if(e.key==="Enter")g("chk").click()};
+    g("chk").onclick=async()=>{run.typed=i.value;const v=i.value.trim();if(!v)return;run.given=v;
+      if(norm(v)===norm(t.ans)||!AI)return answer(norm(v)===norm(t.ans));
+      run.checking=true;render();let r=null;try{r=await aiCheck(t,v)}catch(e){r=null}
+      run.checking=false;if(r){run.ai=r;answer(!!r.ok)}else answer(false)};setTimeout(()=>i.focus(),50)}
+  if(t.ty==="match"){const m=run.m;
+    app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{m.sel=+b.dataset.r;m.flash=null;render()});
+    app.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{if(m.sel==null)return;const k=+b.dataset.e;
+      if(k===m.sel){m.ok.add(k);m.sel=null;m.flash=null;if(m.ok.size===t.pairs.length){answer(m.err===0);return}}else{m.err++;m.flash=k}render()})}}
+
+function norm(s){s=" "+s.toLowerCase().replace(/[’‘`]/g,"'")+" ";
+  s=s.replace(/can't/g,"can not").replace(/cannot/g,"can not").replace(/won't/g,"will not").replace(/n't/g," not")
+   .replace(/'m\b/g," am").replace(/'re\b/g," are").replace(/'s\b/g," is").replace(/'ve\b/g," have").replace(/'ll\b/g," will").replace(/'d\b/g," would")
+   .replace(/[.,!?;:—–"«»()]/g," ").replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|forty)\b/g,w=>({one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,twenty:20,forty:40})[w]).replace(/-/g," ").replace(/'/g,"").replace(/\s+/g," ");return s.trim()}
+
+function answer(ok){const t=run.q[run.i];run.res=ok;const s=stat(t.t);s.last=Date.now();
+  if(!t.retry){if(ok){run.ok++;s.ok++}else{s.bad++;if(run.diag)run.miss.push(t.t)}}else if(ok)s.ok++;
+  save();render()}
+function next(){const t=run.q[run.i];delete t._o;if(!run.res&&!run.diag&&!t.retry)run.q.push(Object.assign({},t,{retry:true}));
+  run.i++;run.res=null;run.pick=null;run.ai=null;run.given="";run.checking=false;run.pool=null;run.sel=null;run.typed="";run.m=null;render()}
+
+function finish(){const pct=Math.round(run.ok/run.first*100);let h=`<div class="card">`;
+  if(run.diag){const weak=[...new Set(run.miss)];
+    h+=`<div class="scheme">Результат диагностики</div><div class="big">${run.ok} / ${run.first}</div><p style="color:var(--mut)">${weak.length?"Темы, которые стоит пройти:":"Ошибок нет — можно открыть все уроки и заниматься «Умным миксом»."}</p><div class="list">`;
+    weak.forEach(t=>h+=`<button class="item" data-t="${t}"><div><b>${esc(PATH[t].n)}</b><small>Уровень ${TOPIC_LV[t]+1} · юниты ${PATH[t].u}</small></div><span class="pill r">?</span></button>`);
+    h+=`</div><div class="row" style="margin-top:14px"><button class="btn" id="mark">Отметить остальные темы пройденными</button><button class="btn ghost" id="all">В «Путь»</button></div>`;
+    app.innerHTML=h+`</div>`;app.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>sheet(+b.dataset.t));
+    mark.onclick=()=>{LESSONS.forEach((L,i)=>{if(L.kind==="topic"&&!weak.includes(L.t))st.les[i]={best:100,pass:true}});save();setMode("path")};
+    all.onclick=()=>setMode("path");return}
+  if(run.lesson!=null){const i=run.lesson,pass=pct>=80,prev=st.les[i]||{best:0,pass:false};st.les[i]={best:Math.max(prev.best,pct),pass:prev.pass||pass};save();
+    h+=`<div class="scheme">${LESSONS[i].kind==="topic"?esc(PATH[LESSONS[i].t].n):"Контрольный микс"}</div><div class="big">${pct}%</div>
+    <p>${run.ok} из ${run.first} с первого раза. ${pass?(i+1<LESSONS.length?"Следующий урок открыт.":"Весь путь пройден!"):"Нужно 80%, чтобы идти дальше. Ошибки уже повторены в конце, попробуйте ещё раз."}</p>
+    <div class="row">${pass&&i+1<LESSONS.length?`<button class="btn" id="nxt">Следующий урок →</button>`:`<button class="btn" id="again">Ещё раз</button>`}<button class="btn ghost" id="all">Все уроки</button></div>`}
+  else h+=`<div class="scheme">Умный микс</div><div class="big">${pct}%</div><p>${run.ok} из ${run.first} с первого раза. Слабые темы попадутся чаще в следующем миксе.</p><div class="row"><button class="btn" id="again">Новый микс</button></div>`;
+  app.innerHTML=h+`</div>`;const g=id=>document.getElementById(id);
+  if(g("again"))g("again").onclick=()=>{const L=run.lesson;run=null;if(L!=null){view=L;render();g("go").click()}else{render();g("go").click()}};
+  if(g("all"))g("all").onclick=()=>{run=null;view=null;render()};
+  if(g("nxt"))g("nxt").onclick=()=>{const n=run.lesson+1;run=null;view=n;render()}}
+
+
+/* ===== ГОВОРЕНИЕ: звонок, сериал, произношение ===== */
+const TUTORS=[
+ {id:"emma",n:"Эмма",en:"Emma",city:"Лондон 🇬🇧",about:"lives in London, works as a graphic designer, loves cafés and rainy walks",voice:"airy",lang:"en-GB",skin:"#f1c9a5",hair:"#5a3825",shirt:"#1f7a5a",style:"bob"},
+ {id:"jake",n:"Джейк",en:"Jake",city:"Нью-Йорк 🇺🇸",about:"lives in New York, is a chef in a small restaurant, plays basketball",voice:"rounded",lang:"en-US",skin:"#c98e64",hair:"#1d1d1d",shirt:"#3946a8",style:"short"},
+ {id:"mia",n:"Мия",en:"Mia",city:"Сидней 🇦🇺",about:"lives in Sydney, is a surf instructor and travel blogger",voice:"glassy",lang:"en-AU",skin:"#f6d5bd",hair:"#d9a441",shirt:"#c2452f",style:"long"}
+];
+const SCEN=[
+ {id:"meet",ico:"👋",n:"Знакомство",d:"Болтаем о жизни и работе",en:"getting to know each other: home, work, hobbies",f:[0,1,30]},
+ {id:"weekend",ico:"🌤",n:"Мои выходные",d:"Как прошли выходные",en:"how the learner spent last weekend",f:[13,14,7]},
+ {id:"plans",ico:"✈️",n:"Планы на лето",d:"Отпуск и планы",en:"plans for the summer holiday",f:[21,22,23]},
+ {id:"job",ico:"💼",n:"Собеседование",d:"Вы — кандидат, собеседник — HR",en:"a job interview (you are a kind HR interviewer)",f:[15,16,38]},
+ {id:"if",ico:"💭",n:"Что было бы, если…",d:"Фантазии и сожаления",en:"imaginary situations: what would you do if..., what would you have done if...",f:[24,39]},
+ {id:"city",ico:"🏙",n:"Мой город",d:"Расскажите о своём городе",en:"the learner describes their home town (you are planning a trip there)",f:[20,3,10]}
+];
+const EPIS=[
+ {n:"Прилёт в Лондон",ico:"🛂",set:"Heathrow airport, passport control. You play a polite but serious border officer.",goals:[["Скажи, откуда ты","say where they are from"],["Объясни цель поездки","explain the purpose of the trip"],["Скажи, сколько пробудешь и где остановишься","say how long they are staying and where"]],f:[0,21,11]},
+ {n:"Такси до отеля",ico:"🚕",set:"A black cab from the airport. You play a chatty London taxi driver.",goals:[["Назови отель и попроси отвезти","name the hotel and ask to be taken there"],["Спроси, сколько ехать","ask how long the ride takes"],["Поддержи разговор о погоде","make small talk about the weather"]],f:[30,0,3]},
+ {n:"Заселение",ico:"🏨",set:"Hotel reception. You play a friendly receptionist; there is a small problem: the room is not ready yet.",goals:[["Скажи, что у тебя бронь","say they have a booking and give their name"],["Спроси про завтрак","ask about breakfast time"],["Вежливо попроси решить проблему с номером","politely ask for a solution to the room problem"]],f:[3,25,22]},
+ {n:"Кафе на углу",ico:"☕",set:"A busy café. You play a cheerful barista.",goals:[["Закажи напиток и что-то поесть","order a drink and some food"],["Спроси, сколько стоит","ask how much it is"],["Скажи, здесь или с собой","say whether it is to take away or to eat in"]],f:[25,8,7]},
+ {n:"Потерялась в городе",ico:"🗺",set:"A street near the river. You play a helpful local who gives directions with prepositions of place and movement.",goals:[["Вежливо обратись и спроси дорогу","politely ask the way to the museum"],["Переспроси, если что-то непонятно","ask to repeat or clarify the directions"],["Поблагодари и попрощайся","thank and say goodbye"]],f:[10,30,12]},
+ {n:"Встреча с другом",ico:"🍕",set:"Dinner with Sam, an English friend. You play Sam.",goals:[["Расскажи, что уже успела сделать в Лондоне","tell what they have done in London so far"],["Расскажи, что было вчера","describe what happened yesterday"],["Расскажи о планах на завтра","talk about plans for tomorrow"]],f:[15,13,21]}
+];
+let talk=null,D=null,TTS=null,voiceOn=true,tutor=TUTORS[0];
+try{if(window.claude&&claude.use){claude.use("dictation").then(x=>{D=x;if(mode==="talk")render()}).catch(()=>{});claude.use("tts").then(x=>{TTS=x;if(x)x.onState(({state})=>setSpeaking(state==="speaking"))}).catch(()=>{})}}catch(e){}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const canMic=()=>!!(D||SR);
+function weakTopics(n){return PATH.map((_,t)=>[t,stat(t)]).filter(([t,s])=>s.bad>0).sort((a,b)=>(b[1].bad/(b[1].ok+b[1].bad))-(a[1].bad/(a[1].ok+a[1].bad))).slice(0,n).map(x=>x[0])}
+
+function avatar(tu,cls){const h=tu.hair,s=tu.skin;
+  const back=tu.style==="bob"?`<path d="M45 95 Q45 30 100 28 Q155 30 155 95 L155 140 Q130 150 100 150 Q70 150 45 140Z" fill="${h}"/>`:tu.style==="long"?`<path d="M42 95 Q42 28 100 26 Q158 28 158 95 L166 178 Q100 192 34 178Z" fill="${h}"/>`:"";
+  const front=tu.style==="bob"?`<path d="M55 82 Q58 35 100 35 Q142 35 145 82 Q125 62 100 64 Q75 62 55 82Z" fill="${h}"/>`:tu.style==="long"?`<path d="M55 88 Q58 34 100 34 Q142 34 145 88 Q120 50 95 58 Q72 64 55 88Z" fill="${h}"/>`:`<path d="M55 86 Q52 38 100 36 Q148 38 145 86 Q138 58 100 56 Q66 58 55 86Z" fill="${h}"/>`;
+  const eye=x=>`<g class="eye"><ellipse cx="${x}" cy="98" rx="7" ry="8" fill="#fff"/><circle cx="${x}" cy="99" r="4.5" fill="#3b2a20"/><circle cx="${x+1.5}" cy="97.5" r="1.4" fill="#fff"/></g>`;
+  return `<svg class="av ${cls||""}" viewBox="0 0 200 220" aria-label="${tu.n}">${back}
+  <path d="M30 220 Q30 165 100 160 Q170 165 170 220Z" fill="${tu.shirt}"/><rect x="85" y="128" width="30" height="38" rx="10" fill="${s}"/>
+  <circle cx="55" cy="100" r="10" fill="${s}"/><circle cx="145" cy="100" r="10" fill="${s}"/><ellipse cx="100" cy="95" rx="45" ry="52" fill="${s}"/>${front}
+  ${eye(82)}${eye(118)}<path d="M73 84 Q82 79 91 84" stroke="${h}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M109 84 Q118 79 127 84" stroke="${h}" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M100 103 Q97 113 101 115" stroke="rgba(0,0,0,.25)" stroke-width="2" fill="none"/><circle cx="74" cy="116" r="7" fill="#f08a8a" opacity=".35"/><circle cx="126" cy="116" r="7" fill="#f08a8a" opacity=".35"/>
+  <g class="mouth"><path d="M88 124 Q100 135 112 124 Q100 128 88 124Z" fill="#b5474a"/></g></svg>`}
+function setSpeaking(on){document.querySelectorAll(".avwrap").forEach(e=>e.classList.toggle("speaking",on))}
+
+function say(text,force){if(!voiceOn&&!force)return Promise.resolve();
+  if(TTS)return TTS.speak(text,{language:"en",voice:tutor.voice}).catch(()=>{});
+  return new Promise(res=>{try{if(!window.speechSynthesis){fake();return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=tutor.lang;u.rate=.95;
+    const v=speechSynthesis.getVoices().find(v=>v.lang===tutor.lang)||speechSynthesis.getVoices().find(v=>v.lang.startsWith("en"));if(v)u.voice=v;
+    u.onstart=()=>setSpeaking(true);u.onend=u.onerror=()=>{setSpeaking(false);res()};speechSynthesis.speak(u)}catch(e){fake()}
+    function fake(){setSpeaking(true);setTimeout(()=>{setSpeaking(false);res()},Math.min(6000,text.length*55))}})}
+
+/* ---- распознавание речи: одна обёртка для Claude и браузера ---- */
+let rec=null;
+function listen(onText,onDone){let base="";
+  if(D){D.onPartial(({text})=>onText((base+" "+text).trim()));D.onFinal(({text})=>{base=(base+" "+text).trim();onText(base)});
+    D.onState(({state})=>{if(state==="idle")onDone(base)});
+    return D.start().then(()=>true).catch(e=>{onDone(null,e&&e.code)})}
+  rec=new SR();rec.lang="en-US";rec.interimResults=true;rec.continuous=true;let txt="";
+  rec.onresult=ev=>{txt="";for(const r of ev.results)txt+=r[0].transcript;onText(txt)};
+  rec.onend=()=>onDone(txt);rec.onerror=()=>{};try{rec.start()}catch(e){onDone(null)}return Promise.resolve(true)}
+function stopListen(){if(D)return D.stop().catch(()=>{});if(rec)rec.stop();return Promise.resolve()}
+
+/* ---- ИИ ---- */
+function talkPrompt(learner){const sc=talk.sc,story=talk.ep!=null?EPIS[talk.ep]:null;
+  const topics=PATH.map((p,i)=>i+": "+p.n).join("\n");
+  const hist=talk.msgs.slice(-14).map(m=>(m.who==="ai"?"Partner: ":"Learner: ")+m.text).join("\n");
+  const who=story?`This is an interactive story: the learner is the hero visiting London. Scene: ${story.set}
+The learner must reach these goals by speaking:\n${story.goals.map((g,i)=>"g"+i+": "+g[1]).join("\n")}
+Stay in character, react to what the learner says and move the story forward. Do not list the goals. When all goals are reached, end the scene naturally in 1-2 sentences and set "complete": true.`
+   :`You are ${tutor.en}, who ${tutor.about}. You are on a video call with the learner. Topic: ${sc.en}.`;
+  return `You are a friendly English speaking partner for a Russian-speaking learner (level A2-B1).
+${who}
+Gently steer the talk so the learner needs these structures: ${sc.f.map(i=>PATH[i].n).join("; ")}.
+
+Rules for "reply": spoken style, 1-3 short sentences of simple natural English (A2-B1 words), ${story?"stay in the scene":"end with ONE question that invites a full-sentence answer"}. Never explain grammar inside "reply". If the learner writes in Russian or seems stuck, answer simply and make the next step easier.
+${learner==null?'This is the start: greet the learner and open the conversation or scene. "correction" must be null.':`Check ONLY the learner's last message (it may come from speech recognition): if it has a grammar or word-choice mistake a teacher would fix, fill "correction"; ignore punctuation, capital letters, fillers and small recognition glitches. If it is fine, "correction" is null.`}
+
+Grammar topics (id: name):
+${topics}
+
+Conversation so far:
+${hist||"(empty)"}
+
+Reply with JSON only:
+{"reply":"your next spoken line","reply_ru":"its Russian translation","correction":null or {"fixed":"the learner's last message corrected minimally","note":"one short sentence in Russian (на ты): what was wrong and the rule","topic":id of the closest grammar topic or null},"hint":"a short natural answer the learner could say next"${story?',"goals_done":["ids of ALL goals reached so far, e.g. g0"],"complete":true or false':""}}`}
+
+async function talkTurn(learner){talk.busy=true;render();
+  try{const r=await AI.json(talkPrompt(learner),{modelTier:"quick",cache:false});
+    const me=learner!=null?talk.msgs[talk.msgs.length-1]:null;
+    if(me&&r.correction&&r.correction.fixed&&norm(r.correction.fixed)!==norm(me.text)){me.corr=r.correction;
+      if(Number.isInteger(r.correction.topic)&&PATH[r.correction.topic]){const s=stat(r.correction.topic);s.bad++;s.last=Date.now();save()}}
+    else if(me)talk.good++;
+    if(talk.ep!=null&&Array.isArray(r.goals_done))r.goals_done.forEach(g=>talk.goals.add(String(g)));
+    if(talk.ep!=null&&r.complete&&talk.goals.size>=EPIS[talk.ep].goals.length){talk.complete=true;st.ep=st.ep||{};st.ep[talk.ep]=true;save()}
+    talk.msgs.push({who:"ai",text:r.reply||"Sorry, could you say that again?",ru:r.reply_ru||"",hint:r.hint||""});
+    talk.busy=false;render();say(r.reply||"")}
+  catch(e){talk.busy=false;talk.err=e&&e.code==="rate_limited"?"Слишком много запросов — подождите немного.":"Собеседник не ответил. Отправьте ещё раз.";render()}}
+function talkSend(v){v=(v||"").trim();if(!v||talk.busy)return;talk.err=null;talk.live="";talk.msgs.push({who:"me",text:v});talk.turns++;talkTurn(v)}
+
+/* ---- экраны ---- */
+function talkList(){const weak=weakTopics(3);st.ep=st.ep||{};
+  let h=`<div class="card"><div class="scheme">Говорение с ИИ</div><p class="ru" style="font-size:22px;margin-bottom:10px">С кем поговорим?</p>
+  <div class="tutors">${TUTORS.map(t=>`<button class="tut ${t.id===tutor.id?"on":""}" data-u="${t.id}"><div class="avwrap sm">${avatar(t)}</div><b>${t.n}</b><small>${t.city}</small></button>`).join("")}</div>
+  ${AI?"":`<p class="why no">ИИ-собеседник пока недоступен в словаре. <a href="https://claude.ai/artifact/9ucgvRDfYcoV35jgR8ZUkV">Открыть разговорную практику в Claude</a>.</p>`}
+  ${AI&&!canMic()?`<p class="units" style="margin-top:10px">Микрофон здесь недоступен — отвечайте текстом. Голосом можно в Chrome на компьютере.</p>`:""}</div>
+  <div class="stage">📞 Видеозвонок — свободный разговор</div><div class="list">`;
+  if(weak.length)h+=`<button class="item go" data-k="weak"><div><b>🎯 Мои слабые темы</b><small>${weak.map(t=>esc(PATH[t].n)).join(", ")}</small></div><span class="pill r">по ошибкам</span></button>`;
+  SCEN.forEach(s=>h+=`<button class="item go" data-k="${s.id}"><div><b>${s.ico} ${s.n}</b><small>${s.d} · ${s.f.map(t=>esc(PATH[t].n)).join(", ")}</small></div><span class="pill">позвонить</span></button>`);
+  h+=`</div><div class="stage">🎬 Сериал «Неделя в Лондоне» — вы главный герой</div><div class="list">`;
+  EPIS.forEach((e,i)=>{const lk=i>0&&!st.ep[i-1]&&!st.open;h+=`<button class="item go ${lk?"lock":""}" data-e="${i}" ${lk?"disabled":""}><div><b>${e.ico} Эпизод ${i+1}. ${e.n}</b><small>${e.goals.map(g=>g[0]).join(" · ")}</small></div><span class="pill ${st.ep[i]?"g":""}">${st.ep[i]?"пройден":lk?"🔒":"играть"}</span></button>`});
+  app.innerHTML=h+`</div>`;
+  if(!AI) app.querySelectorAll(".go").forEach(button=>{button.disabled=true});
+  app.querySelectorAll(".tut").forEach(b=>b.onclick=()=>{tutor=TUTORS.find(t=>t.id===b.dataset.u);render()});
+  app.querySelectorAll(".go:not(.lock)").forEach(b=>b.onclick=()=>{if(!AI)return;const k=b.dataset.k,e=b.dataset.e;
+    let sc=k==="weak"?{ico:"🎯",n:"Мои слабые темы",en:"free friendly chat about the learner's everyday life",f:weak}:k?SCEN.find(x=>x.id===k):{ico:EPIS[+e].ico,n:"Эпизод "+(+e+1)+". "+EPIS[+e].n,f:EPIS[+e].f};
+    talk={sc,ep:e!=null?+e:null,goals:new Set(),msgs:[],busy:false,listening:false,live:"",ru:false,turns:0,good:0,err:null,t0:Date.now(),kbd:!canMic(),pron:[]};
+    talkTurn(null)})}
+
+function talkCall(){const t=talk,last=[...t.msgs].reverse().find(m=>m.who==="ai"),me=t.msgs[t.msgs.length-1];
+  const lastMe=[...t.msgs].reverse().find(m=>m.who==="me");
+  const mins=Math.floor((Date.now()-t.t0)/60000);
+  let h=`<div class="call"><div class="ctop"><button class="cbtn" id="cx">✕</button><div class="cname">${t.ep!=null?esc(t.sc.n):tutor.n+" · "+tutor.city}<small>${t.ep!=null?"Сериал «Неделя в Лондоне»":esc(t.sc.ico+" "+t.sc.n)}</small></div><button class="cbtn" id="clog" title="Переписка">☰</button></div>`;
+  if(t.ep!=null)h+=`<div class="goals">${EPIS[t.ep].goals.map((g,i)=>`<span class="${t.goals.has("g"+i)?"ok":""}">${t.goals.has("g"+i)?"✓":"○"} ${esc(g[0])}</span>`).join("")}</div>`;
+  h+=`<div class="avwrap big">${avatar(tutor)}</div>`;
+  if(t.complete)h+=`<div class="done">🎉 Эпизод пройден!<br><button class="btn" id="cend2">Итог и следующий эпизод</button></div>`;
+  h+=`<div class="cap">${t.busy?`<span class="typing">${tutor.n} думает…</span>`:last?`${esc(last.text)}${t.ru&&last.ru?`<div class="tr">${esc(last.ru)}</div>`:""}`:""}</div>`;
+  if(lastMe&&lastMe.corr&&me===lastMe||lastMe&&lastMe.corr&&t.msgs.indexOf(lastMe)===t.msgs.length-2&&!t.busy)
+    h+=`<div class="ctoast"><b>Лучше:</b> ${esc(lastMe.corr.fixed)}<br><span>${esc(lastMe.corr.note||"")}</span><div class="row" style="gap:10px;margin-top:6px">${canMic()?`<button class="linkb" id="crep">🎯 Повторить вслух</button>`:""}${Number.isInteger(lastMe.corr.topic)&&PATH[lastMe.corr.topic]?`<button class="linkb" id="crule">Правило</button>`:""}</div></div>`;
+  if(t.live)h+=`<div class="live">${esc(t.live)}</div>`;
+  if(t.err)h+=`<div class="ctoast err">${esc(t.err)}</div>`;
+  h+=`<div class="hintline" id="chint"></div>
+  <div class="ctrl"><button class="cbtn ${t.ru?"on":""}" id="cru">RU</button><button class="cbtn" id="chb" title="Подсказка">💡</button>
+  ${canMic()&&!t.kbd?`<button class="micbig ${t.listening?"rec":""}" id="cmic" ${t.busy?"disabled":""}>${t.listening?"■":"🎤"}</button>`:""}
+  <button class="cbtn ${voiceOn?"on":""}" id="cvo">🔊</button><button class="cbtn ${t.kbd?"on":""}" id="ckb" title="Клавиатура">⌨️</button></div>
+  ${t.kbd?`<div class="inrow"><textarea id="tin" rows="2" placeholder="Ответьте по-английски"></textarea><button class="btn" id="tsend" ${t.busy?"disabled":""}>→</button></div>`:`<p class="clbl">${t.listening?"Слушаю… нажмите ■, когда закончите":t.busy?"":"Нажмите 🎤 и ответьте вслух"}</p>`}
+  <button class="cend" id="cend">Завершить звонок · ${t.turns} реплик${mins?` · ${mins} мин`:""}</button></div>`;
+  app.innerHTML=h;const g=id=>document.getElementById(id);
+  g("cx").onclick=g("cend").onclick=()=>{stopListen();try{TTS&&TTS.stop();speechSynthesis&&speechSynthesis.cancel()}catch(e){}t.done=true;render()};
+  if(g("cend2"))g("cend2").onclick=()=>{t.done=true;render()};
+  g("clog").onclick=()=>logSheet();g("cru").onclick=()=>{t.ru=!t.ru;render()};
+  g("cvo").onclick=()=>{voiceOn=!voiceOn;if(!voiceOn){try{TTS&&TTS.stop();speechSynthesis&&speechSynthesis.cancel()}catch(e){}}render()};
+  g("ckb").onclick=()=>{t.kbd=!t.kbd;render()};
+  g("chb").onclick=()=>{g("chint").textContent=last&&last.hint?"Можно сказать: "+last.hint:"Подсказка появится после реплики собеседника"};
+  if(g("crule"))g("crule").onclick=()=>sheet(lastMe.corr.topic);
+  if(g("crep"))g("crep").onclick=()=>pronounce(lastMe.corr.fixed);
+  if(g("tin")){g("tin").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();talkSend(e.target.value)}};g("tsend").onclick=()=>talkSend(g("tin").value);if(!t.busy)g("tin").focus()}
+  if(g("cmic"))g("cmic").onclick=()=>{
+    if(t.listening){t.listening=false;stopListen();render();return}
+    try{TTS&&TTS.stop();speechSynthesis&&speechSynthesis.cancel()}catch(e){}
+    t.listening=true;t.live="";t.err=null;
+    listen(x=>{t.live=x;const l=document.querySelector(".live");if(l)l.textContent=x;else render()},
+      (txt,code)=>{t.listening=false;if(code){t.err=code==="not_granted"?"Микрофон не разрешён — переключитесь на ⌨️.":"Не удалось включить микрофон.";render();return}
+        if(txt&&txt.trim())talkSend(txt);else{t.live="";render()}});
+    render()}}
+
+function logSheet(){const d=document.createElement("div");d.className="ov";
+  d.innerHTML=`<div class="sh"><div class="grab"></div><div class="scheme">Переписка</div><div class="msgs">${talk.msgs.map(m=>m.who==="ai"?`<div class="b ai">${esc(m.text)}${m.ru?`<div class="tr">${esc(m.ru)}</div>`:""}</div>`:`<div class="b me">${esc(m.text)}</div>${m.corr?`<div class="corr"><b>Лучше:</b> ${esc(m.corr.fixed)}<br><span>${esc(m.corr.note||"")}</span></div>`:""}`).join("")}</div><button class="btn" style="width:100%;margin-top:12px" id="lx">Закрыть</button></div>`;
+  document.body.appendChild(d);d.onclick=e=>{if(e.target===d)d.remove()};d.querySelector("#lx").onclick=()=>d.remove()}
+
+/* ---- произношение: повтори за мной ---- */
+function words(s){return norm(s).split(" ").filter(Boolean)}
+function lev(a,b){const m=[];for(let i=0;i<=a.length;i++){m[i]=[i];for(let j=1;j<=b.length;j++)m[i][j]=i?Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1)):j}return m[a.length][b.length]}
+function score(target,said){const T=words(target),S=words(said),eq=(a,b)=>a===b||(a.length>3&&lev(a,b)<=1);
+  const L=Array(T.length+1).fill(0).map(()=>Array(S.length+1).fill(0));
+  for(let i=1;i<=T.length;i++)for(let j=1;j<=S.length;j++)L[i][j]=eq(T[i-1],S[j-1])?L[i-1][j-1]+1:Math.max(L[i-1][j],L[i][j-1]);
+  const hit=new Set();let i=T.length,j=S.length;while(i&&j){if(eq(T[i-1],S[j-1])){hit.add(i-1);i--;j--}else if(L[i-1][j]>=L[i][j-1])i--;else j--}
+  return{pct:T.length?Math.round(hit.size/T.length*100):0,T,hit}}
+function pronounce(target){const d=document.createElement("div");d.className="ov";let busy=false;
+  const draw=(res,said)=>{d.innerHTML=`<div class="sh"><div class="grab"></div><div class="scheme">Повтори за собеседником</div>
+    <p class="ru" style="font-size:22px">${res?res.T.map((w,k)=>`<span class="${res.hit.has(k)?"pw ok":"pw no"}">${esc(w)}</span>`).join(" "):esc(target)}</p>
+    ${res?`<div class="pring" style="--p:${res.pct}"><span>${res.pct}%</span></div><p style="text-align:center">${res.pct>=90?"Отлично, очень чисто!":res.pct>=70?"Хорошо! Красные слова — попробуй ещё раз.":"Попробуй медленнее и чётче."}</p><p class="units" style="text-align:center">Услышано: «${esc(said||"…")}»</p>`:`<p class="units">Нажми 🔊, послушай, потом нажми 🎤 и повтори фразу.</p>`}
+    <div class="row" style="justify-content:center;gap:12px;margin:12px 0"><button class="cbtn dark" id="pl">🔊</button><button class="micbig" id="pm">${busy?"■":"🎤"}</button></div>
+    <p class="units" style="text-align:center">Оценка по распознанным словам: показывает, какие слова звучат неразборчиво.</p>
+    <button class="btn ghost" style="width:100%" id="px">Готово</button></div>`;
+    d.querySelector("#pl").onclick=()=>say(target,true);
+    d.querySelector("#px").onclick=()=>{stopListen();d.remove()};
+    d.querySelector("#pm").onclick=()=>{if(busy){stopListen();return}busy=true;let heard="";draw(null);
+      listen(x=>{heard=x},(txt)=>{busy=false;const r=score(target,txt||heard||"");if(talk)talk.pron.push(r.pct);draw(r,txt||heard)})}};
+  draw(null);document.body.appendChild(d)}
+
+function talkSummary(){const t=talk;const cs=t.msgs.filter(m=>m.corr);const by={};
+  cs.forEach(m=>{const k=Number.isInteger(m.corr.topic)&&PATH[m.corr.topic]?m.corr.topic:-1;(by[k]=by[k]||[]).push(m)});
+  const pr=t.pron.length?Math.round(t.pron.reduce((a,b)=>a+b,0)/t.pron.length):null;
+  const nx=t.ep!=null&&t.complete&&t.ep+1<EPIS.length?t.ep+1:null;
+  let h=`<div class="card"><div class="scheme">Итог · ${esc(t.sc.n)}</div>
+  <div class="stats"><div><b>${t.turns}</b><small>реплик</small></div><div><b>${t.turns?Math.round(t.good/t.turns*100):0}%</b><small>без ошибок</small></div>${pr!=null?`<div><b>${pr}%</b><small>произношение</small></div>`:""}${t.ep!=null?`<div><b>${t.goals.size}/${EPIS[t.ep].goals.length}</b><small>цели эпизода</small></div>`:""}</div>
+  <p>${cs.length?"Что стоит подтянуть:":t.turns?"Ни одной поправки — отлично!":"Вы ещё ничего не сказали."}</p><div class="list">`;
+  Object.entries(by).forEach(([k,arr])=>{k=+k;h+=`<div class="item" style="display:block;cursor:default"><b>${k>=0?esc(PATH[k].n):"Слова и выражения"}</b>
+    ${arr.map(m=>`<small><s>${esc(m.text)}</s><br>✓ ${esc(m.corr.fixed)}</small>`).join("")}
+    <div class="row" style="margin-top:8px;gap:10px">${k>=0?`<button class="btn ghost tl" data-t="${k}">Урок по теме</button><button class="linkb" data-r="${k}">Правило</button>`:""}${canMic()?`<button class="linkb pr" data-f="${esc(arr[0].corr.fixed)}">🎯 Произнести</button>`:""}</div></div>`});
+  h+=`</div><div class="row" style="margin-top:14px">${nx!=null?`<button class="btn" id="tnext">Эпизод ${nx+1} →</button>`:`<button class="btn" id="tagain">Ещё разговор</button>`}${t.complete?"":`<button class="btn ghost" id="tback">Вернуться в звонок</button>`}</div></div>`;
+  app.innerHTML=h;const g=id=>document.getElementById(id);
+  app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>sheet(+b.dataset.r));
+  app.querySelectorAll(".pr").forEach(b=>b.onclick=()=>pronounce(b.dataset.f));
+  app.querySelectorAll(".tl").forEach(b=>b.onclick=()=>{const i=LESSONS.findIndex(l=>l.t===+b.dataset.t);talk=null;st.open=true;save();setMode("path");view=i;render()});
+  if(g("tagain"))g("tagain").onclick=()=>{talk=null;render()};
+  if(g("tback"))g("tback").onclick=()=>{t.done=false;render()};
+  if(g("tnext"))g("tnext").onclick=()=>{talk=null;render();const b=document.querySelector(`[data-e="${nx}"]`);if(b)b.click()}}
+
+render();
+</script>
+</body>
+</html>
